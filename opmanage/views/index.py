@@ -5,7 +5,7 @@
 from django.shortcuts import render,render_to_response,HttpResponseRedirect
 from django.http import HttpResponse
 
-from opmanage.forms import UserForm
+from opmanage.forms import UserForm, AddUserForm
 from opmanage.models import User_info
 
 def login(request):
@@ -71,6 +71,23 @@ def add_user(request):
     :param request:
     :return:
     """
+    if request.method == "POST":
+        add_userform = AddUserForm(request.POST)
+        if add_userform.is_valid():
+            username = request.POST.get('username', None)
+            password = request.POST.get('password', None)
+            check_login = User_info.objects.filter(username=username,password=password).count()
+            print check_login
+            if check_login == 1:
+                return HttpResponse('login')
+            else:
+                return HttpResponse('not login')
+        else:
+            return render(request, "login.html", {'userform': userform, 'error': userform.errors})
+    else:
+        userform = AddUserForm()
+        return render(request,"login.html", {'userform': userform})
+
 
 def del_user(request):
     """

@@ -8,7 +8,7 @@ class UserForm(forms.Form):
     username = forms.CharField(required=True,max_length=20,error_messages={'required': '用户名不能为空','invalid': '用户名格式错误'})
     password = forms.CharField(required=True,max_length=20,error_messages={'required': '密码不能为空','invalid': '密码格式错误'})
 
-class AddUser(forms.Form):
+class AddUserForm(forms.Form):
     username = forms.CharField()
     password = forms.CharField()
     email = forms.CharField()
