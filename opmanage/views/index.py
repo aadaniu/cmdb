@@ -2,10 +2,11 @@
 # 2017-11-29
 # by why
 
-from django.shortcuts import render
+from django.shortcuts import render,render_to_response,HttpResponseRedirect
+from django.http import HttpResponse
 
 from opmanage.forms import UserForm
-
+from opmanage.models import User_info
 
 def login(request):
     """
@@ -15,11 +16,15 @@ def login(request):
     """
     if request.method == "POST":
         userform = UserForm(request.POST)
-        request.POST.get('username', None)
-        request.POST.get('password', None)
         if userform.is_valid():
-            User_info = 1
-            pass
+            username = request.POST.get('username', None)
+            password = request.POST.get('password', None)
+            check_login = User_info.objects.filter(username=username,password=password).count()
+            print check_login
+            if check_login == 1:
+                return HttpResponse('login')
+            else:
+                return HttpResponse('not login')
         else:
             return render(request, "login.html", {'userform': userform, 'error': userform.errors})
     else:
