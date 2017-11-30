@@ -4,6 +4,7 @@
 
 from django.shortcuts import render,render_to_response,HttpResponseRedirect
 from cmdb_main.forms import UserForm
+from cmdb_main.models import User_info
 
 def login(request):
     """
@@ -15,10 +16,10 @@ def login(request):
         userform = UserForm(request.POST)
         request.POST.get('username', None)
         request.POST.get('password', None)
+        if userform.is_valid():
 
-        # 验证码
-        return render(request,"login.html",{'userform': userform, 'error': userform.errors})
-
+        else:
+            return render(request, "login.html", {'userform': userform, 'error': userform.errors})
     else:
         userform = UserForm()
         return render(request,"login.html", {'userform': userform})
@@ -53,6 +54,27 @@ def auth(request):
 def is_login(request):
     """
         登录判断，
+    :param request:
+    :return:
+    """
+
+def add_user(request):
+    """
+        添加用户
+    :param request:
+    :return:
+    """
+
+def del_user(request):
+    """
+        删除用户
+    :param request:
+    :return:
+    """
+
+def change_user(request):
+    """
+        删除用户
     :param request:
     :return:
     """
