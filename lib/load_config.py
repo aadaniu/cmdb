@@ -7,7 +7,6 @@ import sys
 import ConfigParser
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-print os.path.join(BASE_DIR, 'config\cmdb.config')
 
 # load cmdb config
 

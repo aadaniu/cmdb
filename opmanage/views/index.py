@@ -1,0 +1,83 @@
+# -*- coding: utf-8 -*-
+# 2017-11-29
+# by why
+
+from django.shortcuts import render
+
+from opmanage.forms import UserForm
+
+
+def login(request):
+    """
+        用于用户登录
+    :param request:
+    :return:
+    """
+    if request.method == "POST":
+        userform = UserForm(request.POST)
+        request.POST.get('username', None)
+        request.POST.get('password', None)
+        if userform.is_valid():
+            User_info = 1
+            pass
+        else:
+            return render(request, "login.html", {'userform': userform, 'error': userform.errors})
+    else:
+        userform = UserForm()
+        return render(request,"login.html", {'userform': userform})
+
+
+def logout(request):
+    """
+        用于用户退出
+    :param request:
+    :return:
+    """
+    pass
+
+
+def index(request):
+    """
+        浏览主页
+    :param request:
+    :return:
+    """
+    pass
+
+
+def auth(request):
+    """
+        权限判断，理论是一个装饰器
+    :param request:
+    :return:
+    """
+    pass
+
+def is_login(request):
+    """
+        登录判断，
+    :param request:
+    :return:
+    """
+
+def add_user(request):
+    """
+        添加用户
+    :param request:
+    :return:
+    """
+
+def del_user(request):
+    """
+        删除用户
+    :param request:
+    :return:
+    """
+
+def change_user(request):
+    """
+        删除用户
+    :param request:
+    :return:
+    """
+

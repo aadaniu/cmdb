@@ -15,9 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from cmdb_main.views import index
+
+from opmanage.views import index, test
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^login/', index.login),
+    url(r'^test/', test.insert_data),
 ]
+
