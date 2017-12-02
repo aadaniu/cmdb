@@ -3,8 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        .input-group {
+            position: relative;
+            padding: 20px;
+            width: 250px;
+        }
+        .input-group input{
+            width: 200px;
+            display: inline-block;
+        }
+        .input-group span{
+            display: inline-block;
+            position: absolute;
+            height: 12px;
+            font-size: 8px;
+            border: 1px solid darkred;
+            background-color: coral;
+            color: white;
+            top: 41px;
+            left: 20px;
+            width: 202px;
+        }
+    </style>
 </head>
 <body>
+    <form action="/adduser/" method="post" novalidate>
+        <div class="input-group">
+            {{ add_userform.username }}
+            {% if error.username.0 %}
+            <span>{{ error.username.0 }}</span>
+            {% endif %}
+        </div>
+        <div class="input-group">
+            {{ add_userform.password }}
+            {% if error.password.0 %}
+            <span>{{ error.password.0 }}</span>
+            {% endif %}
+        </div>
+        <div class="input-group">
+            {{ add_userform.email }}
+            {% if error.email.0 %}
+            <span>{{ error.email.0 }}</span>
+            {% endif %}
+        </div>
+        <div class="input-group">
+            {{ add_userform.auth }}
+            {% if error.auth.0 %}
+            <span>{{ error.auth.0 }}</span>
+            {% endif %}
+        </div>
+        <div class="input-group">
+            {{ add_userform.jumper }}
+            {% if error.jumper.0 %}
+            <span>{{ error.jumper.0 }}</span>
+            {% endif %}
+        </div>
+        <div class="input-group">
+            {{ add_userform.vpn }}
+            {% if error.vpn.0 %}
+            <span>{{ error.vpn.0 }}</span>
+            {% endif %}
+        </div>
+        <div class="input-group">
+            {{ add_userform.phone }}
+            {% if error.phone.0 %}
+            <span>{{ error.phone.0 }}</span>
+            {% endif %}
+        </div>
+        <div class="input-group">
+            {{ add_userform.department }}
+            {% if error.department.0 %}
+            <span>{{ error.department.0 }}</span>
+            {% endif %}
+        </div>
+        <div class="input-group">
+            {{ add_userform.ccj_admin }}
+            {% if error.ccj_admin.0 %}
+            <span>{{ error.ccj_admin.0 }}</span>
+            {% endif %}
+        </div>
+        <div class="input-group">
+            {{ add_userform.cct_admin }}
+            {% if error.cct_admin.0 %}
+            <span>{{ error.cct_admin.0 }}</span>
+            {% endif %}
+        </div>
+        <div>
+            <input type="submit" value="提交">
+        </div>
+    </form>
 
 </body>
 </html>

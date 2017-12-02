@@ -18,7 +18,7 @@ class RandomStr(object):
         :return:
             string
         """
-        str = "abcdefghijklmnopqrstuvwxyz0123456789"
+        str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ0123456789"
         return ''.join(random.sample(str, length))
 
 
@@ -33,5 +33,5 @@ class RandomStr(object):
         :return:
             string
         """
-        str = "abcdefghijklmnopqrstuvwxyz0123456789"
+        str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ0123456789"
         return title + '-' + ''.join(random.sample(str, length))

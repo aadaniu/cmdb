@@ -20,7 +20,8 @@ from opmanage.views import index, test
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^login/', index.login),
     url(r'^test/', test.insert_data),
+    url(r'^login/', index.login),
+    url(r'^adduser/', index.add_user),
 ]
 
