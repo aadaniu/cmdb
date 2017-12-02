@@ -8,7 +8,7 @@ from opmanage.models import User_info
 
 def insert_data(requets):
     try:
-        User_info.objects.create(name='wanghongyu',
+        User_info.objects.create(username='wanghongyu',
                                  password='123456',
                                  email='wanghongyu@chuchujie.com',
                                  auth=True,
@@ -18,8 +18,8 @@ def insert_data(requets):
                                  department='op',
                                  ccj_admin=True,
                                  cct_admin=False)
-    except:
-        pass
+    except Exception as e:
+        return HttpResponse(e)
     return HttpResponse('ok')
 
 
