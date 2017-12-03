@@ -19,6 +19,12 @@ cmdb_mysql_user = cmdb_config.get('mysql','user')
 cmdb_mysql_password = cmdb_config.get('mysql','password')
 cmdb_mysql_database = cmdb_config.get('mysql','database')
 
+cmdb_smtp_host = cmdb_config.get('smtp','host')
+cmdb_smtp_port = cmdb_config.get('smtp','port')
+cmdb_smtp_user = cmdb_config.get('smtp','user')
+cmdb_smtp_password = cmdb_config.get('smtp','password')
+
+
 # load zabbix config
 
 zabbix_config = ConfigParser.RawConfigParser()
@@ -33,3 +39,11 @@ zabbix_mysql_port = zabbix_config.get('mysql','port')
 zabbix_mysql_user = zabbix_config.get('mysql','user')
 zabbix_mysql_passport = zabbix_config.get('mysql','password')
 zabbix_mysql_database = zabbix_config.get('mysql','database')
+
+# load global config
+
+global_config = ConfigParser.RawConfigParser()
+global_config.read(os.path.join(BASE_DIR, 'config/global.config'))
+
+global_all_email_suffix = global_config.get('all','email_suffix')
+

@@ -8,7 +8,7 @@ from django.db import models
 from django.db import models
 
 class User_info(models.Model):
-    username = models.CharField(max_length=20)
+    username = models.CharField(max_length=20,unique=True)
     password = models.CharField(max_length=20)
     email = models.EmailField()
     auth = models.BooleanField()
@@ -16,8 +16,8 @@ class User_info(models.Model):
     vpn = models.BooleanField()
     phone = models.CharField(max_length=15)
     department = models.CharField(max_length=30)
-    ccj_admin = models.BooleanField()
-    cct_admin = models.BooleanField()
+    zabbix = models.BooleanField()
+    kibana = models.BooleanField()
 
 
 class Department_info(models.Model):

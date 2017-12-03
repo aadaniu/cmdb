@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../cmdb/.idea/cmdb.iml" filepath="$PROJECT_DIR$/../cmdb/.idea/cmdb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../tag/.idea/tag.iml" filepath="$PROJECT_DIR$/../tag/.idea/tag.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../whypython/.idea/whypython.iml" filepath="$PROJECT_DIR$/../whypython/.idea/whypython.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/whyscmdb.iml" filepath="$PROJECT_DIR$/.idea/whyscmdb.iml" />
+    </modules>
+  </component>
+</project>

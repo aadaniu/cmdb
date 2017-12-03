@@ -19,9 +19,11 @@ from django.contrib import admin
 from opmanage.views import index, test
 
 urlpatterns = [
+    url(r'^test/adduesr', test.insert_data),
+    url(r'^test/sendtable', test.sendtable),
     url(r'^admin/', admin.site.urls),
-    url(r'^test/', test.insert_data),
     url(r'^login/', index.login),
     url(r'^adduser/', index.add_user),
+    url(r'^deluser/', index.del_user),
 ]
 

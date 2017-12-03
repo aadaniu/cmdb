@@ -29,70 +29,72 @@
 </head>
 <body>
     <form action="/adduser/" method="post" novalidate>
-        <div class="input-group">
-            {{ add_userform.username }}
-            {% if error.username.0 %}
-            <span>{{ error.username.0 }}</span>
-            {% endif %}
-        </div>
+        <a>密 码</a><br>
         <div class="input-group">
             {{ add_userform.password }}
             {% if error.password.0 %}
             <span>{{ error.password.0 }}</span>
             {% endif %}
         </div>
+        <a>邮 箱</a><br>
         <div class="input-group">
             {{ add_userform.email }}
             {% if error.email.0 %}
             <span>{{ error.email.0 }}</span>
             {% endif %}
         </div>
+        <a>权 限</a><br>
         <div class="input-group">
             {{ add_userform.auth }}
             {% if error.auth.0 %}
             <span>{{ error.auth.0 }}</span>
             {% endif %}
         </div>
+        <a>跳板机</a><br>
         <div class="input-group">
             {{ add_userform.jumper }}
             {% if error.jumper.0 %}
             <span>{{ error.jumper.0 }}</span>
             {% endif %}
         </div>
+        <a>vpn</a><br>
         <div class="input-group">
             {{ add_userform.vpn }}
             {% if error.vpn.0 %}
             <span>{{ error.vpn.0 }}</span>
             {% endif %}
         </div>
+        <a>电 话</a><br>
         <div class="input-group">
             {{ add_userform.phone }}
             {% if error.phone.0 %}
             <span>{{ error.phone.0 }}</span>
             {% endif %}
         </div>
+        <a>部 门</a><br>
         <div class="input-group">
             {{ add_userform.department }}
             {% if error.department.0 %}
             <span>{{ error.department.0 }}</span>
             {% endif %}
         </div>
+        <a>zabbix</a><br>
         <div class="input-group">
-            {{ add_userform.ccj_admin }}
-            {% if error.ccj_admin.0 %}
-            <span>{{ error.ccj_admin.0 }}</span>
+            {{ add_userform.zabbix }}
+            {% if error.zabbix.0 %}
+            <span>{{ error.zabbix.0 }}</span>
             {% endif %}
         </div>
+        <a>kibana</a><br>
         <div class="input-group">
-            {{ add_userform.cct_admin }}
-            {% if error.cct_admin.0 %}
-            <span>{{ error.cct_admin.0 }}</span>
+            {{ add_userform.kibana }}
+            {% if error.kibana.0 %}
+            <span>{{ error.kibana.0 }}</span>
             {% endif %}
         </div>
         <div>
             <input type="submit" value="提交">
         </div>
     </form>
-
 </body>
 </html>
