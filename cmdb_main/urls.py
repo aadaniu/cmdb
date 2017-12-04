@@ -21,9 +21,14 @@ from opmanage.views import index, test
 urlpatterns = [
     url(r'^test/adduesr', test.insert_data),
     url(r'^test/sendtable', test.sendtable),
+    url(r'^test/sendmail', test.send),
     url(r'^admin/', admin.site.urls),
     url(r'^login/', index.login),
+    url(r'^logout/', index.logout),
     url(r'^adduser/', index.add_user),
     url(r'^deluser/', index.del_user),
+    url(r'^index/', index.del_user),
+    url(r'^changepassword/',index.change_password),
+    url(r'^changeuserinfo/',index.change_user_info),
 ]
 

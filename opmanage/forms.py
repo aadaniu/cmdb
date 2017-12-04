@@ -25,6 +25,16 @@ class UserForm(forms.Form):
     username = forms.CharField(required=True,max_length=20,error_messages={'required': '用户名不能为空','invalid': '用户名格式错误'})
     password = forms.CharField(required=True,max_length=20,error_messages={'required': '密码不能为空','invalid': '密码格式错误'})
 
+    # py2
+    def clean(self):
+        cleaned_data = super(UserForm, self).clean()
+        username = cleaned_data.get('username')
+        if checkusername_exit(username) == False:
+            self.add_error('username', '用户名不存在')
+
+    # py3
+
+
 class AddUserForm(forms.Form):
     email = forms.CharField()
     password = forms.CharField()
@@ -36,9 +46,22 @@ class AddUserForm(forms.Form):
     zabbix = forms.CharField()
     kibana = forms.CharField()
 
+    def clean(self):
+        cleaned_data = super(AddUserForm, self).clean()
+        username = cleaned_data.get('username')
+        if checkusername_exit(username) == False:
+            self.add_error('username', '用户名不存在')
+
+
 class DelUserForm(forms.Form):
     username = forms.CharField()
     manager_password = forms.CharField()
+
+    def clean(self):
+        cleaned_data = super(DelUserForm, self).clean()
+        username = cleaned_data.get('username')
+        if checkusername_exit(username) == False:
+            self.add_error('username', '用户名不存在')
 
 
 

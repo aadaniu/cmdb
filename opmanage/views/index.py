@@ -2,12 +2,14 @@
 # 2017-11-29
 # by why
 
-from django.shortcuts import render,render_to_response,HttpResponseRedirect
+from django.shortcuts import render,render_to_response,HttpResponseRedirect,redirect
 from django.http import HttpResponse
 
 from opmanage.forms import UserForm, AddUserForm, DelUserForm
 from opmanage.models import User_info
 from lib.load_config import global_all_email_suffix
+
+import time
 
 def login(request):
     """
@@ -23,18 +25,27 @@ def login(request):
             username = request.POST.get('username', None)
             password = request.POST.get('password', None)
             # 登录验证成功
+            # 计划挪到form
             if check_login(username,password):
-                return HttpResponse('login')
+                request.session['username'] = username
+                request.session['auth'] = get_auth(username)
+                return redirect('/login/')
             # 登录验证失败
             else:
-                return HttpResponse('not login')
+                return render(request, "login.html", {'userform': userform, 'error': userform.errors})
         # 字段验证不通过
         else:
             return render(request, "login.html", {'userform': userform, 'error': userform.errors})
     # 非POST请求
     else:
-        userform = UserForm()
-        return render(request,"login.html", {'userform': userform})
+        # 验证权限
+        # 计划弄成装饰器
+        if request.session.get('auth',None) == 1:
+            return render(request, 'index.html')
+        # 验证失败
+        else:
+            userform = UserForm()
+            return render(request,"login.html", {'userform': userform})
 
 
 def add_user(request):
@@ -59,11 +70,6 @@ def add_user(request):
             department = request.POST.get('department', None)
             zabbix = request.POST.get('zabbix', None)
             kibana = request.POST.get('kibana', None)
-
-            # 判断用户是否存在，不存在添加错误返回
-            if check_userexit(username) == False:
-                # 计划移动到form表单中
-                return HttpResponse('no')
 
             # 插入数据
             User_info.objects.create(username=username,password=password,email=email,auth=auth,jumper=jumper,
@@ -105,6 +111,7 @@ def add_user(request):
         add_userform = AddUserForm()
         return render(request,"adduser.html", {'add_userform': add_userform})
 
+
 def del_user(request):
     """
         删除用户
@@ -119,11 +126,15 @@ def del_user(request):
             username = request.POST.get('username', None)
             manager_password = request.POST.get('manager_password', None)
             # 验证管理员权限不通过
-            if check_manage_password(username,manager_password) == False:
-                return HttpResponse('have no auth')
-            # 删除用户
-            User_info.objects.filter(username=username).delete()
-            return HttpResponse('del %s' % username)
+            if check_login(request.session.get('username',None),manager_password) == False:
+                # 添加权限报错，计划改到form
+                return render(request, "deluser.html", {'del_userform': del_userform, 'error': del_userform.errors})
+            # 验证管理员用户通过
+            else:
+                # 删除权限用户
+                # 删除用户
+                User_info.objects.filter(username=username).delete()
+                return HttpResponse('del %s' % username)
         # 字段验证不通过
         else:
             return render(request, "deluser.html", {'del_userform': del_userform, 'error': del_userform.errors})
@@ -139,7 +150,9 @@ def logout(request):
     :param request:
     :return:
     """
-    pass
+    request.session.set_expiry(0.1)
+    time.sleep(0.2)
+    return redirect('/login/')
 
 
 def index(request):
@@ -148,38 +161,77 @@ def index(request):
     :param request:
     :return:
     """
-    pass
+    if request.session.get('auth') == 1:
+        return render(request, 'index.html')
+    else:
+        return redirect('/login/')
 
 
-def check_auth(request):
+def change_password(request):
     """
-        权限判断，理论是一个装饰器
+        用于用户修改密码
     :param request:
     :return:
     """
     pass
 
-def is_login(request):
+
+def change_user_info(request):
     """
-        登录判断，
+        用于修改权限
     :param request:
     :return:
     """
 
 
-
-
-def check_userexit(username):
+def check_login_auth(auth):
     """
-        检查用户名是否存在
-    :param username:
+        登录权限判断
+    :param request:
     :return:
     """
-    check_userexit_status = User_info.objects.filter(username=username).count()
-    if check_userexit_status != 1:
+    if auth == 1:
         return True
     else:
         return False
+
+
+def check_manage_auth(auth):
+    """
+        管理权限判断
+    :param request:
+    :return:
+    """
+    if auth == 1:
+        return True
+    else:
+        return False
+
+
+def get_auth(username):
+    """
+        获取当前用户权限
+    :param username:
+    :return:
+    """
+    user_info = User_info.objects.filter(username=username)
+    auth = user_info[0].auth
+    return auth
+
+
+def check_login(username,password):
+    """
+        验证用户名密码是否正确
+    :param username: 用户名
+    :param password: 密码
+    :return:
+    """
+    check_login_status = User_info.objects.filter(username=username,password=password).count()
+    if check_login_status == 1:
+        return True
+    else:
+        return False
+
 
 def check_emailexit(email):
     """
@@ -233,7 +285,7 @@ def create_zabbix(username,password,email):
 
 
 
-def change_user(request):
+def change_user_info(request):
     """
         修改用户
     :param request:
@@ -242,25 +294,14 @@ def change_user(request):
     pass
 
 
-def check_login(username,password):
-    """
-        验证用户名密码是否正确
-    :param username: 用户名
-    :param password: 密码
-    :return:
-    """
-    check_login_status = User_info.objects.filter(username=username,password=password).count()
-    if check_login_status == 1:
-        return True
-    else:
-        return False
-
-
 def check_manage_password(*args):
     """
-        验证管理员密码
+        暂时用于删除业务逻辑
     :param args:
     :return:
     """
     pass
+
+
+
 

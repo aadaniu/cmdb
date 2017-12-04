@@ -7,6 +7,11 @@ from django.shortcuts import render,render_to_response,HttpResponseRedirect
 from opmanage.models import User_info
 
 def insert_data(requets):
+    """
+        添加测试数据
+    :param requets:
+    :return:
+    """
     try:
         User_info.objects.create(username='wanghongyu',
                                  password='123456',
@@ -22,9 +27,14 @@ def insert_data(requets):
         return HttpResponse(e)
     return HttpResponse('ok')
 
-from lib.sendmail import sendmail_table
+from lib.sendmail import sendmail_table, sendmail_general
 
 def sendtable(requets):
+    """
+        测试发送表格邮件
+    :param requets:
+    :return:
+    """
     subject = '磁盘使用情况'
     temail = ['why@whysdomain.com',]
     # 原来的sendmail，不支持不同的表头
@@ -50,12 +60,31 @@ def sendtable(requets):
     data2['title'] = '磁盘使用率小于%d%%的主机磁盘，共计%s例' % (20,len(data2['data']))
     dataDict.append(data2)
     user = '王宏宇'
-    print dataDict
+
 
     try:
         sendmail_table(subject, temail, dataDict, user)
     except Exception as e:
         return HttpResponse(e)
     return HttpResponse('ok')
+
+
+def send(request):
+    """
+        测试发送简单邮件
+    :param request:
+    :return:
+    """
+    # try:
+    #     sendmail_general('hello world','why@whysdomain.com')
+    # except Exception as e:
+    #     return HttpResponse(e)
+    # return HttpResponse('ok')
+    sendmail_general('Test','helloworld',['why@whysdomain.com',])
+    return HttpResponse('ok')
+
+
+
+
 
 

@@ -81,12 +81,25 @@ def get_date(days):
 
 
 # 发送普通邮件
-def sendmail_general(femail,temail,msg):
+def sendmail_general(subject, text, temail, femail=cmdb_smtp_user):
+    """
+        发送一个普通邮件
+    :param subject: 标题
+    :param text: 内容
+    :param temail: 收件人列表
+    :param femail:
+    :return:
+    """
+    msg = email.MIMEText.MIMEText(text, _subtype='plain', _charset='utf-8')
+    msg['To'] = ",".join(temail)
+    msg['From'] = femail
+    msg['Subject'] = subject
+    msg['Date'] = Utils.formatdate(localtime=1)
     s = smtplib.SMTP(smtp_host, smtp_port)
     s.ehlo()        #未知
     s.starttls()    #ssl需要
     s.login(mail_user, mail_passwd)
-    s.sendmail(femail, temail, msg)
+    s.sendmail(femail, temail, msg.as_string())
     s.close()
 
 
