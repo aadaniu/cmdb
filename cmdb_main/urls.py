@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^test/adduesr', test.insert_data),
     url(r'^test/sendtable', test.sendtable),
     url(r'^test/sendmail', test.send),
+    url(r'^test/zabbix', test.test_zabbix),
     url(r'^admin/', admin.site.urls),
     url(r'^login/', index.login),
     url(r'^logout/', index.logout),

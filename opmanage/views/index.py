@@ -2,14 +2,16 @@
 # 2017-11-29
 # by why
 
+import time
 from django.shortcuts import render,render_to_response,HttpResponseRedirect,redirect
 from django.http import HttpResponse
+
 
 from opmanage.forms import UserForm, AddUserForm, DelUserForm
 from opmanage.models import User_info
 from lib.load_config import global_all_email_suffix
 
-import time
+
 
 def login(request):
     """

@@ -30,14 +30,15 @@ cmdb_smtp_password = cmdb_config.get('smtp','password')
 zabbix_config = ConfigParser.RawConfigParser()
 zabbix_config.read(os.path.join(BASE_DIR, 'config/zabbix.config'))
 
+zabbix_api_host = zabbix_config.get('api','host')
 zabbix_api_url = zabbix_config.get('api','url')
 zabbix_api_username = zabbix_config.get('api','username')
-zabbix_api_passport = zabbix_config.get('api','password')
+zabbix_api_password = zabbix_config.get('api','password')
 
 zabbix_mysql_host = zabbix_config.get('mysql','host')
 zabbix_mysql_port = zabbix_config.get('mysql','port')
 zabbix_mysql_user = zabbix_config.get('mysql','user')
-zabbix_mysql_passport = zabbix_config.get('mysql','password')
+zabbix_mysql_password = zabbix_config.get('mysql','password')
 zabbix_mysql_database = zabbix_config.get('mysql','database')
 
 # load global config
