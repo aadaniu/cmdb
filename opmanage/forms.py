@@ -46,11 +46,11 @@ class AddUserForm(forms.Form):
     zabbix = forms.CharField()
     kibana = forms.CharField()
 
-    def clean(self):
-        cleaned_data = super(AddUserForm, self).clean()
-        username = cleaned_data.get('username')
-        if checkusername_exit(username) == False:
-            self.add_error('username', '用户名不存在')
+    # def clean(self):
+    #     cleaned_data = super(AddUserForm, self).clean()
+    #     username = cleaned_data.get('username')
+    #     if checkusername_exit(username) == False:
+    #         self.add_error('username', '用户名不存在')
 
 
 class DelUserForm(forms.Form):

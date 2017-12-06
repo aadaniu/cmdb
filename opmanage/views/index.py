@@ -10,6 +10,7 @@ from django.http import HttpResponse
 from opmanage.forms import UserForm, AddUserForm, DelUserForm
 from opmanage.models import User_info
 from lib.load_config import global_all_email_suffix
+from lib.zabbix import zabbix
 
 
 
@@ -61,7 +62,6 @@ def add_user(request):
         add_userform = AddUserForm(request.POST)
         # 字段验证通过
         if add_userform.is_valid():
-            print global_all_email_suffix
             email = request.POST.get('email', None)
             username = email.replace('@' + global_all_email_suffix,'')
             password = request.POST.get('password', None)
@@ -91,10 +91,9 @@ def add_user(request):
                     pass
             # 创建zabbix用户
             if zabbix:
-                try:
-                    create_zabbix(username,password,email)
-                except:
-                    pass
+                # 如果创建失败
+                if create_zabbix(username,password,phone)['status'] == False:
+                    print 'zabbix no'
             # 创建kibana用户
             if kibana:
                 try:
@@ -176,14 +175,6 @@ def change_password(request):
     :return:
     """
     pass
-
-
-def change_user_info(request):
-    """
-        用于修改权限
-    :param request:
-    :return:
-    """
 
 
 def check_login_auth(auth):
@@ -275,16 +266,28 @@ def create_kibana(username,password,email):
     pass
 
 
-def create_zabbix(username,password,email):
+def create_zabbix(username,password,phone):
     """
         创建zabbix用户
     :param username:
     :param password:
-    :param email:
+    :param phone:
     :return:
     """
-    pass
-
+    z = zabbix()
+    params = {'alias': username,
+              'passwd': password}
+    params['usrgrps'] = [{'usrgrpid': '7'}]   # 一个用户可以在多个组内
+    params['user_medias'] = [
+                                  {'mediatypeid': '1',
+                                   'sendto': phone,
+                                   'active': '0',      # 0为开启
+                                   'severity': '63',   # 对应1111 1111 各个报警级别
+                                   'period': '1-7,00:00-24:00'
+                                  }
+                            ]
+    result = z.getdataZabbix('user.create', params)
+    return result
 
 
 def change_user_info(request):

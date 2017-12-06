@@ -16,13 +16,13 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from opmanage.views import index, test
+from opmanage.views import index, test, test_zabbix
 
 urlpatterns = [
     url(r'^test/adduesr', test.insert_data),
     url(r'^test/sendtable', test.sendtable),
     url(r'^test/sendmail', test.send),
-    url(r'^test/zabbix', test.test_zabbix),
+    url(r'^test/zabbix', test_zabbix.test_zabbix),
     url(r'^admin/', admin.site.urls),
     url(r'^login/', index.login),
     url(r'^logout/', index.logout),

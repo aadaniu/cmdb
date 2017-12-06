@@ -84,22 +84,7 @@ def send(request):
     return HttpResponse('ok')
 
 
-from lib.zabbix import zabbix
 
-
-def test_zabbix(request):
-    """
-        测试zabbix功能
-    :param request:
-    :return:
-    """
-    try:
-        z = zabbix()
-        # print z.getallhost()
-        # print z.usergroup_create('test02',['1','2'])
-    except Exception as e:
-        return HttpResponse(e)
-    return HttpResponse('ok')
 
 
 
