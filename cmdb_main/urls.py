@@ -26,10 +26,11 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^login/', index.login),
     url(r'^logout/', index.logout),
+    url(r'^index/', index.index),
     url(r'^adduser/', index.add_user),
     url(r'^deluser/', index.del_user),
-    url(r'^index/', index.del_user),
-    url(r'^changepassword/',index.change_password),
-    url(r'^changeuserinfo/',index.change_user_info),
+    url(r'^updatauser/',index.updata_user),
+    url(r'^getuser/',index.get_user),
+    url(r'^updatauserpassword/',index.updata_user_password),
 ]
 

@@ -83,6 +83,8 @@ def test_zabbix(request):
         # params = {"output":['alias','userid'],'userids': '1'} # 获取指定id的用户的指定信息
         # print z.getdataZabbix('user.get', params)
 
+        # print z.userid_to_name('1')
+        print z.username_to_id('wanghongyu')
 
 
         """41项

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .input-group {
+            position: relative;
+            padding: 20px;
+            width: 250px;
+        }
+        .input-group input{
+            width: 200px;
+            display: inline-block;
+        }
+        .input-group span{
+            display: inline-block;
+            position: absolute;
+            height: 12px;
+            font-size: 8px;
+            border: 1px solid darkred;
+            background-color: coral;
+            color: white;
+            top: 41px;
+            left: 20px;
+            width: 202px;
+        }
+    </style>
+</head>
+<body>
+    <form action="/updatauser/" method="post" novalidate>
+        <a>用户名</a><br>
+        <div class="input-group">
+            {{ updata_userform.username }}
+            {% if error.username.0 %}
+            <span>{{ error.username.0 }}</span>
+            {% endif %}
+        </div>
+        <a>管理员密码</a><br>
+        <div class="input-group">
+            {{ updata_userform.manager_password }}
+            {% if error.manager_password.0 %}
+            <span>{{ error.manager_password.0 }}</span>
+            {% endif %}
+        </div>
+        <a>密码</a><br>
+        <div class="input-group">
+            {{ updata_userform.password }}
+            {% if error.password.0 %}
+            <span>{{ error.password.0 }}</span>
+            {% endif %}
+        </div>
+        <a>权限</a><br>
+        <div class="input-group">
+            {{ updata_userform.auth }}
+            {% if error.auth.0 %}
+            <span>{{ error.auth.0 }}</span>
+            {% endif %}
+        </div>
+        <a>跳板机</a><br>
+        <div class="input-group">
+            {{ updata_userform.jumper }}
+            {% if error.jumper.0 %}
+            <span>{{ error.jumper.0 }}</span>
+            {% endif %}
+        </div>
+        <a>vpn</a><br>
+        <div class="input-group">
+            {{ updata_userform.vpn }}
+            {% if error.vpn.0 %}
+            <span>{{ error.vpn.0 }}</span>
+            {% endif %}
+        </div>
+        <a>部门</a><br>
+        <div class="input-group">
+            {{ updata_userform.department }}
+            {% if error.department.0 %}
+            <span>{{ error.department.0 }}</span>
+            {% endif %}
+        </div>
+        <a>zabbix</a><br>
+        <div class="input-group">
+            {{ updata_userform.zabbix }}
+            {% if error.zabbix.0 %}
+            <span>{{ error.zabbix.0 }}</span>
+            {% endif %}
+        </div>
+        <a>电话</a><br>
+        <div class="input-group">
+            {{ updata_userform.phone }}
+            {% if error.phone.0 %}
+            <span>{{ error.phone.0 }}</span>
+            {% endif %}
+        </div>
+        <a>kibana</a><br>
+        <div class="input-group">
+            {{ updata_userform.kibana }}
+            {% if error.kibana.0 %}
+            <span>{{ error.kibana.0 }}</span>
+            {% endif %}
+        </div>
+        <div>
+            <input type="submit" value="提交">
+        </div>
+    </form>
+</body>
+</html>

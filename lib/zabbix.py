@@ -122,3 +122,27 @@ class zabbix():
         finally:
             return result
 
+    def username_to_id(self, name):
+        """
+            用户名查找用户id
+        :param name:
+        :return:
+        """
+        id = None
+        params = {"output": ['alias', 'userid']}
+        data = self.getdataZabbix('user.get', params)
+        for i in data['data']:
+            if i['alias'] == name:
+                id = i['userid']
+                break
+        return id
+
+    def userid_to_name(self, id):
+        """
+            用户id查找用户名
+        :param id:
+        :return:
+        """
+        params = {"output": ['alias', 'userid'], 'userids': id}
+        return self.getdataZabbix('user.get',params)['data'][0]['alias']
+

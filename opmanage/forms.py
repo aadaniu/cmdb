@@ -63,6 +63,21 @@ class DelUserForm(forms.Form):
         if checkusername_exit(username) == False:
             self.add_error('username', '用户名不存在')
 
+class UpdataUserForm(forms.Form):
+    manager_password = forms.CharField()
+    username = forms.CharField()
+    password = forms.CharField(required=False)
+    auth = forms.CharField(required=False)
+    jumper = forms.CharField(required=False)
+    vpn = forms.CharField(required=False)
+    phone = forms.CharField(required=False)
+    department = forms.CharField(required=False)
+    zabbix = forms.CharField(required=False)
+    kibana = forms.CharField(required=False)
+
+
+class GetUserForm(forms.Form):
+    username = forms.CharField()
 
 
 

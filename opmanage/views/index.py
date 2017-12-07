@@ -7,11 +7,10 @@ from django.shortcuts import render,render_to_response,HttpResponseRedirect,redi
 from django.http import HttpResponse
 
 
-from opmanage.forms import UserForm, AddUserForm, DelUserForm
+from opmanage.forms import UserForm, AddUserForm, DelUserForm,UpdataUserForm,GetUserForm
 from opmanage.models import User_info
 from lib.load_config import global_all_email_suffix
 from lib.zabbix import zabbix
-
 
 
 def login(request):
@@ -32,7 +31,7 @@ def login(request):
             if check_login(username,password):
                 request.session['username'] = username
                 request.session['auth'] = get_auth(username)
-                return redirect('/login/')
+                return redirect('/index/')
             # 登录验证失败
             else:
                 return render(request, "login.html", {'userform': userform, 'error': userform.errors})
@@ -49,6 +48,29 @@ def login(request):
         else:
             userform = UserForm()
             return render(request,"login.html", {'userform': userform})
+
+
+def index(request):
+    """
+        浏览主页
+    :param request:
+    :return:
+    """
+    if request.session.get('auth') == 1:
+        return render(request, 'index.html')
+    else:
+        return redirect('/login/')
+
+
+def logout(request):
+    """
+        用于用户退出
+    :param request:
+    :return:
+    """
+    request.session.set_expiry(0.1)
+    time.sleep(0.2)
+    return redirect('/login/')
 
 
 def add_user(request):
@@ -135,6 +157,8 @@ def del_user(request):
                 # 删除权限用户
                 # 删除用户
                 User_info.objects.filter(username=username).delete()
+                # 删除用户其他权限账户
+
                 return HttpResponse('del %s' % username)
         # 字段验证不通过
         else:
@@ -145,37 +169,175 @@ def del_user(request):
         return render(request, "deluser.html", {'del_userform': del_userform})
 
 
-def logout(request):
+def get_user(request):
     """
-        用于用户退出
+        查询用户信息
     :param request:
     :return:
     """
-    request.session.set_expiry(0.1)
-    time.sleep(0.2)
-    return redirect('/login/')
-
-
-def index(request):
-    """
-        浏览主页
-    :param request:
-    :return:
-    """
-    if request.session.get('auth') == 1:
-        return render(request, 'index.html')
+    if request.method == "POST":
+        get_userform = GetUserForm(request.POST)
+        if get_userform.is_valid():
+            username = request.POST.get('username')
+            userinfo = User_info.objects.filter(username=username)
+            return render(request, "getuserinfo.html", {'userinfo': userinfo})
     else:
-        return redirect('/login/')
+        get_userform = GetUserForm()
+        return render(request, "getuser.html", {'get_userform': get_userform})
 
 
-def change_password(request):
+def updata_user(request):
+    """
+        修改用户
+    :param request:
+    :return:
+    """
+    # POST请求
+    if request.method == "POST":
+        updata_userform = UpdataUserForm(request.POST)
+        # 字段验证通过
+        if updata_userform.is_valid():
+            manager_password = request.POST.get('manager_password', None)
+            # 验证管理员权限不通过
+            if check_login(request.session.get('username', None), manager_password) == False:
+                # 添加权限报错，计划改到form
+                return render(request, "updatauser.html", {'updata_userform': updata_userform, 'error': updata_userform.errors})
+            # 验证管理员用户通过
+            else:
+                username = request.POST.get('username')
+                password = request.POST.get('password')
+                auth = request.POST.get('auth')
+                jumper = request.POST.get('jumper')
+                vpn = request.POST.get('vpn')
+                phone = request.POST.get('phone')
+                department = request.POST.get('department')
+                zabbix = request.POST.get('zabbix')
+                kibana = request.POST.get('kibana')
+                if password != '':
+                    updata_user_password(request,username,password)
+                if auth != '':
+                    updata_user_auth(request,username,auth)
+                if jumper != '':
+                    updata_user_jumper(request,username,jumper)
+                if vpn != '':
+                    updata_user_vpn(request,username,vpn)
+                if phone != '':
+                    updata_user_phone(request,username,phone)
+                if department != '':
+                    updata_user_department(request,username,department)
+                if zabbix != '':
+                    updata_user_zabbix(request,username,zabbix)
+                if kibana !=  '':
+                    updata_user_kibana(request,username,kibana)
+                return HttpResponse('updata %s' % username)
+        # 字段验证不通过
+        else:
+            return render(request, "updatauser.html", {'updata_userform': updata_userform, 'error': updata_userform.errors})
+    # 非POST请求
+    else:
+        updata_userform = UpdataUserForm()
+        return render(request, "updatauser.html", {'updata_userform': updata_userform})
+
+
+def updata_user_password(request,username=None,password=None):
     """
         用于用户修改密码
     :param request:
     :return:
     """
-    pass
+    if request.method == 'POST':
+        if check_manage_auth(request.session.get('auth',None)):
+            User_info.objects.filter(username=username).update(password=password)
+    else:
+        pass
 
+
+def updata_user_auth(request,username=None,auth=None):
+    """
+        用于用户修改cmdb权限
+    :param request:
+    :return:
+    """
+    if request.method == 'POST':
+        if check_manage_auth(request.session.get('auth',None)):
+            User_info.objects.filter(username=username).update(auth=auth)
+    else:
+        pass
+
+
+def updata_user_vpn(request,username=None,vpn=None):
+    """
+        用于用户修改vpn权限
+    :param request:
+    :return:
+    """
+    if request.method == 'POST':
+        if check_manage_auth(request.session.get('auth',None)):
+            User_info.objects.filter(username=username).update(vpn=vpn)
+    else:
+        pass
+
+
+def updata_user_jumper(request,username=None,jumper=None):
+    """
+        用于用户修改jumper权限
+    :param request:
+    :return:
+    """
+    if request.method == 'POST':
+        if check_manage_auth(request.session.get('auth',None)):
+            User_info.objects.filter(username=username).update(jumper=jumper)
+    else:
+        pass
+
+def updata_user_phone(request,username=None,phone=None):
+    """
+        用于用户修改电话
+    :param request:
+    :return:
+    """
+    if request.method == 'POST':
+        if check_manage_auth(request.session.get('auth',None)):
+            User_info.objects.filter(username=username).update(phone=phone)
+    else:
+        pass
+
+
+def updata_user_department(request,username=None,department=None):
+    """
+        用于用户修改部门
+    :param request:
+    :return:
+    """
+    if request.method == 'POST':
+        if check_manage_auth(request.session.get('auth',None)):
+            User_info.objects.filter(username=username).update(department=department)
+    else:
+        pass
+
+def updata_user_zabbix(request,username=None,zabbix=None):
+    """
+        用于用户修改部门
+    :param request:
+    :return:
+    """
+    if request.method == 'POST':
+        if check_manage_auth(request.session.get('auth',None)):
+            User_info.objects.filter(username=username).update(zabbix=zabbix)
+    else:
+        pass
+
+def updata_user_kibana(request,username=None,kibana=None):
+    """
+        用于用户修改部门
+    :param request:
+    :return:
+    """
+    if request.method == 'POST':
+        if check_manage_auth(request.session.get('auth',None)):
+            User_info.objects.filter(username=username).update(kibana=kibana)
+    else:
+        pass
 
 def check_login_auth(auth):
     """
@@ -225,16 +387,6 @@ def check_login(username,password):
     else:
         return False
 
-
-def check_emailexit(email):
-    """
-        检查邮箱是否存在
-    :param email:
-    :return:
-    """
-    pass
-
-
 def create_vpn(username,email):
     """
         创建vpn
@@ -277,12 +429,12 @@ def create_zabbix(username,password,phone):
     z = zabbix()
     params = {'alias': username,
               'passwd': password}
-    params['usrgrps'] = [{'usrgrpid': '7'}]   # 一个用户可以在多个组内
+    params['usrgrps'] = [{'usrgrpid': '7'}]
     params['user_medias'] = [
                                   {'mediatypeid': '1',
                                    'sendto': phone,
-                                   'active': '0',      # 0为开启
-                                   'severity': '63',   # 对应1111 1111 各个报警级别
+                                   'active': '0',
+                                   'severity': '63',
                                    'period': '1-7,00:00-24:00'
                                   }
                             ]
@@ -290,13 +442,19 @@ def create_zabbix(username,password,phone):
     return result
 
 
-def change_user_info(request):
+def delete_zabbix(username):
     """
-        修改用户
-    :param request:
+        删除zabbix用户
+    :param username:
     :return:
     """
-    pass
+    z = zabbix()
+    params = [z.username_to_id(username)]
+    result = z.getdataZabbix('delete', params)
+    return result
+
+
+
 
 
 def check_manage_password(*args):

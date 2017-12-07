@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .input-group {
+            position: relative;
+            padding: 20px;
+            width: 250px;
+        }
+        .input-group input{
+            width: 200px;
+            display: inline-block;
+        }
+        .input-group span{
+            display: inline-block;
+            position: absolute;
+            height: 12px;
+            font-size: 8px;
+            border: 1px solid darkred;
+            background-color: coral;
+            color: white;
+            top: 41px;
+            left: 20px;
+            width: 202px;
+        }
+    </style>
+</head>
+<body>
+    <form action="/getuser/" method="post" novalidate>
+        <a>用户名</a><br>
+        <div class="input-group">
+            {{ get_userform.username }}
+            {% if error.username.0 %}
+            <span>{{ error.username.0 }}</span>
+            {% endif %}
+        </div>
+        <div>
+            <input type="submit" value="提交">
+        </div>
+    </form>
+</body>
+</html>
