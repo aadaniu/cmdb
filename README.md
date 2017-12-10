@@ -14,16 +14,20 @@
 邮件如果发给一个不存在的人会返回成功吗？
 
 ## 依赖包
-- djang-1.11.5
-- pymysql-0.7.11
-- pyzabbix-0.7.4
-- elasticsearch-6.0.0
+- djang (1.11.5)
+- pymysql (0.7.11)
+- ipaddr (2.1.11)
+- boto3 (1.4.8)
+- qcloudapi-sdk-python (2.0.10)
+- aliyun-python-sdk-core (2.6.0)
+- aliyun-python-sdk-ecs (4.4.3)
+
 
 ## 配置文件
-- global.config
-- cmdb.config
-- zabbix.config
-- elasticsearch.config
+- global.config 用于公司全局配置
+- cmdb.config   cmdb依赖配置
+- zabbix.config zabbix依赖配置
+- elasticsearch.config  elasticsearch配置
 
 ## 生成数据库并启动服务
 

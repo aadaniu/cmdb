@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% extends "base.html" %}
+{% block content %}
+    <table border="1" cellpadding="1" cellspacing="1" width="500">
+        <thead>
+            <tr>
+                <th>姓名</th>
+                <th>部门</th>
+                <th>电话</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in user_info %}
+            <tr>
+                <td>{{ i.username }}</td>
+                <td>{{ i.department }}</td>
+                <td>{{ i.phone }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+</body>
+</html>

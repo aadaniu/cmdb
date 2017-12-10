@@ -28,6 +28,8 @@
     </style>
 </head>
 <body>
+{% extends "base.html" %}
+{% block content %}
     <form action="/login/" method="post" novalidate>
         <div class="input-group">
             {{ userform.username }}
@@ -45,6 +47,6 @@
             <input type="submit" value="提交">
         </div>
     </form>
-
+{% endblock %}
 </body>
 </html>

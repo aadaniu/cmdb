@@ -128,14 +128,20 @@ class zabbix():
         :param name:
         :return:
         """
-        id = None
-        params = {"output": ['alias', 'userid']}
-        data = self.getdataZabbix('user.get', params)
-        for i in data['data']:
-            if i['alias'] == name:
-                id = i['userid']
-                break
-        return id
+        # id = None
+        # params = {"output": ['alias', 'userid']}
+        # data = self.getdataZabbix('user.get', params)
+        # for i in data['data']:
+        #     if i['alias'] == name:
+        #         id = i['userid']
+        #         break
+        # return id
+        params = {"output": ['userid'],
+                  'filter' : {
+                        'alias': [name,]
+                      }
+                  }
+        return self.getdataZabbix('user.get', params)['data'][0]['userid']
 
     def userid_to_name(self, id):
         """
@@ -145,4 +151,296 @@ class zabbix():
         """
         params = {"output": ['alias', 'userid'], 'userids': id}
         return self.getdataZabbix('user.get',params)['data'][0]['alias']
+
+    def hostid_to_name(self, id):
+        """
+            主机id查找主机名
+        :param id:
+        :return:
+        """
+        params = {'output': ['host',],
+                  'hostids': [id],
+                  }
+        return self.getdataZabbix('host.get', params)['data'][0]['host']
+
+
+    def hostname_to_id(self, host):
+        """
+            主机名查找主机id
+        :param host:
+        :return:
+        """
+        params = {'output': 'hostid',
+                  'filter': {
+                      'host': [host]
+                  }}
+        return self.getdataZabbix('host.get', params)['data'][0]['hostid']
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def getallhost(self):
+        hostdic = {
+            "jsonrpc": "2.0",
+            "method": "host.get",
+            "params": {
+                # "output": [
+                #     "hostid",
+                #     "host"
+                # ],
+                "selectInterfaces": [
+                    "interfaceid",
+                    "ip"
+                ]
+            },
+            "id": 2,
+            "auth": self.token
+        }
+        return self._queryZabbix(hostdic)
+
+    def delhost(self, hosts):
+        hostids = []
+        for h in self.getallhost():
+            if h['host'] in hosts:
+                hostids.append(h['hostid'])
+
+        hostdic = {
+            "jsonrpc": "2.0",
+            "method": "host.delete",
+            "params": hostids,
+            "auth": self.token,
+            "id": 1
+        }
+        self._queryZabbix(hostdic)
+
+    def disablehost(self, hosts):
+
+        for h in self.getallhost():
+            if h['host'] in hosts:
+                hostids = h['hostid']
+
+                hostdic = {
+                    "jsonrpc": "2.0",
+                    "method": "host.update",
+                    "params": {"hostid": hostids,
+                               "status": 1
+                               },
+                    "auth": self.token,
+                    "id": 1
+                }
+                self._queryZabbix(hostdic)
+
+    def enablehost(self, hosts):
+
+        for h in self.getallhost():
+            if h['host'] in hosts:
+                hostids = h['hostid']
+
+                hostdic = {
+                    "jsonrpc": "2.0",
+                    "method": "host.update",
+                    "params": {"hostid": hostids,
+                               "status": 0
+                               },
+                    "auth": self.token,
+                    "id": 1
+                }
+                self._queryZabbix(hostdic)
+
+    def __update_macros(self, **kwargs):
+
+        hostdic = {
+            "jsonrpc": "2.0",
+            "method": "host.update",
+            "params": {
+                "hostid": kwargs['hostid'],
+                "macros": kwargs['macros']
+            },
+            "auth": self.token,
+            "id": 1
+        }
+        return self._queryZabbix(hostdic)
+
+    def createhost(self, **kwargs):
+        '''
+
+        :param hostinfo:
+                {'hostname':'hostname',
+                    'ip':'ip',
+                    'groupid':'groupid',
+                    'templateid':'templateid'
+                    }
+        :return:
+            if add seccess .
+        '''
+        hostdic = {
+            "jsonrpc": "2.0",
+            "method": "host.create",
+            "params": {
+                "host": kwargs['host'],
+                "interfaces": [
+                    {
+                        "type": 1,
+                        "main": 1,
+                        "useip": 1,
+                        "ip": kwargs['ipaddr'].strip(),
+                        "dns": '',
+                        "port": "10050"
+                    }
+                ],
+                "groups": kwargs['groupids'],
+                "templates": kwargs['templateidlist'],
+
+            },
+            "auth": self.token,
+            "id": 1
+        }
+        res = self._queryZabbix(hostdic)
+        if 'macros' in kwargs.keys():
+            kwargs['hostid'] = res['hostids'][0]
+            self.__update_macros(**kwargs)
+
+    def getTemplate(self, **kwargs):
+        """
+
+        :param kwargs:
+        :return:
+        """
+        hostdic = {
+            "jsonrpc": "2.0",
+            "method": "template.get",
+            "params": {
+                "filter": kwargs
+            },
+            "auth": self.token,
+            "id": 1
+        }
+        return self._queryZabbix(hostdic)
+
+    def getitems(self, hostids, key_):
+        itemdic = {
+            "jsonrpc": "2.0",
+            "method": "item.get",
+            "params": {
+                "output": "extend",
+                "hostids": hostids,
+                "search": {
+                    "key_": key_
+                },
+                "sortfield": "name"
+            },
+            "auth": self.token,
+            "id": 1
+        }
+        return self._queryZabbix(itemdic)
+
+    def getitemshistory(self, time_from=0, time_till=0, itemids=None, history=0):
+        if not itemids:
+            itemids = []
+        historydic = {"jsonrpc": "2.0",
+                      "method": "history.get",
+                      "params": {"history": history,
+                                 "itemids": itemids,
+                                 "time_from": time_from,
+                                 "time_till": time_till,
+                                 "output": "extend"},
+                      "auth": self.token,
+                      "id": 0}
+        return self._queryZabbix(historydic)
+
+    def getitemlastdaystat(self, itemids, history=0):
+        result = {}
+        time_from = int((date.today() - timedelta(days=1)).strftime('%s'))
+        time_still = int(date.today().strftime('%s'))
+        tlist = self.getitemshistory(time_from=time_from, time_till=time_still, itemids=itemids,
+                                     history=history)
+        # print len(tlist)
+        for l in tlist:
+            value = float(l['value'])
+            itemid = l['itemid']
+            if itemid not in result.keys():
+                result[itemid] = []
+            result[itemid].append(value)
+        for id in result.keys():
+            minv = min(result[id])
+            avgv = sum(result[id]) / len(result[id])
+            result[id] = (minv, avgv)
+            # return -1, -1
+        return result
+
+    def queryTest(self, date):
+
+        return self._queryZabbix(date)
+
+    def getallgroups(self):
+        groupdic = {
+            "jsonrpc": "2.0",
+            "method": "hostgroup.get",
+            "params": {
+                "output": "extend",
+                "filter": {
+                    "name": [
+                        "Zabbix servers",
+                        "Linux servers",
+                        "ADS",
+                        "DEV",
+                        "Discovered hosts",
+                        "dns",
+                        "DP",
+                        "dubbo-test",
+                        "ELB",
+                        "ELK",
+                        "EMR",
+                        "Huodong",
+                        "MEMCACHE",
+                        "Mikoomi templates",
+                        "Mongo",
+                        "ms-shop",
+                        "MySQL DB Group",
+                        "nli",
+                        "RDS service",
+                        "Redis",
+                        "search",
+                        "shop",
+                        "Shop-seller",
+                        "Social",
+                        "Swoole",
+                        "test-cluster",
+                        "zk",
+                        "zookeeper"
+                    ]
+                }
+            },
+            "auth": self.token,
+            "id": 1
+        }
+
+
+if __name__ == '__main__':
+    hosts = {}
+    zbx = zabbix()
+    for t in zbx.getTemplate():
+        print t
+        print t['name'], t['templateid']
+
 

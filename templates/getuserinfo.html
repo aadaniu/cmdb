@@ -5,6 +5,8 @@
     <title>Title</title>
 </head>
 <body>
+{% extends "base.html" %}
+{% block content %}
 <a>用户</a><br>
 {{ userinfo.0.username }}<br>
 <a>密码</a><br>
@@ -25,5 +27,6 @@
 {{ userinfo.0.zabbix }}<br>
 <a>kibana</a><br>
 {{ userinfo.0.kibana }}<br>
+{% endblock %}
 </body>
 </html>

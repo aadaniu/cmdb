@@ -26,5 +26,12 @@ class Department_info(models.Model):
 
 
 class Host_info(models.Model):
+    """
+    id name IP 机型 实例状态 标签信息
+    """
     name = models.CharField(max_length=30)
-    type = models.CharField(max_length=30)
+    ipaddr = models.CharField(max_length=30)
+    cloud = models.CharField(max_length=30)
+    types = models.CharField(max_length=30)
+    status = models.CharField(max_length=30)
+

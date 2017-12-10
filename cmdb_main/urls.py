@@ -19,7 +19,9 @@ from django.contrib import admin
 from opmanage.views import index, test, test_zabbix
 
 urlpatterns = [
+    url(r'^test/$', test.test),
     url(r'^test/adduesr', test.insert_data),
+    url(r'^test/addhost', test.insert_host),
     url(r'^test/sendtable', test.sendtable),
     url(r'^test/sendmail', test.send),
     url(r'^test/zabbix', test_zabbix.test_zabbix),
@@ -31,6 +33,7 @@ urlpatterns = [
     url(r'^deluser/', index.del_user),
     url(r'^updatauser/',index.updata_user),
     url(r'^getuser/',index.get_user),
+    url(r'^getmessage/',index.get_message),
     url(r'^updatauserpassword/',index.updata_user_password),
 ]
 

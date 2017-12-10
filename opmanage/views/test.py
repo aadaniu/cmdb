@@ -4,7 +4,26 @@
 
 from django.http import HttpResponse
 from django.shortcuts import render,render_to_response,HttpResponseRedirect
-from opmanage.models import User_info
+from opmanage.models import User_info,Host_info
+# from lib.qcloud import cvm
+
+
+def test(request):
+    return render(request,"test.html")
+
+
+def insert_host(requets):
+    """
+        添加测试数据
+    :param requets:
+    :return:
+    """
+    try:
+
+        Host_info.objects.create()
+    except Exception as e:
+        return HttpResponse(e)
+
 
 def insert_data(requets):
     """
@@ -13,16 +32,27 @@ def insert_data(requets):
     :return:
     """
     try:
-        User_info.objects.create(username='wanghongyu',
-                                 password='123456',
-                                 email='wanghongyu@whysdomain.com',
-                                 auth=True,
-                                 jumper=True,
-                                 vpn=True,
-                                 phone='13552493019',
-                                 department='op',
-                                 zabbix=True,
-                                 kibana=False)
+        # User_info.objects.create(username='wanghongyu',
+        #                          password='123456',
+        #                          email='wanghongyu@whysdomain.com',
+        #                          auth=True,
+        #                          jumper=True,
+        #                          vpn=True,
+        #                          phone='13552493019',
+        #                          department='op',
+        #                          zabbix=True,
+        #                          kibana=False)
+        User_info.objects.create(username='wangfucheng',
+                         password='123456',
+                         email='wangfucheng@whysdomain.com',
+                         auth=True,
+                         jumper=True,
+                         vpn=True,
+                         phone='13552493019',
+                         department='op',
+                         zabbix=True,
+                         kibana=False)
+        return HttpResponse('ok')
     except Exception as e:
         return HttpResponse(e)
     return HttpResponse('ok')

@@ -82,17 +82,98 @@ def test_zabbix(request):
         # params = {"output": ['name','id']}    # 获取所有用户的指定条件
         # params = {"output":['alias','userid'],'userids': '1'} # 获取指定id的用户的指定信息
         # print z.getdataZabbix('user.get', params)
+        # params = {"output": ['userid'],
+        #           'filter' : {
+        #                 'alias': ['wanghongyu',]
+        #               }
+        #           }
+        # print z.getdataZabbix('user.get', params)
 
         # print z.userid_to_name('1')
-        print z.username_to_id('wanghongyu')
+        # print z.username_to_id('wanghongyu')
+
+        """
+        06获取模板
+            template.get 对应官方文档 https://www.zabbix.com/documentation/2.4/manual/api/reference/template/get
+
+        """
+        # params = {"output": "extend"}
+        # params = {"output": ['host','name', 'templateid']}
+        # print z.getdataZabbix('template.get', params)
+
+        """
+        07获取报警
+            alert.get 对应官方文档 https://www.zabbix.com/documentation/2.4/manual/api/reference/alert/get
+        """
+        # params = {"output": "extend"}
+        # print z.getdataZabbix('alert.get', params)
+
+        """
+        08添加主机
+            host.create 对应官方文档 https://www.zabbix.com/documentation/2.4/manual/api/reference/host/create
+        """
+        # params =    {"host": "agent01",
+        #             "interfaces": [
+        #                             {
+        #                                 "type": 1,
+        #                                 "main": 1,
+        #                                 "useip": 1,
+        #                                 "ip": "172.17.0.10",
+        #                                 "dns": "",
+        #                                 "port": "10050"
+        #                             }
+        #                         ],
+        #             "groups": [
+        #                         {
+        #                             "groupid": "4"
+        #                         }
+        #                     ],
+        #             }
+        # print z.getdataZabbix('host.create', params)
+
+        """
+        09删除主机
+            host.delete 对应官方文档 https://www.zabbix.com/documentation/2.4/manual/api/reference/host/delete
+        """
+        # params = ['10105',]
+        # print z.getdataZabbix('host.delete', params)
+
+        """
+        10查询主机
+            host.get 对应官方文档
+        """
+        # params = {'output': 'extend',
+        #           'filter': {
+        #               'host': ['agent01']
+        #           }}
+        # 结果
+        # {u'available': u'0', u'maintenance_type': u'0', u'ipmi_errors_from': u'0', u'ipmi_username': u'', u'snmp_disable_until': u'0', u'ipmi_authtype': u'0', u'ipmi_disable_until': u'0', u'lastacce
+        # ss': u'0', u'snmp_error': u'', u'ipmi_privilege': u'2', u'jmx_error': u'', u'jmx_available': u'0', u'maintenanceid': u'0', u'snmp_available': u'0', u'status': u'0', u'description': u'', u'host': u'agent01', u'disable
+        # _until': u'0', u'ipmi_password': u'', u'templateid': u'0', u'ipmi_available': u'0', u'maintenance_status': u'0', u'snmp_errors_from': u'0', u'ipmi_error': u'', u'proxy_hostid': u'0', u'hostid': u'10106', u'name': u'a
+        # gent01', u'jmx_errors_from': u'0', u'jmx_disable_until': u'0', u'flags': u'0', u'error': u'', u'maintenance_from': u'0', u'errors_from': u'0'}
+
+        # params = {'output': 'hostid',
+        #           'filter': {
+        #               'host': ['agent01']
+        #           }}
+        # [{u'hostid': u'10106'}]}
+
+        # params = {'output': ['host',],
+        #           'hostids': ['10106'],
+        #           }
+        # {u'host': u'agent01', u'hostid': u'10106'}
+        # print z.getdataZabbix('host.get', params)
+
+        print z.hostid_to_name('10106')
+        print z.hostname_to_id('agent01')
 
 
         """41项
-        Action  报警动作的增删改查
-        Alert   报警信息查询
+        Action  报警动作的增删改查   对于cmdb用不到，我们更希望手动来创建
+        Alert   报警信息查询  对于cmdb可以用来生成运维报表
         API info    获取api版本
         Application
-        Configuration
+        Configuration   配置导入导出
         Discovered host
         Discovered service
         Discovery check
@@ -102,7 +183,7 @@ def test_zabbix(request):
         Graph item
         Graph prototype
         History
-        Host
+        Host    主机的增删改查，添加移除主机组
         Host group
         Host interface
         Host prototype
@@ -120,16 +201,17 @@ def test_zabbix(request):
         Screen
         Screen item
         Script
-        Template
-        Template screen
-        Template screen item
+        Template 包括模板的增删改查，模板添加移除到模板组 对于cmdb来说可以用
+        Template screen 模板视图的操作，我们也没用到这个
+        Template screen item 同上，没有用过
         Trigger
         Trigger prototype
-        User 包含用户创建的增删改查，用户报警方式的增删改查，以及部分用户权限查询
-        User group 包含用户组的增删改查，以及部分用户组权限查
-        User macro 全局变量和局部变量的增删改查
+        User 包含用户创建的增删改查，用户报警方式的增删改查，以及部分用户权限查询 对于cmdb来说可以用
+        User group 包含用户组的增删改查，以及部分用户组权限查 对于cmdb来说可以用
+        User macro 全局变量和局部变量的增删改查  对于cmdb可能会用到
         Web scenario 说实话我没找到这个
         """
+
 
     except Exception as e:
         return HttpResponse(e)

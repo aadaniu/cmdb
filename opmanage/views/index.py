@@ -3,6 +3,7 @@
 # by why
 
 import time
+import json
 from django.shortcuts import render,render_to_response,HttpResponseRedirect,redirect
 from django.http import HttpResponse
 
@@ -43,7 +44,7 @@ def login(request):
         # 验证权限
         # 计划弄成装饰器
         if request.session.get('auth',None) == 1:
-            return render(request, 'index.html')
+            return redirect('/index/')
         # 验证失败
         else:
             userform = UserForm()
@@ -158,7 +159,7 @@ def del_user(request):
                 # 删除用户
                 User_info.objects.filter(username=username).delete()
                 # 删除用户其他权限账户
-
+                delete_zabbix(username)
                 return HttpResponse('del %s' % username)
         # 字段验证不通过
         else:
@@ -323,7 +324,12 @@ def updata_user_zabbix(request,username=None,zabbix=None):
     """
     if request.method == 'POST':
         if check_manage_auth(request.session.get('auth',None)):
-            User_info.objects.filter(username=username).update(zabbix=zabbix)
+            userinfo = User_info.objects.filter(username=username)
+            userinfo.update(zabbix=zabbix)
+            if zabbix == '1':
+                create_zabbix(username, userinfo[0].password,userinfo[0].phone)
+            else:
+                delete_zabbix(username)
     else:
         pass
 
@@ -450,11 +456,8 @@ def delete_zabbix(username):
     """
     z = zabbix()
     params = [z.username_to_id(username)]
-    result = z.getdataZabbix('delete', params)
+    result = z.getdataZabbix('user.delete', params)
     return result
-
-
-
 
 
 def check_manage_password(*args):
@@ -464,6 +467,44 @@ def check_manage_password(*args):
     :return:
     """
     pass
+
+
+def get_message(request):
+    """
+        获取员工用户，部门和电话
+    :param request:
+    :return:
+    """
+    user_info = User_info.objects.all()
+    return render(request, "getmessage.html", {'user_info': user_info})
+
+
+
+
+def interface_user_phone(request):
+    """
+        ajax接口，用于返回用户，部门和电话
+    :param request:
+    :return:
+    """
+
+    result = {'status': False,
+              'data': []}
+
+    if request.POST.get('searchstr'):
+        pass
+    try:
+        user_info = User_info.objects.all()
+        for i in user_info:
+            result['data'].append({'username':i['username'],'phone':i['phone'],'department':i['department'],})
+        result['status'] = True
+    except:
+        pass
+    return HttpResponse(json.dumps(result))
+
+
+
+
 
 
 

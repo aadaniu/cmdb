@@ -28,6 +28,8 @@
     </style>
 </head>
 <body>
+{% extends "base.html" %}
+{% block content %}
     <form action="/adduser/" method="post" novalidate>
         <a>密 码</a><br>
         <div class="input-group">
@@ -96,5 +98,6 @@
             <input type="submit" value="提交">
         </div>
     </form>
+{% endblock %}
 </body>
 </html>

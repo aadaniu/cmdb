@@ -28,6 +28,8 @@
     </style>
 </head>
 <body>
+{% extends "base.html" %}
+{% block content %}
     <form action="/deluser/" method="post" novalidate>
         <a>用户名</a><br>
         <div class="input-group">
@@ -47,5 +49,6 @@
             <input type="submit" value="提交">
         </div>
     </form>
+{% endblock %}
 </body>
 </html>
