@@ -128,20 +128,15 @@ class zabbix():
         :param name:
         :return:
         """
-        # id = None
-        # params = {"output": ['alias', 'userid']}
-        # data = self.getdataZabbix('user.get', params)
-        # for i in data['data']:
-        #     if i['alias'] == name:
-        #         id = i['userid']
-        #         break
-        # return id
         params = {"output": ['userid'],
                   'filter' : {
                         'alias': [name,]
                       }
                   }
-        return self.getdataZabbix('user.get', params)['data'][0]['userid']
+        try:
+            return self.getdataZabbix('user.get', params)['data'][0]['userid']
+        except:
+            return {"status": True,"data": None}
 
     def userid_to_name(self, id):
         """

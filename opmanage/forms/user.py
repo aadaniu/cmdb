@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-# 2017-11-30
+# 2017-12-13
 # by why
 
 from django import forms
-from models import User_info
 
-
+from opmanage.models import User_info
 
 def checkusername_exit(username):
     """
@@ -19,26 +18,11 @@ def checkusername_exit(username):
     else:
         return False
 
-
-
-class UserForm(forms.Form):
-    username = forms.CharField(required=True,max_length=20,error_messages={'required': '用户名不能为空','invalid': '用户名格式错误'})
-    password = forms.CharField(required=True,max_length=20,error_messages={'required': '密码不能为空','invalid': '密码格式错误'})
-
-    # py2
-    def clean(self):
-        cleaned_data = super(UserForm, self).clean()
-        username = cleaned_data.get('username')
-        if checkusername_exit(username) == False:
-            self.add_error('username', '用户名不存在')
-
-    # py3
-
-
 class AddUserForm(forms.Form):
+    cmdb_auth = ((1, "user"),(10,"host"))
     email = forms.CharField()
     password = forms.CharField()
-    auth = forms.CharField()
+    auth = forms.MultipleChoiceField(required=True,widget=forms.CheckboxSelectMultiple(),choices=cmdb_auth)
     jumper = forms.CharField()
     vpn = forms.CharField()
     phone = forms.CharField()
@@ -78,8 +62,3 @@ class UpdataUserForm(forms.Form):
 
 class GetUserForm(forms.Form):
     username = forms.CharField()
-
-
-
-
-

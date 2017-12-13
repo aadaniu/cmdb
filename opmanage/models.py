@@ -11,7 +11,7 @@ class User_info(models.Model):
     username = models.CharField(max_length=20,unique=True)
     password = models.CharField(max_length=20)
     email = models.EmailField()
-    auth = models.BooleanField()
+    auth = models.CharField(max_length=20)
     jumper = models.BooleanField()
     vpn = models.BooleanField()
     phone = models.CharField(max_length=15)

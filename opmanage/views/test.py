@@ -32,26 +32,26 @@ def insert_data(requets):
     :return:
     """
     try:
-        # User_info.objects.create(username='wanghongyu',
-        #                          password='123456',
-        #                          email='wanghongyu@whysdomain.com',
-        #                          auth=True,
-        #                          jumper=True,
-        #                          vpn=True,
-        #                          phone='13552493019',
-        #                          department='op',
-        #                          zabbix=True,
-        #                          kibana=False)
-        User_info.objects.create(username='wangfucheng',
-                         password='123456',
-                         email='wangfucheng@whysdomain.com',
-                         auth=True,
-                         jumper=True,
-                         vpn=True,
-                         phone='13552493019',
-                         department='op',
-                         zabbix=True,
-                         kibana=False)
+        User_info.objects.create(username='wanghongyu',
+                                 password='123456',
+                                 email='wanghongyu@whysdomain.com',
+                                 auth=11,
+                                 jumper=True,
+                                 vpn=True,
+                                 phone='13552493019',
+                                 department='op',
+                                 zabbix=True,
+                                 kibana=False)
+        # User_info.objects.create(username='wangfucheng',
+        #                  password='123456',
+        #                  email='wangfucheng@whysdomain.com',
+        #                  auth=01,
+        #                  jumper=True,
+        #                  vpn=True,
+        #                  phone='13552493019',
+        #                  department='op',
+        #                  zabbix=True,
+        #                  kibana=False)
         return HttpResponse('ok')
     except Exception as e:
         return HttpResponse(e)
