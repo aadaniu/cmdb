@@ -1,0 +1,28 @@
+{% extends "cmdbbase.html" %}
+
+
+{% block css %}
+{% include "form_css.html"%}
+{% endblock %}
+
+{% block content %}
+    <form action="/lb/dellb/" method="post" novalidate>
+        <!--<a>密 码</a><br>-->
+        <!--<div class="input-group">-->
+            <!--{{ add_userform.password }}-->
+            <!--{% if error.password.0 %}-->
+            <!--<span>{{ error.password.0 }}</span>-->
+            <!--{% endif %}-->
+        <!--</div>-->
+        <a>负载均衡器名称</a><br>
+        <div class="input-group">
+            {{ del_lbform.name }}
+            {% if error.name.0 %}
+            <span>{{ error.name.0 }}</span>
+            {% endif %}
+        </div>
+        <div>
+            <input type="submit" value="提交">
+        </div>
+    </form>
+{% endblock %}

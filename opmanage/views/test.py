@@ -4,12 +4,22 @@
 
 from django.http import HttpResponse
 from django.shortcuts import render,render_to_response,HttpResponseRedirect
-from opmanage.models import User_info,Host_info
+
+
+from opmanage.models import User_info,Host_info,Department_info,Serverline_info
 # from lib.qcloud import cvm
+from lib.jenkinsapi import getLastThreeBuildTimes
+
 
 
 def test(request):
     return render(request,"test.html")
+
+def test_cmdbbase(request):
+    return render(request,"cmdbbase.html")
+
+def testjenkins(request):
+    return HttpResponse(getLastThreeBuildTimes('api-cart-master-deploy'))
 
 
 def insert_host(requets):
@@ -32,30 +42,22 @@ def insert_data(requets):
     :return:
     """
     try:
-        User_info.objects.create(username='wanghongyu',
-                                 password='123456',
-                                 email='wanghongyu@whysdomain.com',
-                                 auth=11,
-                                 jumper=True,
-                                 vpn=True,
-                                 phone='13552493019',
-                                 department='op',
-                                 zabbix=True,
-                                 kibana=False)
-        # User_info.objects.create(username='wangfucheng',
-        #                  password='123456',
-        #                  email='wangfucheng@whysdomain.com',
-        #                  auth=01,
-        #                  jumper=True,
-        #                  vpn=True,
-        #                  phone='13552493019',
-        #                  department='op',
-        #                  zabbix=True,
-        #                  kibana=False)
+        Department_info.objects.create(department_name='op',department_leader='guosong',department_email='op@chuchujie.com')
+        Department_info.objects.create(department_name='shop',department_leader='lishun',department_email='shop@chuchujie.com')
+        Department_info.objects.create(department_name='ads',department_leader='yinzhiwei',department_email='ads@chuchujie.com')
+        Department_info.objects.create(department_name='test',department_leader='mayanqin',department_email='test@chuchujie.com')
+        Department_info.objects.create(department_name='data',department_leader='wangyujie',department_email='data@chuchujie.com')
+        Department_info.objects.create(department_name='client',department_leader='wangjing',department_email='client@chuchujie.com')
+        Department_info.objects.create(department_name='java',department_leader='guming',department_email='java@chuchujie.com')
+        Serverline_info.objects.create(serverline_name='shop-api-order',serverline_leader='jijian',serverline_op_leader='wanghongyu',department_id='2')
+        Serverline_info.objects.create(serverline_name='dwxk-api-cart',serverline_leader='jianpanlong',serverline_op_leader='huangqingwu',department_id='2')
+        User_info.objects.create(username='wanghongyu',password='123456',email='wanghongyu@whysdomain.com',auth='00000000000000000011',jumper='1',vpn='1',
+                                 phone='13552493019', department_id = 1, git= '1',zabbix='1',jenkins='1')
+
         return HttpResponse('ok')
     except Exception as e:
         return HttpResponse(e)
-    return HttpResponse('ok')
+
 
 from lib.sendmail import sendmail_table, sendmail_general
 

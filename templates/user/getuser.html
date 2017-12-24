@@ -1,0 +1,21 @@
+{% extends "cmdbbase.html" %}
+
+
+{% block css %}
+{% include "form_css.html"%}
+{% endblock %}
+
+{% block content %}
+    <form action="/user/getuser/" method="post" novalidate>
+        <a>用户名</a><br>
+        <div class="input-group">
+            {{ get_userform.username }}
+            {% if error.username.0 %}
+            <span>{{ error.username.0 }}</span>
+            {% endif %}
+        </div>
+        <div>
+            <input type="submit" value="提交">
+        </div>
+    </form>
+{% endblock %}

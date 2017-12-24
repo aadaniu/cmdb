@@ -5,6 +5,7 @@
 import time
 from django.shortcuts import render,render_to_response,HttpResponseRedirect,redirect
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt,csrf_protect
 
 
 from opmanage.forms.index import LoginUserForm
@@ -18,16 +19,16 @@ def check_login(func):
     :return:
     """
     def check_login_status(request, *args, **kwargs):
-        print 'check_login装饰器'
+        # print 'check_login装饰器'
         # 验证登录状态通过，正常显示
         if request.session.get('login_status', None) == 1:
-            print 'check_login验证登录状态通过，正常显示ok'
+            # print 'check_login验证登录状态通过，正常显示ok'
             r = func(request)
             return r
         # 验证登录状态不通过，跳转到登录页面
         else:
-            print 'check_login验证登录状态不通过，跳转到登录页面no'
-            return redirect('/index/login/')
+            # print 'check_login验证登录状态不通过，跳转到登录页面no'
+            return redirect('/index/login/?nextpath=%s'% request.path)
 
     return check_login_status
 
@@ -45,25 +46,23 @@ def check_user_auth(check_num):
             # 不懂为什么这里写check_num -= 0不行，必须传递给一个变量才能实现。
             local_check_num = int(check_num)
             local_check_num = 0 - local_check_num
-            print local_check_num
             auth = request.session.get('auth')
-            print str(auth)
             # 验证权限通过
             if str(auth)[local_check_num] == '1':
                 print 'check_user_auth验证权限通过ok'
                 return func(request)
-            # 验证权限不通过
             else:
                 print 'check_user_auth验证权限不通过no'
-                return render(request, "index/noauth.html")
+                return HttpResponse('no')
         return check_user_auth_2
     return check_user_auth_1
 
-
+@csrf_protect
 def login(request):
     """
         用于用户登录
     :param request:
+    :param nextpath:跳转路径
     :return:
     """
     # POST请求
@@ -72,39 +71,23 @@ def login(request):
         # 字段验证通过
         if userform.is_valid():
             username = request.POST.get('username', None)
-            password = request.POST.get('password', None)
-            # 登录验证成功
-            # 计划挪到form
-            if check_username_password(username,password):
-                request.session['username'] = username
-                request.session['auth'] = get_auth(username)
-                request.session['login_status'] = 1
-                return redirect('/index/index')
-            # 登录验证失败
-            else:
-                return render(request, "index/login.html", {'userform': userform, 'error': userform.errors})
+            nextpath = request.POST.get('nextpath', None)
+            # 添加session
+            request.session['username'] = username
+            request.session['auth'] = get_auth(username)
+            request.session['login_status'] = 1
+            return redirect(nextpath)
         # 字段验证不通过
         else:
             return render(request, "index/login.html", {'userform': userform, 'error': userform.errors})
     # 非POST请求
     else:
-        userform = LoginUserForm()
+        # 获取登录前要访问的url
+        nextpath = request.GET.get('nextpath') or '/index/index/'
+        userform = LoginUserForm({'nextpath': nextpath})
         return render(request, "index/login.html", {'userform': userform})
 
 
-def check_username_password(username, password):
-    """
-        用于检测用户名和密码是否正确
-    :param username:
-    :param password:
-    :return:
-    """
-    if User_info.objects.filter(username=username,password=password).count():
-        return True
-    else:
-        return False
-
-@check_login
 def index(request):
     """
         浏览主页
@@ -134,6 +117,15 @@ def get_auth(username):
     user_info = User_info.objects.filter(username=username)
     auth = user_info[0].auth
     return auth
+
+
+def page_4xx(request):
+    """
+        返回4xx错误页面
+    """
+    return render_to_response("4xx.html")
+
+
 
 #
 # @check_login

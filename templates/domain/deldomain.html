@@ -1,0 +1,28 @@
+{% extends "cmdbbase.html" %}
+
+
+{% block css %}
+{% include "form_css.html"%}
+{% endblock %}
+
+{% block content %}
+    <form action="/domain/deldomain/" method="post" novalidate>
+        <!--<a>密 码</a><br>-->
+        <!--<div class="input-group">-->
+            <!--{{ add_userform.password }}-->
+            <!--{% if error.password.0 %}-->
+            <!--<span>{{ error.password.0 }}</span>-->
+            <!--{% endif %}-->
+        <!--</div>-->
+        <a>主机记录</a><br>
+        <div class="input-group">
+            {{ del_domainform.name }}
+            {% if error.name.0 %}
+            <span>{{ error.name.0 }}</span>
+            {% endif %}
+        </div>
+        <div>
+            <input type="submit" value="提交">
+        </div>
+    </form>
+{% endblock %}

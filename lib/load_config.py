@@ -48,3 +48,13 @@ global_config.read(os.path.join(BASE_DIR, 'config/global.config'))
 
 global_all_email_suffix = global_config.get('all','email_suffix')
 
+# load jenkins config
+
+jenkins_config = ConfigParser.RawConfigParser()
+jenkins_config.read(os.path.join(BASE_DIR, 'config/jenkins.config'))
+
+jenkins_url = jenkins_config.get('jenkins','url')
+jenkins_user_id = jenkins_config.get('jenkins','user_id')
+jenkins_api_token = jenkins_config.get('jenkins','api_token')
+
+

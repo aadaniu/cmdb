@@ -140,7 +140,7 @@ def test_zabbix(request):
 
         """
         10查询主机
-            host.get 对应官方文档
+            host.get 对应官方文档 https://www.zabbix.com/documentation/2.4/manual/api/reference/host/get
         """
         # params = {'output': 'extend',
         #           'filter': {
@@ -164,8 +164,17 @@ def test_zabbix(request):
         # {u'host': u'agent01', u'hostid': u'10106'}
         # print z.getdataZabbix('host.get', params)
 
-        print z.hostid_to_name('10106')
-        print z.hostname_to_id('agent01')
+        #print z.hostid_to_name('10106')
+        #print z.hostname_to_id('agent01')
+
+        """
+        11更新主机
+            host.update 对应官方文档 https://www.zabbix.com/documentation/2.4/manual/api/reference/host/update
+
+            需要注意的是As opposed to the Zabbix frontend, when name is the same as host, updating host will not automatically update name. Both properties need to be updated explicitly.
+            翻译一下如果直接host和name相同，对于修改host是生效的。
+        """
+
 
 
         """41项

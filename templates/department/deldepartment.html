@@ -1,0 +1,23 @@
+{% extends "cmdbbase.html" %}
+
+
+{% block css %}
+{% include "form_css.html"%}
+{% endblock %}
+
+{% block content %}
+    <form action="/department/deldepartment/" method="post" novalidate>
+        {% for i in del_departmentform %}
+            <a>{{ i.label }}</a><br>
+            <div class="input-group">
+            {{ i }}
+            {% if i.errors.0 %}
+            <span>{{ i.errors.0 }}</span>
+            {% endif %}
+            </div>
+        {% endfor %}
+        <div>
+            <input type="submit" value="提交">
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "cmdbbase.html" %}
+
+
+{% block css %}
+{% include "form_css.html"%}
+{% endblock %}
+
+{% block content %}
+    <form action="/host/updownhost/" method="post" novalidate>
+        <!--<a>密 码</a><br>-->
+        <!--<div class="input-group">-->
+            <!--{{ add_userform.password }}-->
+            <!--{% if error.password.0 %}-->
+            <!--<span>{{ error.password.0 }}</span>-->
+            <!--{% endif %}-->
+        <!--</div>-->
+        <a>主机名</a><br>
+        <div class="input-group">
+            {{ updown_hostform.name }}
+            {% if error.name.0 %}
+            <span>{{ error.name.0 }}</span>
+            {% endif %}
+        </div>
+        <a>状态</a><br>
+        <div class="input-group">
+            {{ updown_hostform.status }}
+            {% if error.status.0 %}
+            <span>{{ error.status.0 }}</span>
+            {% endif %}
+        </div>
+        <div>
+            <input type="submit" value="提交">
+        </div>
+    </form>
+{% endblock %}
