@@ -29,17 +29,10 @@ def add_lb(request):
         # 字段验证通过
         if add_lbform.is_valid():
             name = request.POST.get('name', None)
-            cname = request.POST.get('cname', None)
-            backend_host = request.POST.get('backend_host', None)
-            role_from_port = request.POST.get('role_from_port', None)
-            role_to_port = request.POST.get('role_to_port', None)
-            ipaddr = request.POST.get('ipaddr', None)
-            cloud = request.POST.get('cloud', None)
-            types = request.POST.get('types', None)
+
 
             # 插入数据
-            Lb_info.objects.create(name=name, cname=cname, backend_host=backend_host, role_from_port=role_from_port, role_to_port=role_to_port,
-                                   ipaddr=ipaddr, cloud=cloud, types=types)
+            add_lbform.savr()
 
             # 添加zabbix监控
             zabbix_proxy_id = '127.0.0.1'
@@ -73,10 +66,10 @@ def del_lb(request):
         if del_lbform.is_valid():
             name = request.POST.get('name', None)
 
-            # 插入数据
+            # 删除数据
             Lb_info.objects.filter(name=name).delete()
 
-            # 添加zabbix监控
+            # 删除zabbix监控
             del_zabbix_host(host=name)
 
             # 创建用户成功

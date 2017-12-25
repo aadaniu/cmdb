@@ -16,8 +16,8 @@ from opmanage.models import Serverline_info
 # 用于判定页面访问权限的下标
 check_num = 1
 
-# @check_login
-# @check_user_auth(check_num=check_num)
+@check_login
+@check_user_auth(check_num=check_num)
 def add_serverline(request):
     """
         添加部门
@@ -40,8 +40,8 @@ def add_serverline(request):
         return render(request,"serverline/addserverline.html", {'add_serverlineform': add_serverlineform})
 
 
-# @check_login
-# @check_user_auth(check_num=check_num)
+@check_login
+@check_user_auth(check_num=check_num)
 def del_serverline(request):
     """
         添加部门

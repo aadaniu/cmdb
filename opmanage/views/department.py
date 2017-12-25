@@ -15,8 +15,8 @@ from opmanage.models import Department_info
 # 用于判定页面访问权限的下标
 check_num = 1
 
-# @check_login
-# @check_user_auth(check_num=check_num)
+@check_login
+@check_user_auth(check_num=check_num)
 def add_department(request):
     """
         添加部门
@@ -44,8 +44,8 @@ def add_department(request):
         return render(request,"department/adddepartment.html", {'add_departmentform': add_departmentform})
 
 
-# @check_login
-# @check_user_auth(check_num=check_num)
+@check_login
+@check_user_auth(check_num=check_num)
 def del_department(request):
     """
         添加部门

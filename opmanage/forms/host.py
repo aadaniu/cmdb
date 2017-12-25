@@ -24,7 +24,7 @@ class AddHostForm(forms.ModelForm):
         }
 
 class DelHostForm(forms.Form):
-    name = forms.CharField(max_length=30)
+    host_name = forms.CharField(max_length=30)
 
 class RenameHostForm(forms.Form):
     name = forms.CharField(max_length=30)

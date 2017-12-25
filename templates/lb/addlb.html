@@ -7,69 +7,15 @@
 
 {% block content %}
     <form action="/lb/addlb/" method="post" novalidate>
-        <!--<a>密 码</a><br>-->
-        <!--<div class="input-group">-->
-            <!--{{ add_userform.password }}-->
-            <!--{% if error.password.0 %}-->
-            <!--<span>{{ error.password.0 }}</span>-->
-            <!--{% endif %}-->
-        <!--</div>-->
-        <a>负载均衡器名称</a><br>
-        <div class="input-group">
-            {{ add_lbform.name }}
-            {% if error.name.0 %}
-            <span>{{ error.name.0 }}</span>
+        {% for i in add_lbform %}
+            <a>{{ i.label }}</a><br>
+            <div class="input-group">
+            {{ i }}
+            {% if i.errors.0 %}
+            <span>{{ i.errors.0 }}</span>
             {% endif %}
-        </div>
-        <a>CNAME</a><br>
-        <div class="input-group">
-            {{ add_lbform.cname }}
-            {% if error.cname.0 %}
-            <span>{{ error.cname.0 }}</span>
-            {% endif %}
-        </div>
-        <a>IP地址</a><br>
-        <div class="input-group">
-            {{ add_lbform.ipaddr }}
-            {% if error.ipaddr.0 %}
-            <span>{{ error.ipaddr.0 }}</span>
-            {% endif %}
-        </div>
-        <a>后端主机</a><br>
-        <div class="input-group">
-            {{ add_lbform.backend_host }}
-            {% if error.backend_host.0 %}
-            <span>{{ error.backend_host.0 }}</span>
-            {% endif %}
-        </div>
-        <a>LB端口</a><br>
-        <div class="input-group">
-            {{ add_lbform.role_from_port }}
-            {% if error.role_from_port.0 %}
-            <span>{{ error.role_from_port.0 }}</span>
-            {% endif %}
-        </div>
-        <a>后端主机端口</a><br>
-        <div class="input-group">
-            {{ add_lbform.role_to_port }}
-            {% if error.role_to_port.0 %}
-            <span>{{ error.role_to_port.0 }}</span>
-            {% endif %}
-        </div>
-        <a>云厂商</a><br>
-        <div class="input-group">
-            {{ add_lbform.cloud }}
-            {% if error.cloud.0 %}
-            <span>{{ error.cloud.0 }}</span>
-            {% endif %}
-        </div>
-        <a>类型</a><br>
-        <div class="input-group">
-            {{ add_lbform.types }}
-            {% if error.types.0 %}
-            <span>{{ error.types.0 }}</span>
-            {% endif %}
-        </div>
+            </div>
+        {% endfor %}
         <div>
             <input type="submit" value="提交">
         </div>

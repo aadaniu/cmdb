@@ -30,7 +30,6 @@ def add_host(request):
             pro_ipaddr = request.POST.get('pro_ipaddr', None)
 
             # 插入数据
-            # Host_info.objects.create(name=name, ipaddr=ipaddr, cloud=cloud, types=types, status=status)
             add_hostform.save()
 
             # 添加zabbix监控，日后添加到信号中
@@ -62,16 +61,16 @@ def del_host(request):
         del_hostform = DelHostForm(request.POST)
         # 字段验证通过
         if del_hostform.is_valid():
-            name = request.POST.get('name', None)
+            host_name = request.POST.get('host_name', None)
 
             # 删除数据
-            Host_info.objects.filter(name=name).delete()
+            Host_info.objects.filter(host_name=host_name).delete()
 
             # 删除zabbix监控
-            del_zabbix_host(host=name)
+            del_zabbix_host(host=host_name)
 
             # 删除主机成功
-            return HttpResponse('del host %s ok' % name)
+            return HttpResponse('del host %s ok' % host_name)
 
         # 字段验证不通过
         else:
@@ -96,17 +95,17 @@ def updown_host(request):
         updown_hostform = UpdownHostForm(request.POST)
         # 字段验证通过
         if updown_hostform.is_valid():
-            name = request.POST.get('name', None)
+            host_name = request.POST.get('host_name', None)
             status = request.POST.get('status', None)
 
             # 删除数据
-            Host_info.objects.filter(name=name).update(status=status)
+            Host_info.objects.filter(name=host_name).update(status=status)
 
             # 更新zabbix监控
             if status != 'running':
-                disable_zabbix_host(host=name)
+                disable_zabbix_host(host=host_name)
             else:
-                enable_zabbix_host(host=name)
+                enable_zabbix_host(host=host_name)
 
             # 更新主机主机成功
             return HttpResponse('change status %s to  %s ok' % (name, status))
