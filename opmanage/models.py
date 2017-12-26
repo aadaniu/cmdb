@@ -60,13 +60,20 @@ class Host_info(models.Model):
     """
         主机
     """
-    host_name = models.CharField(max_length=30)                  # 主机
-    pro_ipaddr = models.GenericIPAddressField()             # 内网IP地址
-    pub_ipaddr = models.GenericIPAddressField()             # 公网IP地址，new
-    cloud = models.CharField(max_length=30, choices=cloud_choices)                 # 云主机类型
-    types = models.CharField(max_length=30)                 # 内存cpu
-    status = models.CharField(max_length=30)                # 运行状态
-    serverline = models.ForeignKey('Serverline_info')           # ，new
+    status_choices = (
+        ('running', u'运行状态'),
+        ('stopped', u'关闭状态'),
+    )
+    host_name = models.CharField(max_length=30)                                     # 主机
+    pro_ipaddr = models.GenericIPAddressField()                                     # 内网IP地址
+    pub_ipaddr = models.GenericIPAddressField()                                     # 公网IP地址
+    cloud = models.CharField(max_length=30, choices=cloud_choices)                  # 云主机类型
+    types = models.CharField(max_length=30)                                         # 内存cpu
+    status = models.CharField(max_length=30, choices=status_choices)                # 运行状态
+    serverline = models.ForeignKey('Serverline_info')                               # 业务线
+
+    def __unicode__(self):
+        return self.host_name
 
 
 class Lb_info(models.Model):
@@ -79,15 +86,15 @@ class Lb_info(models.Model):
         ('internet-facing', u'外网'),
     )
 
-    name = models.CharField(max_length=30)              # 名称
-    cname = models.CharField(max_length=30)             # 用于CNAME解析的域名
-    ipaddr = models.GenericIPAddressField()             # 用于A记录解析的IP地址
-    backend_host = models.ManyToManyField('Host_info')  # 后端主机
-    role_from_port = models.CharField(max_length=30)    # LB上端口
-    role_to_port = models.CharField(max_length=30)      # 后端主机
+    lb_name = models.CharField(max_length=30)                               # 名称
+    cname = models.CharField(max_length=30)                                 # 用于CNAME解析的域名
+    ipaddr = models.GenericIPAddressField()                                 # 用于A记录解析的IP地址
+    backend_host = models.ManyToManyField('Host_info')                      # 后端主机
+    role_from_port = models.CharField(max_length=30)                        # LB上端口
+    role_to_port = models.CharField(max_length=30)                          # 后端主机
     cloud = models.CharField(max_length=30, choices=cloud_choices)          # 云厂商
     types = models.CharField(max_length=30, choices=types_choices)          # 内外网
-    serverline = models.ForeignKey('Serverline_info')       # 业务线，new
+    serverline = models.ForeignKey('Serverline_info')                       # 业务线
 
 class Domain_info(models.Model):
     """
@@ -103,13 +110,13 @@ class Domain_info(models.Model):
         ('CNAME','CNAME')
     )
 
-    serverline = models.ForeignKey('Serverline_info')   # ，new
-    name = models.CharField(max_length=128)  # 主机记录
-    domain = models.CharField(max_length=64) # 域名
-    types = models.CharField(max_length=30, choices=types_choices)        # 记录类型
-    value = models.CharField(max_length=128) # 记录值
-    describe = models.CharField(max_length=128) # 备注
-    backend_type = models.CharField(max_length=30, choices=backend_types_choices)   # 后端资源类型，new
+    serverline = models.ForeignKey('Serverline_info')                               # 业务线
+    name = models.CharField(max_length=128)                                         # 主机记录
+    domain = models.CharField(max_length=64)                                        # 域名
+    types = models.CharField(max_length=30, choices=types_choices)                  # 记录类型
+    value = models.CharField(max_length=128)                                        # 记录值
+    describe = models.CharField(max_length=128)                                     # 备注
+    backend_type = models.CharField(max_length=30, choices=backend_types_choices)   # 后端资源类型
 
 
 

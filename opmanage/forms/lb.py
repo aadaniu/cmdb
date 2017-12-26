@@ -12,7 +12,7 @@ class AddLbForm(forms.ModelForm):
         # 表示该模型的全部字段都被表单使用
         fields = '__all__'
         labels = {
-            'name': u'lb名称',
+            'lb_name': u'lb名称',
             'cname': u'cname',
             'ipaddr': u'a记录ip',
             'backend_host': u'后端主机',
@@ -25,13 +25,13 @@ class AddLbForm(forms.ModelForm):
 
 
 class DelLbForm(forms.Form):
-    name = forms.CharField(label=u'待删除记录')
+    lb_name = forms.CharField(label=u'待删除记录')
 
     def clean(self):
         cleaned_data = super(DelLbForm, self).clean()
-        name = cleaned_data.get('name')
-        if check_name_exit(name) == False:
-            self.add_error('name', '负载均衡器不存在')
+        lb_name = cleaned_data.get('lb_name')
+        if check_name_exit(lb_name) == False:
+            self.add_error('name', 'LB不存在')
 
 
 def check_name_exit(name):

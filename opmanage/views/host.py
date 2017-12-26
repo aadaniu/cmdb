@@ -99,7 +99,7 @@ def updown_host(request):
             status = request.POST.get('status', None)
 
             # 删除数据
-            Host_info.objects.filter(name=host_name).update(status=status)
+            Host_info.objects.filter(host_name=host_name).update(status=status)
 
             # 更新zabbix监控
             if status != 'running':
@@ -108,7 +108,7 @@ def updown_host(request):
                 enable_zabbix_host(host=host_name)
 
             # 更新主机主机成功
-            return HttpResponse('change status %s to  %s ok' % (name, status))
+            return HttpResponse('change status %s to  %s ok' % (host_name, status))
 
         # 字段验证不通过
         else:
@@ -134,17 +134,17 @@ def rename_host(request):
         rename_hostform = RenameHostForm(request.POST)
         # 字段验证通过
         if rename_hostform.is_valid():
-            name = request.POST.get('name', None)
+            host_name = request.POST.get('host_name', None)
             new_name = request.POST.get('new_name', None)
 
             # 删除数据
-            Host_info.objects.filter(name=name).update(name=new_name)
+            Host_info.objects.filter(host_name=host_name).update(name=new_name)
 
             # 更新zabbix监控
-            rename_zabbix_host(host=name, new_host=new_name)
+            rename_zabbix_host(host=host_name, new_host=new_name)
 
             # 更新主机主机成功
-            return HttpResponse('change host from %s to  %s ok' % (name, new_name))
+            return HttpResponse('change host from %s to  %s ok' % (host_name, new_name))
 
         # 字段验证不通过
         else:

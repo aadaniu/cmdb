@@ -117,6 +117,19 @@ def send(request):
 
 
 
+import logging, os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+logger = logging.getLogger('default')
+
+def log_test(request):
+    logger.error("level error test")
+    logger.info("level info test")
+    logger.warning("level info warning")
+
+    return HttpResponse('ok')
+
 
 
 

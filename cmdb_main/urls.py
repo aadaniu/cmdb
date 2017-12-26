@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^test/sendmail', test.send),# 测试发送邮件
     url(r'^test/zabbix', test_zabbix.test_zabbix),# 测试zabbix
     url(r'^test/jenkins', test.testjenkins),  # 测试jenkins
+    url(r'^test/log', test.log_test),  # 测试log
     url(r'^index/login/', index.login),# 登录
     url(r'^index/logout/', index.logout),# 退出
     url(r'^index/index/', index.index),# 主页

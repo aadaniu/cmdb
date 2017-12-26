@@ -27,9 +27,9 @@ class DelHostForm(forms.Form):
     host_name = forms.CharField(max_length=30)
 
 class RenameHostForm(forms.Form):
-    name = forms.CharField(max_length=30)
+    host_name = forms.CharField(max_length=30)
     new_name = forms.CharField(max_length=30)
 
 class UpdownHostForm(forms.Form):
-    name = forms.CharField(max_length=30)
+    host_name = forms.CharField(max_length=30)
     status = forms.CharField(max_length=30)

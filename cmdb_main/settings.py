@@ -153,3 +153,53 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False                  # 是否关闭浏览器
 SESSION_SAVE_EVERY_REQUEST = False                       # 是否每次请求都保存Session，默认修改之后才保存（默认）
 
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': '%(levelname)s %(asctime)s %(message)s'
+        },
+    },
+    'filters': {
+    },
+    'handlers': {           # 决定如何处理logger 中的每条消息。 它表示一个详细的日志行为，例如将消息写到屏幕上、写到文件中或者写到网络socket。
+        # 默认记录日志
+        'default': {
+            'level': 'INFO',
+            # 'class': 'logging.handlers.RotatingFileHandler',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR+'/tmp/logs/','cmdb.log'),
+            # 'formatter': 'standard',
+            # 'maxBytes': 1024 * 1024 * 5,
+        },
+        # 请求日志通过supervisor记录，这边配置文件只负责记录相关请求日志。
+        # 异常发送邮件
+        'mail': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'formatter': 'standard',
+        },
+        # 异常日志
+        'exception': {
+            'level': 'ERROR',
+            # 'class': 'logging.handlers.RotatingFileHandler',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR + '/tmp/logs/', 'error.log'),
+            'formatter': 'standard',
+        },
+    },
+    'loggers': {            # 用于对从logger 传递给handler 的日志记录进行额外的控制。
+        'default': {
+            'handlers': ['default'],  # , 'mail'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'exception': {
+            'handlers': ['exception'], #, 'mail'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
+
