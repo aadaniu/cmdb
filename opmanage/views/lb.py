@@ -5,8 +5,9 @@
 
 from django.shortcuts import render, render_to_response, HttpResponseRedirect
 from django.http import HttpResponse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from opmanage.forms.lb import AddLbForm, DelLbForm
+from opmanage.forms.lb import AddLbForm, DelLbForm, UpdataLbForm, GetLbForm
 from opmanage.models import Lb_info
 from opmanage.views.index import check_login, check_user_auth
 from opmanage.views.host import add_zabbix_host, del_zabbix_host
@@ -38,7 +39,7 @@ def add_lb(request):
             return HttpResponse('add lb %s ok' % lb_name)
         # 字段验证不通过
         else:
-            return render(request, "lb/addlb.html", {'add_lbform': add_lbform, 'error': add_lbform.errors})
+            return render(request, "lb/addlb.html", {'add_lbform': add_lbform})
     # 非POST请求
     else:
         add_lbform = AddLbForm()
@@ -67,8 +68,91 @@ def del_lb(request):
             return HttpResponse('del lb %s ok' % lb_name)
         # 字段验证不通过
         else:
-            return render(request, "lb/dellb.html", {'del_lbform': del_lbform, 'error': del_lbform.errors})
+            return render(request, "lb/dellb.html", {'del_lbform': del_lbform})
     # 非POST请求
     else:
         del_lbform = DelLbForm()
         return render(request, "lb/dellb.html", {'del_lbform': del_lbform})
+
+
+@check_login
+@check_user_auth(check_num=check_num)
+def updata_lb(request):
+    """
+        添加主机
+    :param request:
+    :return:
+    """
+    # POST请求
+    if request.method == "POST":
+        updata_lbform = UpdataLbForm(request.POST)
+        # 字段验证通过
+        if updata_lbform.is_valid():
+            # 添加LB数据
+            updata_lbform.save()
+            # 添加LB成功
+            return HttpResponse('updata lb %s ok')
+        # 字段验证不通过
+        else:
+            return render(request, "lb/addlb.html", {'updata_lbform': updata_lbform})
+    # 非POST请求
+    else:
+        updata_lbform = UpdataLbForm() or UpdataLbForm()
+        return render(request, "lb/addlb.html", {'updata_lbform': updata_lbform})
+
+
+@check_user_auth(check_num=check_num)
+def get_lb(request):
+    """
+        添加主机
+    :param request:
+    :return:
+    """
+    # POST请求
+    if request.method == "POST":
+        get_lbform = GetLbForm(request.POST)
+        # 字段验证通过
+        if get_lbform.is_valid():
+            search_lb = request.POST.get('search_lb', None)
+            every_page_sum = request.POST.get('every_page_sum', 20)
+            pages = request.POST.get('pages', 1)
+            if search_lb == '' or search_lb == None:
+                lb_list = Lb_info.objects.all()
+            else:
+                lb_list = []
+                # lb_list = Lb_info.objects.filter(lb_name=search_lb)
+                for i in Lb_info.objects.all():
+                    if search_lb in i.lb_name:
+                        lb_list.append(i)
+            page_lb_list = to_page(lb_list, pages, every_page_sum)
+            # 获取相关LB信息
+            return render(request, "lb/getlb.html", {'get_lbform': get_lbform, 'page_lb_list': page_lb_list})
+        # 字段验证不通过
+        else:
+            return render(request, "lb/addlb.html", {'get_lbform': get_lbform})
+    # 非POST请求
+    else:
+        lb_list = Lb_info.objects.all()
+        every_page_sum = 20
+        pages = request.GET.get('page') or 1
+        get_lbform =  GetLbForm({'search_lb': request.GET.get('search_lb')}) or GetLbForm()
+        page_lb_list = to_page(lb_list, pages, every_page_sum)
+        return render(request, "lb/getlb.html", {'get_lbform': get_lbform, 'page_lb_list': page_lb_list})
+
+
+def to_page(list, pages, every_page_sum):
+    """
+        构造分页
+    :param list: 列表
+    :param pages:  当前页数
+    :param every_page_sum: 每页显示数量
+    :return:
+    """
+    paginator = Paginator(list, every_page_sum)
+    try:
+        page_list = paginator.page(pages)
+    except PageNotAnInteger:
+        page_list = paginator.page(1)
+    except EmptyPage:
+        page_list = paginator.page(paginator.num_pages)
+    return page_list

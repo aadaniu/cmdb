@@ -6,8 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import render,render_to_response,HttpResponseRedirect
 
 
-from opmanage.models import User_info,Host_info,Department_info,Serverline_info
-# from lib.qcloud import cvm
+from opmanage.models import User_info,Host_info,Department_info,Serverline_info,Lb_info
 from lib.jenkinsapi import getLastThreeBuildTimes
 
 
@@ -53,10 +52,13 @@ def insert_data(requets):
         # Serverline_info.objects.create(serverline_name='dwxk-api-cart',serverline_leader='jianpanlong',serverline_op_leader='huangqingwu',department_id='2')
         # User_info.objects.create(username='wanghongyu',password='123456',email='wanghongyu@whysdomain.com',auth='00000000000000000011',jumper='1',vpn='1',
         #                          phone='13552493019', department_id = 1, git= '1',zabbix='1',jenkins='1')
-
-
-
-
+        i = 0
+        while i < 301:
+            i = i + 1
+            print i
+            # lb_name = 'test%s' % i
+            # Lb_info.objects.create(lb_name=lb_name,cname='0000@whysdomain.com', ipaddr= '22.2.2.2', role_from_port= '80', role_to_port= '3306', cloud= 'aws', types= 'internet-facing', serverline_id=1)
+        print '1'
         return HttpResponse('ok')
     except Exception as e:
         return HttpResponse(e)
