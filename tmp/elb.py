@@ -2,12 +2,10 @@
 # 2017-12-10
 # by why
 
-from lib.ec2 import ec2
-from time import sleep
+from tmp.ec2 import ec2
 
 __author__ = 'jecy'
 import boto3
-from lib.log import logged
 
 ee = ec2()
 session = boto3.Session(profile_name="control-center-for-op")

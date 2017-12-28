@@ -42,17 +42,20 @@ def insert_data(requets):
     :return:
     """
     try:
-        Department_info.objects.create(department_name='op',department_leader='guosong',department_email='op@chuchujie.com')
-        Department_info.objects.create(department_name='shop',department_leader='lishun',department_email='shop@chuchujie.com')
-        Department_info.objects.create(department_name='ads',department_leader='yinzhiwei',department_email='ads@chuchujie.com')
-        Department_info.objects.create(department_name='test',department_leader='mayanqin',department_email='test@chuchujie.com')
-        Department_info.objects.create(department_name='data',department_leader='wangyujie',department_email='data@chuchujie.com')
-        Department_info.objects.create(department_name='client',department_leader='wangjing',department_email='client@chuchujie.com')
-        Department_info.objects.create(department_name='java',department_leader='guming',department_email='java@chuchujie.com')
-        Serverline_info.objects.create(serverline_name='shop-api-order',serverline_leader='jijian',serverline_op_leader='wanghongyu',department_id='2')
-        Serverline_info.objects.create(serverline_name='dwxk-api-cart',serverline_leader='jianpanlong',serverline_op_leader='huangqingwu',department_id='2')
-        User_info.objects.create(username='wanghongyu',password='123456',email='wanghongyu@whysdomain.com',auth='00000000000000000011',jumper='1',vpn='1',
-                                 phone='13552493019', department_id = 1, git= '1',zabbix='1',jenkins='1')
+        # Department_info.objects.create(department_name='op',department_leader='guosong',department_email='op@chuchujie.com')
+        # Department_info.objects.create(department_name='shop',department_leader='lishun',department_email='shop@chuchujie.com')
+        # Department_info.objects.create(department_name='ads',department_leader='yinzhiwei',department_email='ads@chuchujie.com')
+        # Department_info.objects.create(department_name='test',department_leader='mayanqin',department_email='test@chuchujie.com')
+        # Department_info.objects.create(department_name='data',department_leader='wangyujie',department_email='data@chuchujie.com')
+        # Department_info.objects.create(department_name='client',department_leader='wangjing',department_email='client@chuchujie.com')
+        # Department_info.objects.create(department_name='java',department_leader='guming',department_email='java@chuchujie.com')
+        # Serverline_info.objects.create(serverline_name='shop-api-order',serverline_leader='jijian',serverline_op_leader='wanghongyu',department_id='2')
+        # Serverline_info.objects.create(serverline_name='dwxk-api-cart',serverline_leader='jianpanlong',serverline_op_leader='huangqingwu',department_id='2')
+        # User_info.objects.create(username='wanghongyu',password='123456',email='wanghongyu@whysdomain.com',auth='00000000000000000011',jumper='1',vpn='1',
+        #                          phone='13552493019', department_id = 1, git= '1',zabbix='1',jenkins='1')
+
+
+
 
         return HttpResponse('ok')
     except Exception as e:
