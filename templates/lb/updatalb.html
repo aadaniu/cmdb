@@ -1,0 +1,29 @@
+{% extends "cmdbbase.html" %}
+
+
+{% block css %}
+{% include "form_css.html"%}
+{% endblock %}
+
+{% block content %}
+    <form action="/lb/updatalb/" method="post" novalidate>
+        {% for i in updata_lbform %}
+
+            <a>{{ i.label }}</a><br>
+            <div class="input-group">
+                {% if i.label == 'lb名称' %}
+                    <div style="display:none;">{{ i }}</div>
+                    {{ i.value }}
+                {% else %}
+                    {{ i }}
+                {% endif %}
+            {% if i.errors.0 %}
+            <span>{{ i.errors.0 }}</span>
+            {% endif %}
+            </div>
+        {% endfor %}
+        <div>
+            <input type="submit" value="提交">
+        </div>
+    </form>
+{% endblock %}

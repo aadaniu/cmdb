@@ -89,16 +89,25 @@ def updata_lb(request):
         # 字段验证通过
         if updata_lbform.is_valid():
             # 添加LB数据
+            lb_name = request.POST.get('lb_name', None)
+            print lb_name
+            Lb_info.objects.get(lb_name=lb_name)
             updata_lbform.save()
             # 添加LB成功
-            return HttpResponse('updata lb %s ok')
+            return HttpResponse('updata lb %s ok') % lb_name
         # 字段验证不通过
         else:
-            return render(request, "lb/addlb.html", {'updata_lbform': updata_lbform})
+            return render(request, "lb/updatalb.html", {'updata_lbform': updata_lbform})
     # 非POST请求
     else:
-        updata_lbform = UpdataLbForm() or UpdataLbForm()
-        return render(request, "lb/addlb.html", {'updata_lbform': updata_lbform})
+        lb_name = request.GET.get('lb_name')
+        if lb_name != None:
+            lb = Lb_info.objects.get(lb_name=lb_name)
+            # 参考https://docs.djangoproject.com/en/dev/topics/forms/modelforms/#modelform
+            updata_lbform = UpdataLbForm(instance=lb)
+        else:
+            updata_lbform = UpdataLbForm()
+        return render(request, "lb/updatalb.html", {'updata_lbform': updata_lbform})
 
 
 @check_user_auth(check_num=check_num)
@@ -132,10 +141,21 @@ def get_lb(request):
             return render(request, "lb/addlb.html", {'get_lbform': get_lbform})
     # 非POST请求
     else:
-        lb_list = Lb_info.objects.all()
+
         every_page_sum = 20
+        # 获取当前页码
         pages = request.GET.get('page') or 1
-        get_lbform =  GetLbForm({'search_lb': request.GET.get('search_lb')}) or GetLbForm()
+        # 创建回传前端表单，如果search_lb存在，返回相search_lb表单，否则返回空白表单
+        search_lb = request.GET.get('search_lb', None)
+        if search_lb == '' or search_lb == None:
+            lb_list = Lb_info.objects.all()
+            get_lbform = GetLbForm()
+        else:
+            lb_list = []
+            for i in Lb_info.objects.all():
+                if search_lb in i.lb_name:
+                    lb_list.append(i)
+            get_lbform = GetLbForm({'search_lb': search_lb})
         page_lb_list = to_page(lb_list, pages, every_page_sum)
         return render(request, "lb/getlb.html", {'get_lbform': get_lbform, 'page_lb_list': page_lb_list})
 

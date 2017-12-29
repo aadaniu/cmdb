@@ -55,10 +55,9 @@ def insert_data(requets):
         i = 0
         while i < 301:
             i = i + 1
-            print i
-            # lb_name = 'test%s' % i
-            # Lb_info.objects.create(lb_name=lb_name,cname='0000@whysdomain.com', ipaddr= '22.2.2.2', role_from_port= '80', role_to_port= '3306', cloud= 'aws', types= 'internet-facing', serverline_id=1)
-        print '1'
+            # print i
+            lb_name = 'test%s' % i
+            Lb_info.objects.create(lb_name=lb_name,cname='0000@whysdomain.com', ipaddr= '22.2.2.2', role_from_port= '80', role_to_port= '3306', cloud= 'aws', types= 'internet-facing', serverline_id=1)
         return HttpResponse('ok')
     except Exception as e:
         return HttpResponse(e)
