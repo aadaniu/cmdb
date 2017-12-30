@@ -211,10 +211,13 @@ def del_zabbix_host(host):
     :param requets:
     :return:
     """
-    z = zabbix()
-    id = z.hostname_to_id(host)
-    params = [id, ]
-    return z.getdataZabbix('host.delete', params)
+    try:
+        z = zabbix()
+        id = z.hostname_to_id(host)
+        params = [id, ]
+        return z.getdataZabbix('host.delete', params)
+    except:
+        pass
 
 def rename_zabbix_host(host, new_host):
     """

@@ -18,12 +18,12 @@ def check_login(func):
     :param func:
     :return:
     """
-    def check_login_status(request, *args, **kwargs):
+    def check_login_status(request, *args):
         # print 'check_login装饰器'
         # 验证登录状态通过，正常显示
         if request.session.get('login_status', None) == 1:
             # print 'check_login验证登录状态通过，正常显示ok'
-            r = func(request)
+            r = func(request, *args)
             return r
         # 验证登录状态不通过，跳转到登录页面
         else:
@@ -40,8 +40,8 @@ def check_user_auth(check_num):
     :return:
     """
     def check_user_auth_1(func):
-        def check_user_auth_2(request):
-            print 'check_user_auth'
+        def check_user_auth_2(request, *args):
+            # print 'check_user_auth'
             # 取负用作下标
             # 不懂为什么这里写check_num -= 0不行，必须传递给一个变量才能实现。
             local_check_num = int(check_num)
@@ -49,10 +49,10 @@ def check_user_auth(check_num):
             auth = request.session.get('auth')
             # 验证权限通过
             if str(auth)[local_check_num] == '1':
-                print 'check_user_auth验证权限通过ok'
-                return func(request)
+                # print 'check_user_auth验证权限通过ok'
+                return func(request, *args)
             else:
-                print 'check_user_auth验证权限不通过no'
+                # print 'check_user_auth验证权限不通过no'
                 return HttpResponse('no')
         return check_user_auth_2
     return check_user_auth_1

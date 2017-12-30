@@ -8,7 +8,7 @@ from django.http import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from opmanage.forms.lb import AddLbForm, DelLbForm, UpdataLbForm, GetLbForm
-from opmanage.models import Lb_info
+from opmanage.models import Lb_info, Host_info
 from opmanage.views.index import check_login, check_user_auth
 from opmanage.views.host import add_zabbix_host, del_zabbix_host
 
@@ -61,7 +61,8 @@ def del_lb(request):
         if del_lbform.is_valid():
             lb_name = request.POST.get('lb_name', None)
             # 删除数据
-            Lb_info.objects.filter(name=lb_name).delete()
+            # Lb_info.objects.get(lb_name=lb_name).backend_host.clear() clear只删除多对多关系
+            Lb_info.objects.get(lb_name=lb_name).delete()
             # 删除zabbix监控
             del_zabbix_host(host=lb_name)
             # 创建用户成功
@@ -71,7 +72,11 @@ def del_lb(request):
             return render(request, "lb/dellb.html", {'del_lbform': del_lbform})
     # 非POST请求
     else:
-        del_lbform = DelLbForm()
+        lb_name = request.GET.get('lb_name')
+        if lb_name != None:
+            del_lbform = DelLbForm({'lb_name': lb_name})
+        else:
+            del_lbform = DelLbForm()
         return render(request, "lb/dellb.html", {'del_lbform': del_lbform})
 
 
@@ -79,7 +84,7 @@ def del_lb(request):
 @check_user_auth(check_num=check_num)
 def updata_lb(request):
     """
-        添加主机
+        更新主机
     :param request:
     :return:
     """
@@ -90,11 +95,31 @@ def updata_lb(request):
         if updata_lbform.is_valid():
             # 添加LB数据
             lb_name = request.POST.get('lb_name', None)
-            print lb_name
-            Lb_info.objects.get(lb_name=lb_name)
+            # cname = request.POST.get('cname', None)
+            # ipaddr = request.POST.get('cname', None)
+            backend_host = request.POST.get('cname', None)
+            role_from_port = request.POST.get('cname', None)
+            role_to_port = request.POST.get('cname', None)
+            # cloud = request.POST.get('cname', None)
+            # types = request.POST.get('cname', None)
+            serverline = request.POST.get('cname', None)
+            lb = Lb_info.objects.get(lb_name=lb_name)
+            updata_lbform = UpdataLbForm(request.POST, instance=lb)
             updata_lbform.save()
+            # if role_from_port != lb.role_from_port:
+            #     lb.role_from_port = role_from_port
+            # if role_to_port != lb.role_to_port:
+            #     lb.role_to_port = role_to_port
+            # if int(serverline) != lb.serverline.id:
+            #     lb.serverline.id = int(serverline)
+            # lb.save()
+            # lb.backend_host.clear()
+
+            # lb.backend_host.add()
+
+
             # 添加LB成功
-            return HttpResponse('updata lb %s ok') % lb_name
+            return HttpResponse('updata lb %s ok' % lb_name)
         # 字段验证不通过
         else:
             return render(request, "lb/updatalb.html", {'updata_lbform': updata_lbform})
@@ -113,7 +138,7 @@ def updata_lb(request):
 @check_user_auth(check_num=check_num)
 def get_lb(request):
     """
-        添加主机
+        获取主机
     :param request:
     :return:
     """

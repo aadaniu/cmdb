@@ -43,6 +43,11 @@ class User_info(models.Model):
         return self.username
 
 
+class Auth_info(models.Model):
+    auto_name = models.CharField(max_length=20)
+
+
+
 class Serverline_info(models.Model):
     """
         业务线
@@ -86,7 +91,7 @@ class Lb_info(models.Model):
         ('internet-facing', u'外网'),
     )
 
-    lb_name = models.CharField(max_length=30)                               # 名称
+    lb_name = models.CharField(max_length=30,unique=True)                   # 名称
     cname = models.CharField(max_length=30)                                 # 用于CNAME解析的域名
     ipaddr = models.GenericIPAddressField()                                 # 用于A记录解析的IP地址
     backend_host = models.ManyToManyField('Host_info')                      # 后端主机

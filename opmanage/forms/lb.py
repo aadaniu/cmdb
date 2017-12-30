@@ -51,6 +51,13 @@ class UpdataLbForm(forms.ModelForm):
             'serverline': u'业务线',
         }
 
+        widgets = {
+            'cloud' : forms.widgets.Select(attrs={'disabled': "disabled"}),
+            'types' : forms.widgets.Select(attrs={'disabled': "disabled"}),
+        }
+
+
+
 
 class GetLbForm(forms.Form):
     every_page_sum_choices = (

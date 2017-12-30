@@ -11,9 +11,15 @@
 
             <a>{{ i.label }}</a><br>
             <div class="input-group">
-                {% if i.label == 'lb名称' %}
-                    <div style="display:none;">{{ i }}</div>
-                    {{ i.value }}
+                {% if i.label == 'lb名称' or i.label == 'cname' or i.label == 'a记录ip' %}
+                    {% if i.value == None %}
+                        {{ i }}
+                    {% else %}
+                        {{ i.value }}
+                        <div style="display:none;">{{ i }}</div>
+                    {% endif %}
+                <!-- i.label == '云类型' or i.label == '内外网类型' -->
+
                 {% else %}
                     {{ i }}
                 {% endif %}
