@@ -1,0 +1,35 @@
+{% extends "cmdbbase.html" %}
+
+
+{% block css %}
+{% include "form_css.html"%}
+{% endblock %}
+
+{% block content %}
+    <form action="/domain/updatadomain/" method="post" novalidate>
+        {% for i in updata_domainform %}
+
+            <a>{{ i.label }}</a><br>
+            <div class="input-group">
+                {% if i.label == '主机记录' or i.label == '主机记录' %}
+                    {% if i.value == None %}
+                        {{ i }}
+                    {% else %}
+                        {{ i.value }}
+                        <div style="display:none;">{{ i }}</div>
+                    {% endif %}
+                <!-- i.label == '云类型' or i.label == '内外网类型' -->
+
+                {% else %}
+                    {{ i }}
+                {% endif %}
+            {% if i.errors.0 %}
+            <span>{{ i.errors.0 }}</span>
+            {% endif %}
+            </div>
+        {% endfor %}
+        <div>
+            <input type="submit" value="提交">
+        </div>
+    </form>
+{% endblock %}

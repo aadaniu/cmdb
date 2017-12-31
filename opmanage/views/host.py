@@ -7,7 +7,7 @@ from django.http import HttpResponse
 
 from opmanage.forms.host import AddHostForm, DelHostForm, RenameHostForm, UpdownHostForm
 from opmanage.models import Host_info
-from opmanage.views.index import check_login, check_user_auth
+from opmanage.views.index import check_login, check_user_auth, to_page
 from lib.zabbix import zabbix
 
 # 用于判定页面访问权限的下标

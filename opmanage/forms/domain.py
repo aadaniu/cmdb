@@ -41,5 +41,25 @@ class DelDomainForm(forms.Form):
             self.add_error('name', '域名记录不存在')
 
 
+
+class UpdataDomainForm(forms.ModelForm):
+    class Meta:
+        model = Domain_info
+        # 表示该模型的全部字段都被表单使用
+        fields = '__all__'
+        labels = {
+            'name': u'主机记录',
+            'domain': u'域名',
+            'types': u'记录类型',
+            'value': u'记录值',
+            'describe': u'描述',
+            'backend_type': u'后端主机类型',
+            'serverline': u'业务线',
+        }
+
+class GetDomainForm(forms.Form):
+    name = forms.CharField(label=u'记录值',max_length=30)
+
+
 def check_nameanddomain_exit(name, domain):
     pass

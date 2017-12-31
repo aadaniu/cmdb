@@ -164,7 +164,7 @@ def get_lb(request):
             return render(request, "lb/getlb.html", {'get_lbform': get_lbform, 'page_lb_list': page_lb_list})
         # 字段验证不通过
         else:
-            return render(request, "lb/addlb.html", {'get_lbform': get_lbform})
+            return render(request, "lb/getlb.html", {'get_lbform': get_lbform})
     # 非POST请求
     else:
 

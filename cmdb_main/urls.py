@@ -68,6 +68,8 @@ urlpatterns = [
     url(r'^lb/getlb/',lb.get_lb),# 获取LB
     ###################Domain#############################
     url(r'^domain/adddomain/',domain.add_domain),# 添加域名
-
+    url(r'^domain/deldomain/',domain.del_domain),
+    url(r'^domain/getdomain/',domain.get_domain),
+    url(r'^domain/updatadomain/',domain.updata_domain),
 ]
 

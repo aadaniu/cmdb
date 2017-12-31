@@ -115,13 +115,14 @@ class Domain_info(models.Model):
         ('CNAME','CNAME')
     )
 
-    serverline = models.ForeignKey('Serverline_info')                               # 业务线
+    # modelform展示顺序是依据这个的。
     name = models.CharField(max_length=128)                                         # 主机记录
     domain = models.CharField(max_length=64)                                        # 域名
     types = models.CharField(max_length=30, choices=types_choices)                  # 记录类型
     value = models.CharField(max_length=128)                                        # 记录值
     describe = models.CharField(max_length=128)                                     # 备注
     backend_type = models.CharField(max_length=30, choices=backend_types_choices)   # 后端资源类型
+    serverline = models.ForeignKey('Serverline_info')                               # 业务线
 
 
 

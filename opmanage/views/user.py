@@ -7,7 +7,7 @@ import json
 from django.shortcuts import render,render_to_response,HttpResponseRedirect,redirect
 from django.http import HttpResponse
 
-from opmanage.views.index import check_login, check_user_auth
+from opmanage.views.index import check_login, check_user_auth, to_page
 from opmanage.forms.user import AddUserForm, DelUserForm,UpdataUserForm,GetUserForm
 from opmanage.models import User_info
 from lib.load_config import global_all_email_suffix
