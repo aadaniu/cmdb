@@ -4,6 +4,7 @@
 
 from django.shortcuts import render,render_to_response,HttpResponseRedirect
 from django.http import HttpResponse
+from django.db.models import Q
 
 from opmanage.forms.domain import *
 from opmanage.models import Domain_info
@@ -53,16 +54,26 @@ def del_domain(request):
         # 字段验证通过
         if del_domainform.is_valid():
             name = request.POST.get('name', None)
+            domain = request.POST.get('domain', None)
+            q = Q()
+            q.connector = 'AND'
+            q.children.append(('name', name))
+            q.children.append(('domain', domain))
             # 删除数据
-            Domain_info.objects.filter(name=name).delete()
+            Domain_info.objects.filter(q).delete()
             # 删除域名解析成功
-            return HttpResponse('del,domain %s ok' % name)
+            return HttpResponse('del,domain %s@%s ok' % (name,domain))
         # 字段验证不通过
         else:
             return render(request, "domain/deldomain.html", {'del_domainform': del_domainform, 'error': del_domainform.errors})
     # 非POST请求
     else:
-        del_domainform = DelDomainForm()
+        name = request.GET.get('name')
+        domain = request.GET.get('domain')
+        if name != None and domain != None:
+            del_domainform = DelDomainForm({'name': name, 'domain': domain})
+        else:
+            del_domainform = DelDomainForm()
         return render(request, "domain/deldomain.html", {'del_domainform': del_domainform})
 
 
@@ -93,8 +104,13 @@ def updata_domain(request):
     # 非POST请求
     else:
         name = request.GET.get('name')
-        if name != None:
-            domain = Domain_info.objects.get(name=name)
+        domain = request.GET.get('domain')
+        if name != None and domain != None:
+            q = Q()
+            q.connector = 'AND'
+            q.children.append(('name', name))
+            q.children.append(('domain', domain))
+            domain = Domain_info.objects.get(q)
             # 参考https://docs.djangoproject.com/en/dev/topics/forms/modelforms/#modelform
             updata_domainform = UpdataDomainForm(instance=domain)
         else:

@@ -40,36 +40,36 @@ urlpatterns = [
     url(r'^index/logout/', index.logout),           # 退出
     url(r'^index/index/', index.index),             # 主页
     ###################User#############################
-    url(r'^user/adduser/', user.add_user),          # 添加用户
-    url(r'^user/deluser/', user.del_user),          # 删除用户
-    url(r'^user/updatauser/',user.updata_user),     # 更新用户
-    url(r'^user/getuser/',user.get_user),           # 查询用户
-    url(r'^user/getmessage/',user.get_message),     # 获取用户
+    url(r'^user/adduser/', user.add_user),                      # 添加用户
+    url(r'^user/deluser/', user.del_user),                      # 删除用户
+    url(r'^user/updatauser/',user.updata_user),                 # 更新用户
+    url(r'^user/getuser/',user.get_user),                       # 查询用户
+    url(r'^user/getmessage/',user.get_message),                 # 获取用户
     url(r'^user/updatauserpassword/',user.updata_user_password),# 更新用户名密码
     ###################Department#############################
-    url(r'^department/adddepartment/',department.add_department),# 添加部门
-    url(r'^department/deldepartment/',department.del_department),# 删除部门
-
-
+    url(r'^department/adddepartment/',department.add_department),       # 添加部门
+    url(r'^department/deldepartment/',department.del_department),       # 删除部门
+    url(r'^department/getdepartment/',department.get_department),       # 获取部门
+    url(r'^department/updatadepartment/',department.updata_department), # 更新部门
     ###################Serverline#############################
-    url(r'^serverline/addserverline/',serverline.add_serverline),# 添加业务线
-    url(r'^serverline/delserverline/',serverline.del_serverline),# 删除业务线
-    url(r'^serverline/getserverline/',serverline.get_serverline),# 获取业务线
-    url(r'^serverline/updataserverline/',serverline.updata_serverline),
+    url(r'^serverline/addserverline/',serverline.add_serverline),       # 添加业务线
+    url(r'^serverline/delserverline/',serverline.del_serverline),       # 删除业务线
+    url(r'^serverline/getserverline/',serverline.get_serverline),       # 获取业务线
+    url(r'^serverline/updataserverline/',serverline.updata_serverline), # 更新业务线
     ###################Host#############################
-    url(r'^host/addhost/',host.add_host),# 添加主机
-    url(r'^host/delhost/',host.del_host),# 删除主机
+    url(r'^host/addhost/',host.add_host),       # 添加主机
+    url(r'^host/delhost/',host.del_host),       # 删除主机
     url(r'^host/renamehost/', host.rename_host),# 更名主机
     url(r'^host/updownhost/', host.updown_host),# 删除主机
     ###################LB#############################
-    url(r'^lb/addlb/',lb.add_lb),# 添加LB
-    url(r'^lb/dellb/',lb.del_lb),# 删除LB
-    url(r'^lb/updatalb/', lb.updata_lb),  # 更新LB
-    url(r'^lb/getlb/',lb.get_lb),# 获取LB
+    url(r'^lb/addlb/',lb.add_lb),           # 添加LB
+    url(r'^lb/dellb/',lb.del_lb),           # 删除LB
+    url(r'^lb/updatalb/', lb.updata_lb),    # 更新LB
+    url(r'^lb/getlb/',lb.get_lb),           # 获取LB
     ###################Domain#############################
-    url(r'^domain/adddomain/',domain.add_domain),# 添加域名
-    url(r'^domain/deldomain/',domain.del_domain),
-    url(r'^domain/getdomain/',domain.get_domain),
-    url(r'^domain/updatadomain/',domain.updata_domain),
+    url(r'^domain/adddomain/',domain.add_domain),       # 添加域名
+    url(r'^domain/deldomain/',domain.del_domain),       # 删除域名
+    url(r'^domain/getdomain/',domain.get_domain),       # 获取域名
+    url(r'^domain/updatadomain/',domain.updata_domain), # 更新域名
 ]
 

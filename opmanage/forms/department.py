@@ -30,6 +30,22 @@ class DelDepartmentForm(forms.Form):
             self.add_error('department_name', '部门不存在')
 
 
+class UpdataDepartmentForm(forms.ModelForm):
+    class Meta:
+        model = Department_info
+        # 表示该模型的全部字段都被表单使用
+        fields = '__all__'
+        labels = {
+            'department_name': u'部门名称',
+            'department_leader': u'部门负责人',
+            'department_email': u'部门邮箱组',
+        }
+
+
+class GetDepartmentForm(forms.Form):
+    department_name = forms.CharField(label=u'部门名称')
+
+
 def checkdepartment_exit(department_name):
     """
         检测department是否存在
