@@ -49,11 +49,13 @@ urlpatterns = [
     ###################Department#############################
     url(r'^department/adddepartment/',department.add_department),# 添加部门
     url(r'^department/deldepartment/',department.del_department),# 删除部门
+
+
     ###################Serverline#############################
     url(r'^serverline/addserverline/',serverline.add_serverline),# 添加业务线
     url(r'^serverline/delserverline/',serverline.del_serverline),# 删除业务线
-
-
+    url(r'^serverline/getserverline/',serverline.get_serverline),# 获取业务线
+    url(r'^serverline/updataserverline/',serverline.updata_serverline),
     ###################Host#############################
     url(r'^host/addhost/',host.add_host),# 添加主机
     url(r'^host/delhost/',host.del_host),# 删除主机

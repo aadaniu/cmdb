@@ -51,6 +51,7 @@ class UpdataLbForm(forms.ModelForm):
             'serverline': u'业务线',
         }
 
+        # 防止被选中
         widgets = {
             'cloud' : forms.widgets.Select(attrs={'disabled': "disabled"}),
             'types' : forms.widgets.Select(attrs={'disabled': "disabled"}),
@@ -65,7 +66,7 @@ class GetLbForm(forms.Form):
         (30, 30),
         (50, 50),
     )
-    search_lb = forms.CharField(label=u'搜素LB',max_length=30)
+    lb_name = forms.CharField(label=u'搜素LB',max_length=30)
     # pages = forms.CharField(label=u'页数', max_length=30)
     # every_page_sum = forms.CharField(label=u'每页显示行数', max_length=2, widget=forms.widgets.Select(choices=every_page_sum_choices))
 

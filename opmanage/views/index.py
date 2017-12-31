@@ -6,6 +6,7 @@ import time
 from django.shortcuts import render,render_to_response,HttpResponseRedirect,redirect
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 from opmanage.forms.index import LoginUserForm
@@ -125,5 +126,23 @@ def page_4xx(request):
     """
     return render_to_response("4xx.html")
 
+
+
+def to_page(list, pages, every_page_sum):
+    """
+        构造分页
+    :param list: 列表
+    :param pages:  当前页数
+    :param every_page_sum: 每页显示数量
+    :return:
+    """
+    paginator = Paginator(list, every_page_sum)
+    try:
+        page_list = paginator.page(pages)
+    except PageNotAnInteger:
+        page_list = paginator.page(1)
+    except EmptyPage:
+        page_list = paginator.page(paginator.num_pages)
+    return page_list
 
 

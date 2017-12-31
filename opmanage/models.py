@@ -16,7 +16,7 @@ class Department_info(models.Model):
     """
         部门表
     """
-    department_name = models.CharField(max_length=30,unique=True)       # 部门名称
+    department_name = models.CharField(max_length=30)                   # 部门名称
     department_leader = models.CharField(max_length=30)                 # 部门leader
     department_email = models.EmailField()                              # 部门email
     def __unicode__(self):
@@ -27,7 +27,7 @@ class User_info(models.Model):
     """
         用户表
     """
-    username = models.CharField(max_length=20,unique=True)  # 用户名
+    username = models.CharField(max_length=20)  # 用户名
     password = models.CharField(max_length=20)              # 密码
     phone = models.CharField(max_length=15)                 # 电话
     department = models.ForeignKey('Department_info')       # 部门
@@ -52,7 +52,7 @@ class Serverline_info(models.Model):
     """
         业务线
     """
-    serverline_name = models.CharField(max_length=30,unique=True)       # 业务线名称
+    serverline_name = models.CharField(max_length=30)                   # 业务线名称
     serverline_leader = models.CharField(max_length=30)                 # 业务线负责人
     serverline_op_leader = models.CharField(max_length=30)              # 业务线运维负责人
     department = models.ForeignKey('Department_info')                   # 业务线所属部门
@@ -91,7 +91,7 @@ class Lb_info(models.Model):
         ('internet-facing', u'外网'),
     )
 
-    lb_name = models.CharField(max_length=30,unique=True)                   # 名称
+    lb_name = models.CharField(max_length=30)                              # 名称
     cname = models.CharField(max_length=30)                                 # 用于CNAME解析的域名
     ipaddr = models.GenericIPAddressField()                                 # 用于A记录解析的IP地址
     backend_host = models.ManyToManyField('Host_info')                      # 后端主机

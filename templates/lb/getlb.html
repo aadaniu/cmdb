@@ -8,7 +8,7 @@
 {% block content %}
 
 <form action="/lb/getlb/" method="post" novalidate>
-    {{ get_lbform.search_lb.label }}{{ get_lbform.search_lb }}<br>
+    {{ get_lbform.lb_name.label }}{{ get_lbform.lb_name }}<br>
      <div>
         <input type="submit" value="提交">
     </div>
@@ -24,20 +24,20 @@
         {% endfor %}
         <!--判断是否有前一页-->
         {% if page_lb_list.has_previous %}
-        <a href="?page={{ page_lb_list.previous_page_number }}&search_lb={{ get_lbform.search_lb.value }}">上一页</a>
+        <a href="?page={{ page_lb_list.previous_page_number }}&lb_name={{ get_lbform.lb_name.value }}">上一页</a>
         {% endif %}
         <!--循环页-->
         {% for page in page_lb_list.paginator.page_range %}
             {% if page == page_lb_list.number %}
                 <a class='paginator_current' title='当前页:{{ page }}'><span>{{ page }}</span></a>
             {% else %}
-                <a class='paginator' href='?page={{ page }}&search_lb={{ get_lbform.search_lb.value }}' title='{{ page }}'><span>{{ page }}</span></a>
+                <a class='paginator' href='?page={{ page }}&lb_name={{ get_lbform.lb_name.value }}' title='{{ page }}'><span>{{ page }}</span></a>
             {% endif %}
         {% endfor %}
         Page {{ page_lb_list.number }} of {{ page_lb_list.paginator.num_pages }}
         <!--判断是否有后一页-->
         {% if page_lb_list.has_next %}
-            <a href="?page={{ page_lb_list.next_page_number }}&search_lb={{ get_lbform.search_lb.value }}">下一页</a>
+            <a href="?page={{ page_lb_list.next_page_number }}&lb_name={{ get_lbform.lb_name.value }}">下一页</a>
         {% endif %}
     </span>
 </div>

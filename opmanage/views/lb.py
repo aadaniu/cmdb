@@ -5,11 +5,11 @@
 
 from django.shortcuts import render, render_to_response, HttpResponseRedirect
 from django.http import HttpResponse
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 
 from opmanage.forms.lb import AddLbForm, DelLbForm, UpdataLbForm, GetLbForm
-from opmanage.models import Lb_info, Host_info
-from opmanage.views.index import check_login, check_user_auth
+from opmanage.models import Lb_info
+from opmanage.views.index import check_login, check_user_auth, to_page
 from opmanage.views.host import add_zabbix_host, del_zabbix_host
 
 
@@ -135,6 +135,7 @@ def updata_lb(request):
         return render(request, "lb/updatalb.html", {'updata_lbform': updata_lbform})
 
 
+@check_login
 @check_user_auth(check_num=check_num)
 def get_lb(request):
     """
@@ -147,16 +148,16 @@ def get_lb(request):
         get_lbform = GetLbForm(request.POST)
         # 字段验证通过
         if get_lbform.is_valid():
-            search_lb = request.POST.get('search_lb', None)
+            lb_name = request.POST.get('lb_name', None)
             every_page_sum = request.POST.get('every_page_sum', 20)
             pages = request.POST.get('pages', 1)
-            if search_lb == '' or search_lb == None:
+            if lb_name == '' or lb_name == None:
                 lb_list = Lb_info.objects.all()
             else:
                 lb_list = []
-                # lb_list = Lb_info.objects.filter(lb_name=search_lb)
+                # lb_list = Lb_info.objects.filter(lb_name=lb_name)
                 for i in Lb_info.objects.all():
-                    if search_lb in i.lb_name:
+                    if lb_name in i.lb_name:
                         lb_list.append(i)
             page_lb_list = to_page(lb_list, pages, every_page_sum)
             # 获取相关LB信息
@@ -170,34 +171,18 @@ def get_lb(request):
         every_page_sum = 20
         # 获取当前页码
         pages = request.GET.get('page') or 1
-        # 创建回传前端表单，如果search_lb存在，返回相search_lb表单，否则返回空白表单
-        search_lb = request.GET.get('search_lb', None)
-        if search_lb == '' or search_lb == None:
+        # 创建回传前端表单，如果lb_name存在，返回相lb_name表单，否则返回空白表单
+        lb_name = request.GET.get('lb_name', None)
+        if lb_name == '' or lb_name == None:
             lb_list = Lb_info.objects.all()
             get_lbform = GetLbForm()
         else:
             lb_list = []
             for i in Lb_info.objects.all():
-                if search_lb in i.lb_name:
+                if lb_name in i.lb_name:
                     lb_list.append(i)
-            get_lbform = GetLbForm({'search_lb': search_lb})
+            get_lbform = GetLbForm({'lb_name': lb_name})
         page_lb_list = to_page(lb_list, pages, every_page_sum)
         return render(request, "lb/getlb.html", {'get_lbform': get_lbform, 'page_lb_list': page_lb_list})
 
 
-def to_page(list, pages, every_page_sum):
-    """
-        构造分页
-    :param list: 列表
-    :param pages:  当前页数
-    :param every_page_sum: 每页显示数量
-    :return:
-    """
-    paginator = Paginator(list, every_page_sum)
-    try:
-        page_list = paginator.page(pages)
-    except PageNotAnInteger:
-        page_list = paginator.page(1)
-    except EmptyPage:
-        page_list = paginator.page(paginator.num_pages)
-    return page_list

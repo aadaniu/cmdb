@@ -38,9 +38,24 @@ class DelServerlineForm(forms.Form):
             self.add_error('serverline_name', '业务线不存在')
 
 
+class UpdataServerlineForm(forms.ModelForm):
+    class Meta:
+        model = Serverline_info
+        # 表示该模型的全部字段都被表单使用
+        fields = '__all__'
+        labels = {
+            'serverline_name': u'业务线名称',
+            'serverline_leader': u'业务线负责人',
+            'serverline_op_leader': u'业务线运维负责人',
+            'department': u'所属部门',
+        }
 
 
-
+class GetServerlineForm(forms.Form):
+    """
+        获取Serverline表单
+    """
+    serverline_name = forms.CharField(label=u'搜素业务线',max_length=30)
 
 
 def checkserverline_exit(serverline_name):
@@ -54,3 +69,5 @@ def checkserverline_exit(serverline_name):
         return True
     else:
         return False
+
+
