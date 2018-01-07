@@ -124,7 +124,7 @@ def get_domain(request):
     """
         获取主机
     :param request:
-    :return:
+    :return:u
     """
     # POST请求
     if request.method == "POST":

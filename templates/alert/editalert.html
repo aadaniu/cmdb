@@ -6,19 +6,21 @@
 {% endblock %}
 
 {% block content %}
-    <form action="/lb/updatalb/" method="post" novalidate>
-        {% for i in updata_lbform %}
-
-            <a>{{ i.label }}</a><br>
+    <form action="/alert/editalert/" method="post" novalidate>
+        {% for i in edit_alertform %}
             <div class="input-group">
-                {% if i.label == 'lb名称' or i.label == 'cname' or i.label == 'a记录ip' %}
+                {% if i.label == '事件id' or i.label == '触发器id' or i.label == '触发器状态' or i.label == '报警信息' %}
+                    <a>{{ i.label }}</a><br>
                     {% if i.value == None %}
                         {{ i }}
                     {% else %}
                         {{ i.value }}
                         <div style="display:none;">{{ i }}</div>
                     {% endif %}
+                {% elif i.label == '报警时间'%}
+                    <div style="display:none;">{{ i }}</div>
                 {% else %}
+                    <a>{{ i.label }}</a><br>
                     {{ i }}
                 {% endif %}
             {% if i.errors.0 %}

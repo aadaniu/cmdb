@@ -18,6 +18,7 @@ from django.conf.urls import url
 from django.contrib import admin
 
 from opmanage.views import index, user, test, test_zabbix, host, lb, domain, department, serverline
+from alert.views import *
 
 urlpatterns = [
     # url(r'^admin/', admin.site.urls),
@@ -59,6 +60,8 @@ urlpatterns = [
     ###################Host#############################
     url(r'^host/addhost/',host.add_host),       # 添加主机
     url(r'^host/delhost/',host.del_host),       # 删除主机
+    url(r'^host/updatahost/',host.updata_host), # 更新主机
+    url(r'^host/gethost/',host.get_host),       # 获取主机
     url(r'^host/renamehost/', host.rename_host),# 更名主机
     url(r'^host/updownhost/', host.updown_host),# 删除主机
     ###################LB#############################
@@ -71,5 +74,14 @@ urlpatterns = [
     url(r'^domain/deldomain/',domain.del_domain),       # 删除域名
     url(r'^domain/getdomain/',domain.get_domain),       # 获取域名
     url(r'^domain/updatadomain/',domain.updata_domain), # 更新域名
+
+
+    ###################Alert##############################
+    url(r'^alert/gethistoryalert/',get_historyalert),       # 获取历史报警信息
+    url(r'^alert/get_last_dayalert/',get_last_day_alert),     # 获取近一天的所有报警
+    url(r'^alert/get_last_10alert/',get_last_10_alert),      # 获取最近10条报警
+    # url(r'^alert/gethistoryalert/',get_closed_alert),       # 获取已经关闭的报警
+    url(r'^alert/editalert/',edit_alert),                   # 完善报警处理流程
+    url(r'^alert/addalert/',add_alert),                     # zabbix action添加event接口
 ]
 

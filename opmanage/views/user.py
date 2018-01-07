@@ -32,23 +32,16 @@ def add_user(request):
         if add_userform.is_valid():
             username = request.POST.get('username', None)
             password = request.POST.get('password', None)
-            email = username + '@' + global_all_email_suffix
-            auth_num = 0
-            auth_list = request.POST.getlist('auth')
-            for i in auth_list:
-                auth_num += int(i)
-            auth_str = str(auth_num).rjust(20,'0')
+            email = request.POST.get('email', None)
             jumper = request.POST.get('jumper', None)
             vpn = request.POST.get('vpn', None)
             phone = request.POST.get('phone', None)
-            department_id = request.POST.get('department', None)
             zabbix = request.POST.get('zabbix', None)
             git = request.POST.get('git', None)
             jenkins = request.POST.get('git', None)
 
             # 插入数据
-            User_info.objects.create(username=username,password=password,email=email,auth=auth_str,jumper=jumper,
-                                     vpn=vpn,phone=phone,department_id=department_id,zabbix=zabbix,git=git,jenkins=jenkins)
+            add_userform.save()
 
             # 创建VPN
             if vpn  == 't':
@@ -81,12 +74,9 @@ def add_user(request):
                     pass
             # 创建用户成功
             return HttpResponse('ok')
-
         # 字段验证不通过
         else:
-            print add_userform.errors['username'][0]
             return render(request, "user/adduser.html", {'add_userform': add_userform})
-
     # 非POST请求
     else:
         add_userform = AddUserForm()
@@ -107,25 +97,21 @@ def del_user(request):
         # 字段验证通过
         if del_userform.is_valid():
             username = request.POST.get('username', None)
-            manager_password = request.POST.get('manager_password', None)
-            # 验证管理员权限不通过
-            if check_manage_password(request.session.get('username',None),manager_password) == False:
-                # 添加权限报错，计划改到form
-                return render(request, "/user/deluser.html", {'del_userform': del_userform})
-            # 验证管理员用户通过
-            else:
-                # 删除权限用户
-                # 删除用户
-                User_info.objects.filter(username=username).delete()
-                # 删除用户其他权限账户
-                delete_zabbix(username)
-                return HttpResponse('del %s' % username)
+            # 删除用户
+            User_info.objects.filter(username=username).delete()
+            # 删除用户其他权限账户
+            delete_zabbix(username)
+            return HttpResponse('del %s' % username)
         # 字段验证不通过
         else:
             return render(request, "user/deluser.html", {'del_userform': del_userform})
     # 非POST请求
     else:
-        del_userform = DelUserForm()
+        username = request.GET.get('username')
+        if username != None:
+            del_userform = DelUserForm({'username': username})
+        else:
+            del_userform = DelUserForm()
         return render(request, "user/deluser.html", {'del_userform': del_userform})
 
 
@@ -137,15 +123,46 @@ def get_user(request):
     :param request:
     :return:
     """
+        # POST请求
     if request.method == "POST":
         get_userform = GetUserForm(request.POST)
+        # 字段验证通过
         if get_userform.is_valid():
-            username = request.POST.get('username')
-            userinfo = User_info.objects.filter(username=username)
-            return render(request, "user/getuserinfo.html", {'userinfo': userinfo})
+            username = request.POST.get('username', None)
+            every_page_sum = request.POST.get('every_page_sum', 20)
+            pages = request.POST.get('pages', 1)
+            if username == '' or username == None:
+                user_list = User_info.objects.all()
+            else:
+                user_list = []
+                for i in User_info.objects.all():
+                    if username in i.username:
+                        user_list.append(i)
+            page_user_list = to_page(user_list, pages, every_page_sum)
+            # 获取相关user信息
+            return render(request, "user/getuser.html", {'get_userform': get_userform, 'page_user_list': page_user_list})
+        # 字段验证不通过
+        else:
+            return render(request, "user/getuser.html", {'get_userform': get_userform})
+    # 非POST请求
     else:
-        get_userform = GetUserForm()
-        return render(request, "user/getuser.html", {'get_userform': get_userform})
+        every_page_sum = 20
+        # 获取当前页码
+        pages = request.GET.get('page') or 1
+        # 创建回传前端表单，如果username存在，返回相user_name表单，否则返回空白表单
+        username = request.GET.get('username', None)
+        if username == '' or username == None:
+            user_list = User_info.objects.all()
+            get_userform = GetUserForm()
+        else:
+            user_list = []
+            for i in User_info.objects.all():
+                if username in i.username:
+                    user_list.append(i)
+            get_userform = GetUserForm({'username': username})
+        page_user_list = to_page(user_list, pages, every_page_sum)
+        return render(request, "user/getuser.html", {'get_userform': get_userform, 'page_user_list': page_user_list})
+
 
 
 @check_login
@@ -161,54 +178,54 @@ def updata_user(request):
         updata_userform = UpdataUserForm(request.POST)
         # 字段验证通过
         if updata_userform.is_valid():
-            manager_password = request.POST.get('manager_password', None)
-            # 验证管理员权限不通过
-            if check_manage_password(request.session.get('username', None), manager_password) == False:
-                # 添加权限报错，计划改到form
-                return render(request, "user/updatauser.html", {'updata_userform': updata_userform, 'error': updata_userform.errors})
-            # 验证管理员用户通过
-            else:
-                username = request.POST.get('username')
-                password = request.POST.get('password')
-                phone = request.POST.get('phone')
-                auth_num = 0
-                auth_list = request.POST.getlist('auth')
-                for i in auth_list:
-                    auth_num += int(i)
-                auth_str = str(auth_num).rjust(20,'0')
-                jumper = request.POST.get('jumper')
-                vpn = request.POST.get('vpn')
-                department = request.POST.get('department')
-                zabbix = request.POST.get('zabbix')
-                git = request.POST.get('git')
-                jenkins = request.POST.get('jenkins')
-                if password != '':
-                    updata_user_password(request,username,password)
-                if auth_str != '':
-                    updata_user_auth(request,username,auth_str)
-                if jumper != '':
-                    updata_user_jumper(request,username,jumper)
-                if vpn != '':
-                    updata_user_vpn(request,username,vpn)
-                if phone != '':
-                    updata_user_phone(request,username,phone)
-                if department != '':
-                    updata_user_department(request,username,department)
-                if zabbix != '':
-                    updata_user_zabbix(request,username,zabbix)
-                if git !=  '':
-                    updata_user_git(request,username,git)
-                if jenkins !=  '':
-                    updata_user_jenkins(request,username,jenkins)
-                return HttpResponse('updata %s' % username)
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            phone = request.POST.get('phone')
+            auth = request.POST.get('auth')
+            jumper = request.POST.get('jumper')
+            vpn = request.POST.get('vpn')
+            department = request.POST.get('department')
+            zabbix = request.POST.get('zabbix')
+            git = request.POST.get('git')
+            jenkins = request.POST.get('jenkins')
+
+
+            user = User_info.objects.get(username=username)
+            updata_hostform = UpdataUserForm(request.POST, instance=user)
+            updata_hostform.save()
+            # if password != '':
+            #     updata_user_password(request,username,password)
+            # if auth_str != '':
+            #     updata_user_auth(request,username,auth_str)
+            # if jumper != '':
+            #     updata_user_jumper(request,username,jumper)
+            # if vpn != '':
+            #     updata_user_vpn(request,username,vpn)
+            # if phone != '':
+            #     updata_user_phone(request,username,phone)
+            # if department != '':
+            #     updata_user_department(request,username,department)
+            # if zabbix != '':
+            #     updata_user_zabbix(request,username,zabbix)
+            # if git !=  '':
+            #     updata_user_git(request,username,git)
+            # if jenkins !=  '':
+            #     updata_user_jenkins(request,username,jenkins)
+            return HttpResponse('updata %s' % username)
         # 字段验证不通过
         else:
-            print updata_userform.errors
             return render(request, "user/updatauser.html", {'updata_userform': updata_userform})
     # 非POST请求
     else:
-        updata_userform = UpdataUserForm()
+        username = request.GET.get('username')
+        if username != None:
+            user = User_info.objects.get(username=username)
+            # 参考https://docs.djangoproject.com/en/dev/topics/forms/modelforms/#modelform
+            updata_userform = UpdataUserForm(instance=user)
+        else:
+            updata_userform = UpdataUserForm()
         return render(request, "user/updatauser.html", {'updata_userform': updata_userform})
+
 
 
 def updata_user_password(request,username=None,password=None):

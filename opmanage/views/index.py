@@ -46,10 +46,11 @@ def check_user_auth(check_num):
             # 取负用作下标
             # 不懂为什么这里写check_num -= 0不行，必须传递给一个变量才能实现。
             local_check_num = int(check_num)
-            local_check_num = 0 - local_check_num
+            #local_check_num = 0 - local_check_num
             auth = request.session.get('auth')
             # 验证权限通过
-            if str(auth)[local_check_num] == '1':
+            # if str(auth)[local_check_num] == '1':
+            if int(auth) <= local_check_num:
                 # print 'check_user_auth验证权限通过ok'
                 return func(request, *args)
             else:

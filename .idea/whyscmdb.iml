@@ -9,6 +9,8 @@
     <orderEntry type="module" module-name="cmdb" />
     <orderEntry type="module" module-name="tag" />
     <orderEntry type="module" module-name="game_devops" />
+    <orderEntry type="module" module-name="game_devops" />
+    <orderEntry type="module" module-name="mysite" />
   </component>
   <component name="TestRunnerService">
     <option name="PROJECT_TEST_RUNNER" value="Unittests" />

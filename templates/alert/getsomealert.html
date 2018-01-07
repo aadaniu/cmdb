@@ -1,0 +1,19 @@
+{% extends "cmdbbase.html" %}
+
+
+{% block css %}
+{% include "form_css.html"%}
+{% endblock %}
+
+{% block content %}
+
+<div class="pagination">
+    <span class="step-links">
+        {% for i in alert_list %}
+            {{ i.clock }}{{ i.subject }}
+            <a href="/alert/editalert?event_id={{ i.event_id }}">修改</a><br>
+        {% endfor %}
+    </span>
+</div>
+
+{% endblock %}

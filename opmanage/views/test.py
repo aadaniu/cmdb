@@ -50,7 +50,7 @@ def insert_data(requets):
         # Department_info.objects.create(department_name='java',department_leader='guming',department_email='java@chuchujie.com')
         # Serverline_info.objects.create(serverline_name='shop-api-order',serverline_leader='jijian',serverline_op_leader='wanghongyu',department_id='2')
         # Serverline_info.objects.create(serverline_name='dwxk-api-cart',serverline_leader='jianpanlong',serverline_op_leader='huangqingwu',department_id='2')
-        # User_info.objects.create(username='wanghongyu',password='123456',email='wanghongyu@whysdomain.com',auth='00000000000000000011',jumper='1',vpn='1',
+        # User_info.objects.create(username='wanghongyu',password='123456',email='wanghongyu@whysdomain.com',auth='1',jumper='1',vpn='1',
         #                          phone='13552493019', department_id = 1, git= '1',zabbix='1',jenkins='1')
         i = 0
         while i < 301:

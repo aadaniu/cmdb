@@ -27,26 +27,29 @@ class User_info(models.Model):
     """
         用户表
     """
-    username = models.CharField(max_length=20)  # 用户名
-    password = models.CharField(max_length=20)              # 密码
-    phone = models.CharField(max_length=15)                 # 电话
-    department = models.ForeignKey('Department_info')       # 部门
-    email = models.EmailField()                             # 邮箱
-    auth = models.CharField(max_length=20)                  # cmdb权限
-    jumper = models.CharField(max_length=1)                 # 跳板机
-    vpn = models.CharField(max_length=1)                    # vpn
-    zabbix = models.CharField(max_length=1)                 # zabbix账号
-    git = models.CharField(max_length=1)                    # git账号
-    jenkins = models.CharField(max_length=1)                # jenkins账号
-    entrytime = models.DateField(auto_now_add=True)         # 入职时间
+    auth_choices = (
+        ('1','admin'),
+        ('2','op'),
+        ('3','other')
+    )
+    create_or_not = (
+        ('t',u'创建'),
+        ('f',u'不创建'),
+    )
+    username = models.CharField(max_length=20)                      # 用户名
+    password = models.CharField(max_length=20)                      # 密码
+    phone = models.CharField(max_length=15)                         # 电话
+    department = models.ForeignKey('Department_info')               # 部门
+    email = models.EmailField()                                     # 邮箱
+    auth = models.CharField(max_length=1, choices=auth_choices)     # cmdb权限
+    jumper = models.CharField(max_length=1, choices=create_or_not)  # 跳板机
+    vpn = models.CharField(max_length=1, choices=create_or_not)     # vpn
+    zabbix = models.CharField(max_length=1, choices=create_or_not)  # zabbix账号
+    git = models.CharField(max_length=1, choices=create_or_not)     # git账号
+    jenkins = models.CharField(max_length=1, choices=create_or_not) # jenkins账号
+    entrytime = models.DateField(auto_now_add=True)                 # 入职时间
     def __unicode__(self):
         return self.username
-
-
-class Auth_info(models.Model):
-    auto_name = models.CharField(max_length=20)
-
-
 
 class Serverline_info(models.Model):
     """
@@ -91,7 +94,7 @@ class Lb_info(models.Model):
         ('internet-facing', u'外网'),
     )
 
-    lb_name = models.CharField(max_length=30)                              # 名称
+    lb_name = models.CharField(max_length=30)                               # 名称
     cname = models.CharField(max_length=30)                                 # 用于CNAME解析的域名
     ipaddr = models.GenericIPAddressField()                                 # 用于A记录解析的IP地址
     backend_host = models.ManyToManyField('Host_info')                      # 后端主机

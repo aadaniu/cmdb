@@ -93,7 +93,7 @@ def updata_department(request):
             return HttpResponse('updata department %s ok' % department_name)
         # 字段验证不通过
         else:
-            return render(request, "department/updatadepartmentdepartment.html", {'updata_departmentform': updata_departmentform})
+            return render(request, "department/updatadepartment.html", {'updata_departmentform': updata_departmentform})
     # 非POST请求
     else:
         department_name = request.GET.get('department_name')

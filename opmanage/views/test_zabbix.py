@@ -46,6 +46,7 @@ def test_zabbix(request):
         """
         03添加用户
             user.create 对应官方文档 https://www.zabbix.com/documentation/2.4/manual/api/reference/user/create
+            用户属性对应官方文档 https://www.zabbix.com/documentation/2.4/manual/api/reference/user/object#user
             示例返回值
             {'status': True, 'data': {u'userids': [u'3']}}
         """
@@ -174,6 +175,66 @@ def test_zabbix(request):
             需要注意的是As opposed to the Zabbix frontend, when name is the same as host, updating host will not automatically update name. Both properties need to be updated explicitly.
             翻译一下如果直接host和name相同，对于修改host是生效的。
         """
+
+
+
+
+
+        """
+        12获取报警
+            alert.get 对应官方文档 https://www.zabbix.com/documentation/2.4/manual/api/reference/alert/get
+        """
+        # # 获取当前时间
+        # import time
+        # import re
+        # # 当前时间
+        # clock_now = time.time()
+        # # 昨天时间
+        # str_clock_now = str(clock_now-86400)[:-3]
+        # params = {
+        #     "output": "extend",
+        #     # "actionids": "39",
+        #     # "userids": "82",
+        #     "time_from": str_clock_now,
+        #     "limit": 10,
+        # }
+        # # print z.getdataZabbix('alert.get', params)
+        # data =  z.getdataZabbix('alert.get', params)['data']
+        # last_day_alert = []
+        # alert = []
+        # for i in data:
+        #     if i[ u'message'] not in alert:
+        #         alert.append(i[ u'message'])
+        #         obj_re_message = re.search(r'\[([^\[\]]*)\]\[([^\[\]]*)\]\[([^\[\]]*)\]\[([^\[\]]*)\]\[([^\[\]]*)\]\[([^\[\]]*)\]\[([^\[\]]*)\]',i[u'subject'])
+        #         print obj_re_message.group(1)   # action_id 我自行定义的
+        #         print obj_re_message.group(2)   # 时间
+        #         print obj_re_message.group(3)   # 主机名
+        #         print obj_re_message.group(4)   # 报警级别
+        #         print obj_re_message.group(5)   # 报警信息
+        #         print re.search(r'op:(.*)',obj_re_message.group(6)).group(1)   # 运维负责人
+        #         print re.search(r'server:(.*)',obj_re_message.group(7)).group(1)   # 业务负责人
+        #         print i[ u'message']
+        #         print i[u'clock']
+        #         print i[u'subject']
+        #         print i[u'eventid']
+        #         last_day_alert.append({''})
+        """
+        13. 创建action
+            action.create 对应官方文档  https://www.zabbix.com/documentation/2.4/manual/api/reference/action/create
+        """
+
+        """
+        14. 修改trigger
+
+        """
+        trigger_id = '13723'
+        z = zabbix()
+        # 0为开启，1为关闭
+        params =  {
+                    "triggerid": trigger_id,
+                    "status": '1',
+                },
+        print z.getdataZabbix('trigger.update', params)
 
 
 
