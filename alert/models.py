@@ -23,11 +23,3 @@ class HistoryAlert_info(models.Model):
         return self.subject
 
 
-class ClosedTrigger_info(models.Model):
-    """
-        已关闭trigger表
-    """
-
-    trigger_id = models.CharField(max_length=30)                        # trigger id
-    close_time = models.CharField(max_length=30)                        # 需要关闭多久
-

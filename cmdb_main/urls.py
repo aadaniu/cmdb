@@ -78,10 +78,11 @@ urlpatterns = [
 
     ###################Alert##############################
     url(r'^alert/gethistoryalert/',get_historyalert),       # 获取历史报警信息
-    url(r'^alert/get_last_dayalert/',get_last_day_alert),     # 获取近一天的所有报警
-    url(r'^alert/get_last_10alert/',get_last_10_alert),      # 获取最近10条报警
-    # url(r'^alert/gethistoryalert/',get_closed_alert),       # 获取已经关闭的报警
+    url(r'^alert/get_lastday_alert/',get_last_day_alert),   # 获取近一天的所有报警
+    url(r'^alert/get_last10_alert/',get_last_10_alert),     # 获取最近10条报警
+    url(r'^alert/get_closed_alert/',get_closed_alert),      # 获取已经关闭的报警
     url(r'^alert/editalert/',edit_alert),                   # 完善报警处理流程
-    url(r'^alert/addalert/',add_alert),                     # zabbix action添加event接口
+    url(r'^alert/addalert/',add_alert),                     # zabbix action添加alert接口
+    url(r'^alert/closetrigger/',close_trigger),             # zabbix trigger关闭接口
 ]
 

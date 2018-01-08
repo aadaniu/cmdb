@@ -10,6 +10,7 @@ from django.shortcuts import render,render_to_response,HttpResponseRedirect,redi
 from django.http import HttpResponse
 import time
 import re
+import json
 
 from opmanage.views.index import check_login, check_user_auth, to_page
 from alert.forms import *
@@ -88,6 +89,14 @@ def get_last_day_alert(request):
 @check_login
 @check_user_auth(check_num=check_num)
 def get_closed_alert(request):
+    alert_list = HistoryAlert_info.objects.filter(clock__gte=clock_lastday).order_by('-clock')
+    return render(request, "alert/getsomealert.html", {'alert_list': alert_list})
+
+
+
+@check_login
+@check_user_auth(check_num=check_num)
+def get_closed_alert(request):
     alert_list = HistoryAlert_info.objects.filter(trigger_status='closed').order_by('-clock')
     return render(request, "alert/getsomealert.html", {'alert_list': alert_list})
 
@@ -107,6 +116,14 @@ def edit_alert(request):
         if edit_alertform.is_valid():
             # 添加处理结果数据
             edit_alertform.save()
+            trigger_id = request.POST.get('trigger_id')
+            z = zabbix()
+            # 0为开启，1为关闭
+            params =  {
+                "triggerid": trigger_id,
+                "status": '0',
+            },
+
             # 添加domain成功
             return HttpResponse('edit_alert')
         # 字段验证不通过
@@ -255,6 +272,7 @@ def close_trigger(request):
                 "triggerid": trigger_id,
                 "status": '1',
             },
-    HistoryAlert_info.objects.filter(event_id=event_id).updata(trigger_status='closed')
-    z.getdataZabbix('trigger.update', params)
+    HistoryAlert_info.objects.filter(event_id=event_id).update(trigger_status='closed')
+    json_dic = z.getdataZabbix('trigger.update', params)
     # {'status': True, 'data': {u'triggerids': [u'13723']}}
+    return HttpResponse(json.dumps(json_dic))

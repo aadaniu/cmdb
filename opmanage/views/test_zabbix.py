@@ -232,7 +232,7 @@ def test_zabbix(request):
         # 0为开启，1为关闭
         params =  {
                     "triggerid": trigger_id,
-                    "status": '1',
+                    "status": '0',
                 },
         print z.getdataZabbix('trigger.update', params)
 

@@ -6,7 +6,7 @@
 from django import forms
 
 
-from alert.models import HistoryAlert_info, ClosedTrigger_info
+from alert.models import HistoryAlert_info
 
 
 class GetHistoryAlertForm(forms.Form):
