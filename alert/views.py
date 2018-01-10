@@ -50,22 +50,31 @@ def get_historyalert(request):
             return render(request, "alert/gethistoryalert.html", {'get_historyalertform': get_historyalertform})
     # 非POST请求
     else:
-        every_page_sum = 20
-        # 获取当前页码
-        pages = request.GET.get('page') or 1
-        # 创建回传前端表单，如果搜索词存在，返回搜索词表单，否则返回空白表单
-        search_word = request.GET.get('search_word', None)
-        if search_word == '' or search_word == None:
-            historyalert_list = HistoryAlert_info.objects.all().order_by('-clock')
-            get_historyalertform = GetHistoryAlertForm()
-        else:
-            historyalert_list = []
-            for i in HistoryAlert_info.objects.all().order_by('-clock'):
-                if search_word in i.subject:
-                    historyalert_list.append(i)
-            get_historyalertform = GetHistoryAlertForm({'search_word': search_word})
-        page_historyalert_list = to_page(historyalert_list, pages, every_page_sum)
-        return render(request, "alert/gethistoryalert.html", {'get_historyalertform': get_historyalertform, 'page_historyalert_list': page_historyalert_list})
+        # django自带分页
+        # every_page_sum = 20
+        # # 获取当前页码
+        # pages = request.GET.get('page') or 1
+        # # 创建回传前端表单，如果搜索词存在，返回搜索词表单，否则返回空白表单
+        # search_word = request.GET.get('search_word', None)
+        # if search_word == '' or search_word == None:
+        #     historyalert_list = HistoryAlert_info.objects.all().order_by('-clock')
+        #     get_historyalertform = GetHistoryAlertForm()
+        # else:
+        #     historyalert_list = []
+        #     for i in HistoryAlert_info.objects.all().order_by('-clock'):
+        #         if search_word in i.subject:
+        #             historyalert_list.append(i)
+        #     get_historyalertform = GetHistoryAlertForm({'search_word': search_word})
+        # page_historyalert_list = to_page(historyalert_list, pages, every_page_sum)
+        # return render(request, "alert/gethistoryalert.html", {'get_historyalertform': get_historyalertform, 'page_historyalert_list': page_historyalert_list})
+        # django自带分页
+
+
+        # 前端分页
+        historyalert_list = HistoryAlert_info.objects.all()
+        return render(request, "alert/gethistoryalert.html", {'historyalert_list': historyalert_list})
+
+
 
 
 @check_login
@@ -89,7 +98,7 @@ def get_last_day_alert(request):
 @check_login
 @check_user_auth(check_num=check_num)
 def get_closed_alert(request):
-    alert_list = HistoryAlert_info.objects.filter(clock__gte=clock_lastday).order_by('-clock')
+    alert_list = HistoryAlert_info.objects.filter(trigger_status='closed').order_by('-clock')
     return render(request, "alert/getsomealert.html", {'alert_list': alert_list})
 
 

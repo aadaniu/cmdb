@@ -271,6 +271,27 @@
         </div>
         <!-- END PAGE CONTAINER -->
 
+        <!-- 表单删除 -->
+        <!-- MESSAGE BOX-->
+        <div class="message-box animated fadeIn" data-sound="alert" id="mb-remove-row">
+            <div class="mb-container">
+                <div class="mb-middle">
+                    <div class="mb-title"><span class="fa fa-times"></span> Remove <strong>Data</strong> ?</div>
+                    <div class="mb-content">
+                        <p>Are you sure you want to remove this row?</p>
+                        <p>Press Yes if you sure.</p>
+                    </div>
+                    <div class="mb-footer">
+                        <div class="pull-right">
+                            <button class="btn btn-success btn-lg mb-control-yes">Yes</button>
+                            <button class="btn btn-default btn-lg mb-control-close">No</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END MESSAGE BOX-->
+
         <!-- 配置退出 -->
         <!-- MESSAGE BOX-->
         <div class="message-box animated fadeIn" data-sound="alert" id="mb-signout">
@@ -308,11 +329,23 @@
         <!-- START THIS PAGE PLUGINS-->        
         <script type='text/javascript' src='/static/js/plugins/icheck/icheck.min.js'></script>
         <script type="text/javascript" src="/static/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
-        
         <script type="text/javascript" src="/static/js/plugins/knob/jquery.knob.min.js"></script>
         <script type="text/javascript" src="/static/js/plugins/owl/owl.carousel.min.js"></script>
         <script type="text/javascript" src="/static/js/plugins/tagsinput/jquery.tagsinput.min.js"></script>
-        <!-- END THIS PAGE PLUGINS-->        
+        <!-- END THIS PAGE PLUGINS-->
+
+        <!-- START THIS PAGE PLUGINS-->
+        <!--USE TABLE AND TABLE EXPOSE-->
+        <script type='text/javascript' src='/static/js/plugins/icheck/icheck.min.js'></script>
+        <script type="text/javascript" src="/static/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
+        <script type="text/javascript" src="/static/js/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="/static/js/plugins/tableexport/tableExport.js"></script>
+        <script type="text/javascript" src="/static/js/plugins/tableexport/jquery.base64.js"></script>
+        <script type="text/javascript" src="/static/js/plugins/tableexport/html2canvas.js"></script>
+        <script type="text/javascript" src="/static/js/plugins/tableexport/jspdf/libs/sprintf.js"></script>
+        <script type="text/javascript" src="/static/js/plugins/tableexport/jspdf/jspdf.js"></script>
+        <script type="text/javascript" src="/static/js/plugins/tableexport/jspdf/libs/base64.js"></script>
+        <!-- END THIS PAGE PLUGINS-->
 
         <!-- START TEMPLATE -->
         <script type="text/javascript" src="/static/js/settings.js"></script>

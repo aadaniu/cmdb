@@ -4,8 +4,8 @@
     <modules>
       <module fileurl="file://F:/atlant/.idea/atlant.iml" filepath="F:/atlant/.idea/atlant.iml" />
       <module fileurl="file://F:/cmdb/.idea/cmdb.iml" filepath="F:/cmdb/.idea/cmdb.iml" />
-      <module fileurl="file://$USER_HOME$/Documents/Tencent Files/93216193/FileRecv/game_devops_full/.idea/game_devops.iml" filepath="$USER_HOME$/Documents/Tencent Files/93216193/FileRecv/game_devops_full/.idea/game_devops.iml" />
       <module fileurl="file://F:/game_devops_full/.idea/game_devops.iml" filepath="F:/game_devops_full/.idea/game_devops.iml" />
+      <module fileurl="file://$USER_HOME$/Documents/Tencent Files/93216193/FileRecv/game_devops_full/.idea/game_devops.iml" filepath="$USER_HOME$/Documents/Tencent Files/93216193/FileRecv/game_devops_full/.idea/game_devops.iml" />
       <module fileurl="file://F:/mysite/.idea/mysite.iml" filepath="F:/mysite/.idea/mysite.iml" />
       <module fileurl="file://F:/op_assistant/.idea/op_assistant.iml" filepath="F:/op_assistant/.idea/op_assistant.iml" />
       <module fileurl="file://F:/tag/.idea/tag.iml" filepath="F:/tag/.idea/tag.iml" />

@@ -40,8 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'opmanage', # Op Manager
-    'alert',    # Alert
+    'opmanage',             # Op Manager
+    'alert',                # Alert
 ]
 
 MIDDLEWARE = [

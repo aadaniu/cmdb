@@ -6,56 +6,78 @@
 {% endblock %}
 
 {% block content %}
+{% load dealclock %}
 
-<form action="/alert/gethistoryalert/" method="post" novalidate>
-    {{ get_historyalertform.search_word.label }}{{ get_historyalertform.search_word }}<br>
-     <div>
-        <input type="submit" value="提交">
+<div class="row">
+    <div class="col-md-12">
+        <!-- START DATATABLE EXPORT -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">历史报警信息</h3>
+                <div class="btn-group pull-right">
+                    <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bars"></i>导出数据</button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" onClick ="$('#customers2').tableExport({type:'json',escape:'false'});"><img src='/static/img/icons/json.png' width="24"/> JSON</a></li>
+                        <li><a href="#" onClick ="$('#customers2').tableExport({type:'json',escape:'false',ignoreColumn:'[2,3]'});"><img src='img/icons/json.png' width="24"/> JSON (ignoreColumn)</a></li>
+                        <li><a href="#" onClick ="$('#customers2').tableExport({type:'json',escape:'true'});"><img src='/static/img/icons/json.png' width="24"/> JSON (with Escape)</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#" onClick ="$('#customers2').tableExport({type:'xml',escape:'false'});"><img src='/static/img/icons/xml.png' width="24"/> XML</a></li>
+                        <li><a href="#" onClick ="$('#customers2').tableExport({type:'sql'});"><img src='/static/img/icons/sql.png' width="24"/> SQL</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#" onClick ="$('#customers2').tableExport({type:'csv',escape:'false'});"><img src='/static/img/icons/csv.png' width="24"/> CSV</a></li>
+                        <li><a href="#" onClick ="$('#customers2').tableExport({type:'txt',escape:'false'});"><img src='/static/img/icons/txt.png' width="24"/> TXT</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#" onClick ="$('#customers2').tableExport({type:'excel',escape:'false'});"><img src='/static/img/icons/xls.png' width="24"/> XLS</a></li>
+                        <li><a href="#" onClick ="$('#customers2').tableExport({type:'doc',escape:'false'});"><img src='/static/img/icons/word.png' width="24"/> Word</a></li>
+                        <li><a href="#" onClick ="$('#customers2').tableExport({type:'powerpoint',escape:'false'});"><img src='/static/img/icons/ppt.png' width="24"/> PowerPoint</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#" onClick ="$('#customers2').tableExport({type:'png',escape:'false'});"><img src='/static/img/icons/png.png' width="24"/> PNG</a></li>
+                        <li><a href="#" onClick ="$('#customers2').tableExport({type:'pdf',escape:'false'});"><img src='/static/img/icons/pdf.png' width="24"/> PDF</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table id="customers2" class="table table-bordered datatable">
+                        <!--默认排序配置jquery.dataTables.min.js中的m.defaults={aaData:null,aaSorting:[[0,"desc"]]-->
+                        <thead>
+                            <tr>
+                                <th>报警时间</th>
+                                <th>报警内容</th>
+                                <th>触发器id</th>
+                                <th>触发器状态</th>
+                                <th>事件id</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in historyalert_list %}
+                            {% if i.trigger_status == 'closed' %}
+                            <tr class="success" id="{{ i.event_id }}">
+                            {% else %}
+                            <tr class="active">
+                            {% endif %}
+                                <td>{{ i.clock|dealclock }}</td>
+                                <td><strong>{{ i.subject }}</strong></td>
+                                <td>{{ i.trigger_id }}</td>
+                                <td><span class="label label-success">{{ i.trigger_status }}</span></td>
+                                <!--<td>{{i.event_id}}</td>-->
+                                <td>
+                                    <button class="btn btn-default btn-rounded btn-condensed btn-sm"><span class="fa fa-pencil"></span></button>
+                                    <button class="btn btn-danger btn-rounded btn-condensed btn-sm" onClick="delete_row('{{ i.event_id }}');"><span class="fa fa-times"></span></button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- END DATATABLE EXPORT -->
+
     </div>
-</form>
-
-<div class="pagination">
-    <span class="step-links">
-        {% for i in page_historyalert_list %}
-            {{ i.clock }}{{ i.subject }}{{ i.event_id }}{{ i.trigger_id }}{{ i.trigger_status }}
-            {% if i.trigger_status == 'open' %}
-                <input id="{{ i.event_id }}" type="button" value="关闭trigger" onclick="ClockTrigger({{ i.event_id }}, {{ i.trigger_id }});" />
-            {% endif %}
-            {% if i.alert_status != 'ccc' %}
-                <a href="/alert/editalert?event_id={{ i.event_id }}">修改</a>
-            {% endif %}
-            <br>
-        {% endfor %}
-        <!--判断是否有前一页-->
-        {% if page_historyalert_list.has_previous %}
-        <a href="?page={{ page_historyalert_list.previous_page_number }}&search_word={{ get_historyalertform.search_word.value }}">上一页</a>
-        {% endif %}
-        <!--循环页-->
-        {% for page in page_historyalert_list.paginator.page_range %}
-            {% if page == page_historyalert_list.number %}
-                <a class='paginator_current' title='当前页:{{ page }}'><span>{{ page }}</span></a>
-            {% else %}
-                <a class='paginator' href='?page={{ page }}&search_word={{ get_historyalertform.search_word.value }}' title='{{ page }}'><span>{{ page }}</span></a>
-            {% endif %}
-        {% endfor %}
-        Page {{ page_historyalert_list.number }} of {{ page_historyalert_list.paginator.num_pages }}
-        <!--判断是否有后一页-->
-        {% if page_historyalert_list.has_next %}
-            <a href="?page={{ page_historyalert_list.next_page_number }}&search_word={{ get_historyalertform.search_word.value }}">下一页</a>
-        {% endif %}
-    </span>
 </div>
 
 {% block js %}
-<script>
-    function ClockTrigger(event_id, trigger_id) {
-         $.post('/alert/closetrigger/',{'event_id': event_id, 'trigger_id':trigger_id}, function(callback){
-            alert('123');
-            console.log(callback);
-            $("#"+event_id).hide()
-        });
-    }
-</script>
 {% endblock %}
 
 {% endblock %}

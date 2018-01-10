@@ -1,0 +1,61 @@
+{% extends "cmdbbase.html" %}
+
+
+{% block css %}
+{% include "form_css.html"%}
+{% endblock %}
+
+{% block content %}
+
+<form action="/alert/gethistoryalert/" method="post" novalidate>
+    {{ get_historyalertform.search_word.label }}{{ get_historyalertform.search_word }}<br>
+     <div>
+        <input type="submit" value="提交">
+    </div>
+</form>
+
+<div class="pagination">
+    <span class="step-links">
+        {% for i in page_historyalert_list %}
+            {{ i.clock }}{{ i.subject }}{{ i.event_id }}{{ i.trigger_id }}{{ i.trigger_status }}
+            {% if i.trigger_status == 'open' %}
+                <input id="{{ i.event_id }}" type="button" value="关闭trigger" onclick="ClockTrigger({{ i.event_id }}, {{ i.trigger_id }});" />
+            {% endif %}
+            {% if i.alert_status != 'ccc' %}
+                <a href="/alert/editalert?event_id={{ i.event_id }}">修改</a>
+            {% endif %}
+            <br>
+        {% endfor %}
+        <!--判断是否有前一页-->
+        {% if page_historyalert_list.has_previous %}
+        <a href="?page={{ page_historyalert_list.previous_page_number }}&search_word={{ get_historyalertform.search_word.value }}">上一页</a>
+        {% endif %}
+        <!--循环页-->
+        {% for page in page_historyalert_list.paginator.page_range %}
+            {% if page == page_historyalert_list.number %}
+                <a class='paginator_current' title='当前页:{{ page }}'><span>{{ page }}</span></a>
+            {% else %}
+                <a class='paginator' href='?page={{ page }}&search_word={{ get_historyalertform.search_word.value }}' title='{{ page }}'><span>{{ page }}</span></a>
+            {% endif %}
+        {% endfor %}
+        Page {{ page_historyalert_list.number }} of {{ page_historyalert_list.paginator.num_pages }}
+        <!--判断是否有后一页-->
+        {% if page_historyalert_list.has_next %}
+            <a href="?page={{ page_historyalert_list.next_page_number }}&search_word={{ get_historyalertform.search_word.value }}">下一页</a>
+        {% endif %}
+    </span>
+</div>
+
+{% block js %}
+<script>
+    function ClockTrigger(event_id, trigger_id) {
+         $.post('/alert/closetrigger/',{'event_id': event_id, 'trigger_id':trigger_id}, function(callback){
+            alert('123');
+            console.log(callback);
+            $("#"+event_id).hide()
+        });
+    }
+</script>
+{% endblock %}
+
+{% endblock %}
