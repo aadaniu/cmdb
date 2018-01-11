@@ -97,7 +97,7 @@ def sendmail_general(subject, text, temail, femail=cmdb_smtp_user):
     msg['Date'] = Utils.formatdate(localtime=1)
     s = smtplib.SMTP(smtp_host, smtp_port)
     s.ehlo()        #未知
-    s.starttls()    #ssl需要
+    # s.starttls()    #ssl需要
     s.login(mail_user, mail_passwd)
     s.sendmail(femail, temail, msg.as_string())
     s.close()

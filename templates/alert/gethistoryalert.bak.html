@@ -22,7 +22,7 @@
                 <input id="{{ i.event_id }}" type="button" value="关闭trigger" onclick="ClockTrigger({{ i.event_id }}, {{ i.trigger_id }});" />
             {% endif %}
             {% if i.alert_status != 'ccc' %}
-                <a href="/alert/editalert?event_id={{ i.event_id }}">修改</a>
+                <a href="/alert/editalert/?event_id={{ i.event_id }}">修改</a>
             {% endif %}
             <br>
         {% endfor %}

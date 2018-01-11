@@ -16,6 +16,9 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.conf.urls.static import static
+from django.conf import settings
+
 
 from opmanage.views import index, user, test, test_zabbix, host, lb, domain, department, serverline
 from alert.views import *
@@ -84,5 +87,5 @@ urlpatterns = [
     url(r'^alert/editalert/',edit_alert),                   # 完善报警处理流程
     url(r'^alert/addalert/',add_alert),                     # zabbix action添加alert接口
     url(r'^alert/closetrigger/',close_trigger),             # zabbix trigger关闭接口
-]
+]  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

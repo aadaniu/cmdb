@@ -11,7 +11,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # load cmdb config
 
 cmdb_config = ConfigParser.RawConfigParser()
-cmdb_config.read(os.path.join(BASE_DIR, 'config\cmdb.config'))
+cmdb_config.read(os.path.join(BASE_DIR, 'config/cmdb.config'))
 
 cmdb_mysql_host = cmdb_config.get('mysql','host')
 cmdb_mysql_port = cmdb_config.get('mysql','port')

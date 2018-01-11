@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>salt平台</title>
+  <script src="/static/jquery-2.1.1.min.js"></script>
+</head>
+<body>
+    <form action="/salt/index/" method="POST" id="form">
+        <div>匹配条件：<input type="text" name="tgt" value="" id="a" style="width: 200px"></div>
+        <div>匹配规则：
+            <!--<input type="text" name="tgt_type" value="" id="b" style="width: 200px">-->
+            <select name="tgt_type" size="1" multiple="multiple" id="b">
+                <option value="glob">glob</option>
+                <option value="pcre">pcre</option>
+                <option value="list">list</option>
+                <option value="grain">grain</option>
+                <option value="grain_pcre">grain_pcre</option>
+                <option value="pillar">pillar</option>
+                <option value="pillar_pcre">pillar_pcre</option>
+                <option value="nodegroup">nodegroup</option>
+                <option value="range">range</option>
+                <option value="compound">compound</option>
+                <option value="ipcidr">ipcidr</option>
+            </select>
+        </div>
+        <div>方法：<input type="text" name="fun" value="" id="c" style="width: 200px"></div>
+        <div>参数：<input type="text" name="kwarg" value="" id="d" style="width: 200px"></div>
+        <div><button type="button" id="fb">执行</button></div>
+        <div style="height: 300px;margin-top: 15px;">
+        <textarea type="text" style="width: 60%;height: 300px" disabled="disabled" class="left" name="comment" id="z"></textarea>
+        </div>
+    </form>
+</body>
+<script>
+$("#fb").click(function () {
+    $.post("/salt/index/",{
+            tgt:$("#a").val(),
+            tgt_type: $("#b").val(),
+            fun: $("#c").val(),
+            kwarg: $("#d").val(),
+        },
+        function (response,status,xhr) {
+            $("#z").html('')
+            $.each(response,function (key,val) {
+            var z = "\r\n"+key+ ":\r\n" + val;
+            $("#z").append(z);
+            })
+        }
+    )
+})
+</script>
+</html>

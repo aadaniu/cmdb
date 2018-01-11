@@ -36,9 +36,9 @@
                     </ul>
                 </div>
             </div>
-            <div class="panel-body">
+            <div class="panel-body panel-body-table">
                 <div class="table-responsive">
-                    <table id="customers2" class="table table-bordered datatable">
+                    <table id="customers2" class="table datatable table-striped table-actions">
                         <!--默认排序配置jquery.dataTables.min.js中的m.defaults={aaData:null,aaSorting:[[0,"desc"]]-->
                         <thead>
                             <tr>
@@ -54,7 +54,7 @@
                             {% if i.trigger_status == 'closed' %}
                             <tr class="success" id="{{ i.event_id }}">
                             {% else %}
-                            <tr class="active">
+                            <tr class="active" id="{{ i.event_id }}">
                             {% endif %}
                                 <td>{{ i.clock|dealclock }}</td>
                                 <td><strong>{{ i.subject }}</strong></td>
@@ -62,7 +62,7 @@
                                 <td><span class="label label-success">{{ i.trigger_status }}</span></td>
                                 <!--<td>{{i.event_id}}</td>-->
                                 <td>
-                                    <button class="btn btn-default btn-rounded btn-condensed btn-sm"><span class="fa fa-pencil"></span></button>
+                                    <button onclick="window.location.href='/alert/editalert?event_id={{ i.event_id }}'" class="btn btn-default btn-rounded btn-condensed btn-sm"><span class="fa fa-pencil"></span></button>
                                     <button class="btn btn-danger btn-rounded btn-condensed btn-sm" onClick="delete_row('{{ i.event_id }}');"><span class="fa fa-times"></span></button>
                                 </td>
                             </tr>
