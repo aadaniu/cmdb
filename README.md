@@ -94,7 +94,6 @@
 ## 依赖包
 - djang (1.11.5)
 - pymysql (0.7.11)
-- ipaddr (2.1.11)
 - boto3 (1.4.8)
 - qcloudapi-sdk-python (2.0.10)
 - aliyun-python-sdk-core (2.6.0)

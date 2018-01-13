@@ -28,7 +28,7 @@ SECRET_KEY = '$djw^xow5n0(=*dn4w4hx+8q1+h$n*xo&t&3mfcdm0av!65(=)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['172.17.0.2', 'cmdb.whysdomain.com']
 
 
 # Application definition
