@@ -227,16 +227,66 @@ def test_zabbix(request):
         14. 修改trigger
 
         """
-        trigger_id = '13723'
+        # trigger_id = '13723'
+        # z = zabbix()
+        # # 0为开启，1为关闭
+        # params =  {
+        #             "triggerid": trigger_id,
+        #             "status": '0',
+        #         },
+        # print z.getdataZabbix('trigger.update', params)
+
+        """
+        15. 获取历史数据
+            history.get https://www.zabbix.com/documentation/2.4/manual/api/reference/history/get
+            支持time_from,time_to,limit等参数
+        """
         z = zabbix()
-        # 0为开启，1为关闭
-        params =  {
-                    "triggerid": trigger_id,
-                    "status": '0',
-                },
-        print z.getdataZabbix('trigger.update', params)
+        params ={
+                    "output": "extend",
+                    "itemids": "24069",
+                    "sortfield": "clock",
+                    "sortorder": "DESC",
+                    "limit": 10
+                }
+
+        print z.getdataZabbix('history.get', params)
+
+        """
+        {'status': True, 'data': [{u'itemid': u'24069', u'ns': u'889294125', u'value': u'0', u'clock': u'1515752889'},
+                                  {u'itemid': u'24069', u'ns': u'882639616', u'value': u'0', u'clock': u'1515752859'},
+                                  {u'itemid': u'24069', u'ns': u'871681861', u'value': u'0', u'clock': u'1515752829'},
+                                  {u'itemid': u'24069', u'ns': u'866340256', u'value': u'0', u'clock': u'1515752799'},
+                                  {u'itemid': u'24069', u'ns': u855850482', u'value': u'0', u'clock': u'1515752769'},
+                                  {u'itemid':u'24069',u'ns': u'849023277', u'value': u'0', u'clock': u'1515752739'},
+                                  {u'itemid': u'24069', u'ns': u'838169491', u'value': u'0', u'clock': u'1515752709'},
+                                  {u'itemid': u'24069', u'ns': u'832910980', u'value': u'0', u'clock': u'1515752679'},
+                                  {u'itemid': u'24069', u'ns': u'822549749', u'value': u'0', u'clock': u'1515752649'},
+                                  {u'itemid': u'24069', u'ns': u'817882180', u'value': u'0', u'clock': u'1515752619'}]}
+        """
+
+        """
+        16. 获取主机iterm
+            item.get https://www.zabbix.com/documentation/2.4/manual/api/reference/item/get
+        """
+
+        # z = zabbix()
+        # host_id = z.hostname_to_id('Zabbix server')
+        #
+        # params ={
+        #             "output": ["itemids", "key_"],
+        #             "hostids": host_id,
+        #             "search": {
+        #                           "key_": "why"
+        #                       },
+        #             "sortfield": "name"
+        #         }
+        # # print z.getdataZabbix('item.get', params)['data'][0]['key_']
+        # print z.getdataZabbix('item.get', params)['data'][0]['itemid']
 
 
+        # import json
+        # return HttpResponse(json.dumps(z.getdataZabbix('item.get', params)))
 
         """41项
         Action  报警动作的增删改查   对于cmdb用不到，我们更希望手动来创建
@@ -252,7 +302,7 @@ def test_zabbix(request):
         Graph
         Graph item
         Graph prototype
-        History
+        History 获取报警历史记录
         Host    主机的增删改查，添加移除主机组
         Host group
         Host interface

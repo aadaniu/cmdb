@@ -10,7 +10,7 @@ from salt import client
 from django.http import JsonResponse
 import json
 
-def index(request):
+def exec_cmd(request):
     accect = ['cmd.run',]
     # context = accect_cmd.objects.values()
     # for i in context:

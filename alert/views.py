@@ -159,18 +159,27 @@ def add_alert(request):
         print request_ipaddr
         subject = request.POST.get('subject')
         message = request.POST.get('message')
-        # obj_re_subject = re.search(r'\[([^\[\]]*)\]\[([^\[\]]*)\]\[([^\[\]]*)\]\[([^\[\]]*)\]\[([^\[\]]*)\]\[([^\[\]]*)\]\[([^\[\]]*)\]',subject)
+        # 报警信息
+        # [1][02:12:09][ads - 019][PROBLEM][cpu idle error][op:why][server:why]
+        obj_re_subject = re.search(
+            r'\[([^\[\]]*)\]\[([^\[\]]*)\]\[([^\[\]]*)\]\[([^\[\]]*)\]\[([^\[\]]*)\]\[([^\[\]]*)\]\[([^\[\]]*)\]',
+            subject)
+        # 报警信息
+        # [27][10:16:34][deploy-001][PROBLEM][005][cpu idle too low (<30%)][15.54 %][运维负责人TEST][业务负责人TEST]
+        # obj_re_subject = re.search(
+        #     r'\[([^\[\]]*)\]\[([^\[\]]*)\]\[([^\[\]]*)\]\[([^\[\]]*)\]\[([^\[\]]*)\]\[([^\[\]]*)\]\[([^\[\]]*)\]\[([^\[\]]*)\]\[([^\[\]]*)\]',
+        #     subject)
         obj_re_message = re.search(r'(\d+)*:(\d+)*', message)
         # print obj_re_subject.group(1)   # action_id 我自行定义的
-        # print obj_re_subject.group(2)   # 时间
-        # print obj_re_subject.group(3)   # 主机名
+        event_time = obj_re_subject.group(2)   # 时间
+        event_host = obj_re_subject.group(3)   # 主机名
         # print obj_re_subject.group(4)   # 报警级别
-        # print obj_re_subject.group(5)   # 报警信息
+        event_message = obj_re_subject.group(5)   # 报警信息
         # print re.search(r'op:(.*)',obj_re_subject.group(6)).group(1)   # 运维负责人
         # print re.search(r'server:(.*)',obj_re_subject.group(7)).group(1)   # 业务负责人
         # print obj_re_message.group(1)   # trigger_id
         # print obj_re_message.group(2)   # event_id
-        HistoryAlert_info.objects.create(clock=123123,# clock=time.time(),
+        HistoryAlert_info.objects.create(clock=time.time(),
                                          subject=subject,
                                          event_id=obj_re_message.group(2),
                                          trigger_id=obj_re_message.group(1),
@@ -181,6 +190,97 @@ def add_alert(request):
         return HttpResponse('ok')
     else:
         return render(request,'alert/addalert.html')
+
+
+
+def check_alert(event_time, event_host, event_message):
+    """
+        预查报警
+    :param event_time:
+    :param event_host:
+    :param event_message:
+    :return:
+    """
+    if check_host_type(event_host) == 'HOST':
+        check_host_alert(event_time, event_host, event_message)
+    elif check_host_type(event_host) == 'ELB':
+        check_lb_alert(event_time, event_host, event_message)
+    else:
+        pass
+
+
+
+def check_host_type(host):
+    """
+        用于通过主机名判断主机类型
+    :param host:
+    :return:
+    """
+    if host.endswith('elb'):
+        return 'ELB'
+    else:
+        return 'HOST'
+
+
+def check_host_alert(event_time, host_name, event_message):
+    """
+        预查报警主机问题
+    :param event_time:
+    :param host_name:
+    :param event_message:
+    :return:
+    """
+    pass
+    # 判断主机报警类别
+    # salt_conn = client.LocalClient()
+    # if 'cpu' in event_message:
+    #     # 获取当前CPU数据
+    #     before_cmd = salt_conn.cmd(host_name, 'cmd.run', 'id', timeout=10)
+    #     # 获取主机上服务，根据服务处理
+    #     # aws api
+    #     # 处理命令
+    #     # exec = ''
+    #     # 自动化处理
+    #     salt_conn.cmd(host_name, 'cmd.run', 'service php-fpm reload', timeout=10)
+    #     # 获取处理完后数据
+    #     afert_cmd = salt_conn.cmd(host_name, 'cmd.run', 'id', timeout=10)
+    #     # 获取cpu使用率最高的进程
+    #     salt_conn.cmd(host_name, 'cmd.run', 'ps aux | sort -k3nr | head -4', timeout=10)
+    #     # 获取主机前端LB负载情况
+    #     # aws api
+    #     # 写入一对一的表中
+    #     # 字段 处理前，处理命令，处理后，当前造成的可能原因，前端后端可能的原因
+    #
+        # # 主机名反查ID
+        # z = zabbix()
+        # data = z.hostnameanditemkey_to_itemid(host_name, 'why')
+        # # 根据HOSTID查找ITERM，匹配近10分钟主机cpu使用率最高的进程，然后获取history值，然后还可以返回一个URL
+        # alert_url = {data[0]['key_']: 'http://zabbix.whysdomain.com/zabbix/history.php?action=showgraph&itemids[]=%s' % data[0]['itemids']}
+        # maybe_url = {data[0]['key_']: 'http://zabbix.whysdomain.com/zabbix/history.php?action=showgraph&itemids[]=%s' % data[0]['itemids']}
+
+
+
+
+
+
+
+
+
+def check_lb_alert(event_time, lb_name, event_message):
+    """
+        预查报警LB问题
+    :param event_time:
+    :param lb_name:
+    :param event_message:
+    :return:
+    """
+    pass
+    if 'UnHealthyHostCount' in event_message:
+    	# 获取挂掉主机
+    	# 检测主机是否能ssh
+    	# 检测主机上服务
+        pass
+
 
 
 # if 'cpu' in subject:
@@ -233,10 +333,7 @@ def add_alert(request):
 # 	# 获取当前请求数
 # 	# 获取发版情况
 # 	# 获取后端超过阈值的日志
-# if 'UnHealthyHostCount'
-# 	# 获取挂掉主机
-# 	# 检测主机是否能ssh
-# 	# 检测主机上服务
+
 
 # mysql
 #

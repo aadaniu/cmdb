@@ -172,6 +172,25 @@ class zabbix():
         return self.getdataZabbix('host.get', params)['data'][0]['hostid']
 
 
+    def hostnameanditemkey_to_itemidanditemkey(self, host, key):
+        """
+            通过主机名和item的key
+        :param host: 主机名
+        :param key: item的匹配关键词，必须只匹配到一个的匹配key，计划做try except
+        :return:
+        """
+        host_id = self.hostname_to_id(host)
+
+        params = {
+            "output": ["itemids", "key_"],
+            "hostids": host_id,
+            "search": {
+                "key_": key,
+            },
+            "sortfield": "name"
+        }
+        return self.getdataZabbix('item.get', params)['data'][0]
+
 
 
 
