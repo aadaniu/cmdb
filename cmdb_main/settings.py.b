@@ -28,7 +28,7 @@ SECRET_KEY = '$djw^xow5n0(=*dn4w4hx+8q1+h$n*xo&t&3mfcdm0av!65(=)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['cmdb.whysdomain.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -138,15 +138,14 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
-
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder"
 )
 
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
 
 # session
 

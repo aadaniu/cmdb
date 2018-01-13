@@ -87,5 +87,5 @@ urlpatterns = [
     url(r'^alert/editalert/',edit_alert),                   # 完善报警处理流程
     url(r'^alert/addalert/',add_alert),                     # zabbix action添加alert接口
     url(r'^alert/closetrigger/',close_trigger),             # zabbix trigger关闭接口
-] # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
