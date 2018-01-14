@@ -20,15 +20,10 @@ def exec_cmd(request):
         tgt_type = request.POST.get('tgt_type')
         fun = request.POST.get('fun')
         str_kwarg = request.POST.get('kwarg')
+        kwarg = None
         if fun in accect:
-            if 0:
-                arg = str_kwarg
-                kwarg = None
-            else:
-                arg = ()
-                kwarg = str_kwarg
             salt_conn = client.LocalClient()
-            result2 = salt_conn.cmd(tgt, fun, arg, timeout=None, tgt_type=tgt_type, ret='', jid='', full_return=False, kwarg=kwarg)
+            result2 = salt_conn.cmd(tgt, fun, arg=[str_kwarg,], timeout=None, expr_form=tgt_type, ret='', jid='', full_return=False, kwarg=None)
             return JsonResponse(result2, safe=False)
         else:
             data = {fun: "请检查命令是否正确或命令超权限，请联系管理员！"}
