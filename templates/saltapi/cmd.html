@@ -34,7 +34,7 @@
 </body>
 <script>
 $("#fb").click(function () {
-    $.post("/salt/index/",{
+    $.post("/saltapi/saltrun/",{
             tgt:$("#a").val(),
             tgt_type: $("#b").val(),
             fun: $("#c").val(),
