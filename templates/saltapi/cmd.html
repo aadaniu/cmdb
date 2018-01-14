@@ -36,9 +36,9 @@
 $("#fb").click(function () {
     $.post("/saltapi/saltrun/",{
             tgt:$("#a").val(),
-            tgt_type: $("#b").val(),
-            fun: $("#c").val(),
-            kwarg: $("#d").val(),
+            tgt_type:$("#b").val(),
+            fun:$("#c").val(),
+            kwarg:$("#d").val(),
         },
         function (response,status,xhr) {
             $("#z").html('')
