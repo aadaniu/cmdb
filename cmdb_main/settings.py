@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'opmanage',             # Op Manager
     'alert',                # Alert
+    'saltapi',              # SaltAPI
 ]
 
 MIDDLEWARE = [
