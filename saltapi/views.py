@@ -34,4 +34,4 @@ def exec_cmd(request):
             data = {fun: "请检查命令是否正确或命令超权限，请联系管理员！"}
             return JsonResponse(data, safe=False)
     else:
-        return render_to_response('/saltapi/cmd.html')
+        return render_to_response('saltapi/cmd.html')
