@@ -22,6 +22,7 @@ from django.conf import settings
 
 from opmanage.views import index, user, test, test_zabbix, host, lb, domain, department, serverline
 from alert.views import *
+from saltapi.views import *
 
 urlpatterns = [
     # url(r'^admin/', admin.site.urls),
@@ -87,5 +88,12 @@ urlpatterns = [
     url(r'^alert/editalert/',edit_alert),                   # 完善报警处理流程
     url(r'^alert/addalert/',add_alert),                     # zabbix action添加alert接口
     url(r'^alert/closetrigger/',close_trigger),             # zabbix trigger关闭接口
+
+
+
+
+
+    ###################Salt##############################
+    url(r'^saltapi/saltrun/',exec_cmd),       # 获取历史报警信息
 ]  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
