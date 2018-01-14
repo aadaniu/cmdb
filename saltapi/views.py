@@ -17,7 +17,7 @@ def exec_cmd(request):
     #     accect.append(i["command"])
     if request.method == "POST":
         tgt = request.POST.get('tgt')
-        tgt_type = request.POST.get('tgt_type')
+        tgt_type = request.POST.get('tgt_type[]')
         fun = request.POST.get('fun')
         str_kwarg = request.POST.get('kwarg')
         kwarg = None
