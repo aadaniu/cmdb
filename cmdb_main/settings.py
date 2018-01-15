@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'opmanage',             # Op Manager
     'alert',                # Alert
     'saltapi',              # SaltAPI
+    'workorder',            # WorkOrder
 ]
 
 MIDDLEWARE = [

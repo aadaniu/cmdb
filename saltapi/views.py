@@ -10,6 +10,9 @@ from salt import client
 from django.http import JsonResponse
 import json
 
+
+from saltapi.models import SaltReturns_info
+
 def exec_cmd(request):
     """
         用于web端批量salt
@@ -23,7 +26,7 @@ def exec_cmd(request):
     #     accect.append(i["command"])
     if request.method == "POST":
         tgt = request.POST.get('tgt')
-        tgt_type = request.POST.get('tgt_type[]')
+        tgt_type = request.POST.get('tgt_type[]', 'glob')
         """
         glob - Bash命令方式(默认)
         pcre(E) - 正则匹配规则
@@ -53,10 +56,11 @@ def exec_cmd(request):
         str_kwarg = request.POST.get('kwarg')
         if fun in accect:
             salt_conn = client.LocalClient()
-            result2 = salt_conn.cmd(tgt, fun, arg=[str_kwarg,], timeout=None, expr_form=tgt_type, ret='', jid='', full_return=True, kwarg=None)
+            result = salt_conn.cmd(tgt, fun, arg=[str_kwarg,], timeout=None, expr_form=tgt_type, ret='', jid='', full_return=True, kwarg=None)
             # 写入历史数据
             #
-            return JsonResponse(result2, safe=False)
+            SaltReturns_info.objects.create(tgt=tgt, fun=fun, tgt_type=tgt_type, str_kwarg=str_kwarg, result=result)
+            return JsonResponse(result, safe=False)
         else:
             data = {fun: "请检查命令是否正确或命令超权限，请联系管理员！"}
             return JsonResponse(data, safe=False)
