@@ -65,8 +65,9 @@ def exec_cmd(request):
 
 
 
-def hostpaller(request):
+def add_hostpaller(request):
     """
+        添加salt标签
         salt paller管理
             salt主机组nodegroup不支持动态，可以通过python动态修改配置文件，salt获取主机组也是salt-master获取配置文件原理实现；
             salt的paller支持动态获取资源，由cmdb提供api，对应salt端脚本即可，并且可以为fabric提供获取主机组的接口，一举两得。
@@ -75,6 +76,25 @@ def hostpaller(request):
     :return:
     """
     pass
+
+
+def delete_hostpaller(request):
+    """
+        删除salt标签
+    :param request:
+    :return:
+    """
+    pass
+
+
+def get_hostpaller(request):
+    """
+        获取salt标签
+    :param request:
+    :return:
+    """
+    pass
+
 
 
 def crontab_plan(request):
