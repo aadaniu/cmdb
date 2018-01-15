@@ -53,7 +53,7 @@ def exec_cmd(request):
         str_kwarg = request.POST.get('kwarg')
         if fun in accect:
             salt_conn = client.LocalClient()
-            result2 = salt_conn.cmd(tgt, fun, arg=[str_kwarg,], timeout=None, expr_form=tgt_type, ret='', jid='', full_return=False, kwarg=None)
+            result2 = salt_conn.cmd(tgt, fun, arg=[str_kwarg,], timeout=None, expr_form=tgt_type, ret='', jid='', full_return=True, kwarg=None)
             # 写入历史数据
             #
             return JsonResponse(result2, safe=False)
