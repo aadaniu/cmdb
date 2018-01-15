@@ -95,5 +95,6 @@ urlpatterns = [
 
     ###################Salt##############################
     url(r'^saltapi/saltrun/',exec_cmd),       # 获取历史报警信息
+    url(r'^saltapi/saltpillar/', exec_cmd),   # 主机标签
 ]  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
