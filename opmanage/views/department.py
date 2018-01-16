@@ -32,11 +32,11 @@ def add_department(request):
             return HttpResponse('ok')
         # 字段验证不通过
         else:
-            return render(request, "department/adddepartment.html", {'add_departmentform': add_departmentform, 'error': add_departmentform.errors})
+            return render(request, "opmanage/department/adddepartment.html", {'add_departmentform': add_departmentform, 'error': add_departmentform.errors})
     # 非POST请求
     else:
         add_departmentform = AddDepartmentForm()
-        return render(request,"department/adddepartment.html", {'add_departmentform': add_departmentform})
+        return render(request,"opmanage/department/adddepartment.html", {'add_departmentform': add_departmentform})
 
 
 @check_login
@@ -58,7 +58,7 @@ def del_department(request):
             return HttpResponse('ok')
         # 字段验证不通过
         else:
-            return render(request, "department/deldepartment.html", {'del_departmentform': del_departmentform, 'error': del_departmentform.errors})
+            return render(request, "opmanage/department/deldepartment.html", {'del_departmentform': del_departmentform, 'error': del_departmentform.errors})
     # 非POST请求
     else:
         department_name = request.GET.get('department_name')
@@ -66,7 +66,7 @@ def del_department(request):
             del_departmentform = DelDepartmentForm({'department_name': department_name})
         else:
             del_departmentform = DelDepartmentForm()
-        return render(request,"department/deldepartment.html", {'del_departmentform': del_departmentform})
+        return render(request,"opmanage/department/deldepartment.html", {'del_departmentform': del_departmentform})
 
 
 
@@ -93,7 +93,7 @@ def updata_department(request):
             return HttpResponse('updata department %s ok' % department_name)
         # 字段验证不通过
         else:
-            return render(request, "department/updatadepartment.html", {'updata_departmentform': updata_departmentform})
+            return render(request, "opmanage/department/updatadepartment.html", {'updata_departmentform': updata_departmentform})
     # 非POST请求
     else:
         department_name = request.GET.get('department_name')
@@ -103,7 +103,7 @@ def updata_department(request):
             updata_departmentform = UpdataDepartmentForm(instance=department)
         else:
             updata_departmentform = UpdataDepartmentForm()
-        return render(request, "department/updatadepartment.html", {'updata_departmentform': updata_departmentform})
+        return render(request, "opmanage/department/updatadepartment.html", {'updata_departmentform': updata_departmentform})
 
 
 @check_login
@@ -131,10 +131,10 @@ def get_department(request):
                         department_list.append(i)
             page_department_list = to_page(department_list, pages, every_page_sum)
             # 获取相关department信息
-            return render(request, "department/getdepartment.html", {'get_departmentform': get_departmentform, 'page_department_list': page_department_list})
+            return render(request, "opmanage/department/getdepartment.html", {'get_departmentform': get_departmentform, 'page_department_list': page_department_list})
         # 字段验证不通过
         else:
-            return render(request, "department/getdepartment.html", {'get_departmentform': get_departmentform})
+            return render(request, "opmanage/department/getdepartment.html", {'get_departmentform': get_departmentform})
     # 非POST请求
     else:
 
@@ -153,7 +153,7 @@ def get_department(request):
                     department_list.append(i)
             get_departmentform = GetDepartmentForm({'department_name': department_name})
         page_department_list = to_page(department_list, pages, every_page_sum)
-        return render(request, "department/getdepartment.html", {'get_departmentform': get_departmentform, 'page_department_list': page_department_list})
+        return render(request, "opmanage/department/getdepartment.html", {'get_departmentform': get_departmentform, 'page_department_list': page_department_list})
 
 
 

@@ -33,11 +33,11 @@ def add_serverline(request):
             return HttpResponse('ok')
         # 字段验证不通过
         else:
-            return render(request, "serverline/addserverline.html", {'add_serverlineform': add_serverlineform, 'error': add_serverlineform.errors})
+            return render(request, "opmanage/serverline/addserverline.html", {'add_serverlineform': add_serverlineform, 'error': add_serverlineform.errors})
     # 非POST请求
     else:
         add_serverlineform = AddServerlineForm()
-        return render(request,"serverline/addserverline.html", {'add_serverlineform': add_serverlineform})
+        return render(request,"opmanage/serverline/addserverline.html", {'add_serverlineform': add_serverlineform})
 
 
 @check_login
@@ -69,7 +69,7 @@ def del_serverline(request):
             return HttpResponse('ok')
         # 字段验证不通过
         else:
-            return render(request, "serverline/delserverline.html", {'del_serverlineform': del_serverlineform, 'error': del_serverlineform.errors})
+            return render(request, "opmanage/serverline/delserverline.html", {'del_serverlineform': del_serverlineform, 'error': del_serverlineform.errors})
     # 非POST请求
     else:
         serverline_name = request.GET.get('serverline_name')
@@ -77,7 +77,7 @@ def del_serverline(request):
             del_serverlineform = DelServerlineForm({'serverline_name': serverline_name})
         else:
             del_serverlineform = DelServerlineForm()
-        return render(request,"serverline/delserverline.html", {'del_serverlineform': del_serverlineform})
+        return render(request,"opmanage/serverline/delserverline.html", {'del_serverlineform': del_serverlineform})
 
 
 
@@ -103,7 +103,7 @@ def updata_serverline(request):
             return HttpResponse('updata serverline %s ok' % serverline_name)
         # 字段验证不通过
         else:
-            return render(request, "serverline/updataserverline.html", {'updata_serverlineform': updata_serverlineform})
+            return render(request, "opmanage/serverline/updataserverline.html", {'updata_serverlineform': updata_serverlineform})
     # 非POST请求
     else:
         serverline_name = request.GET.get('serverline_name')
@@ -114,7 +114,7 @@ def updata_serverline(request):
             updata_serverlineform = UpdataServerlineForm(instance=serverline)
         else:
             updata_serverlineform = UpdataServerlineForm()
-        return render(request, "serverline/updataserverline.html", {'updata_serverlineform': updata_serverlineform})
+        return render(request, "opmanage/serverline/updataserverline.html", {'updata_serverlineform': updata_serverlineform})
 
 
 @check_login
@@ -142,10 +142,10 @@ def get_serverline(request):
                         serverline_list.append(i)
             page_serverline_list = to_page(serverline_list, pages, every_page_sum)
             # 获取相关业务线信息
-            return render(request, "serverline/getserverline.html", {'get_serverlineform': get_serverlineform, 'page_serverline_list': page_serverline_list})
+            return render(request, "opmanage/serverline/getserverline.html", {'get_serverlineform': get_serverlineform, 'page_serverline_list': page_serverline_list})
         # 字段验证不通过
         else:
-            return render(request, "serverline/getserverline.html", {'get_serverlineform': get_serverlineform})
+            return render(request, "opmanage/serverline/getserverline.html", {'get_serverlineform': get_serverlineform})
     # 非POST请求
     else:
         every_page_sum = 20
@@ -163,5 +163,5 @@ def get_serverline(request):
                     serverline_list.append(i)
             get_serverlineform = GetServerlineForm({'serverline_name': serverline_name})
         page_serverline_list = to_page(serverline_list, pages, every_page_sum)
-        return render(request, "serverline/getserverline.html", {'get_serverlineform': get_serverlineform, 'page_serverline_list': page_serverline_list})
+        return render(request, "opmanage/serverline/getserverline.html", {'get_serverlineform': get_serverlineform, 'page_serverline_list': page_serverline_list})
 

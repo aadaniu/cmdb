@@ -39,11 +39,11 @@ def add_lb(request):
             return HttpResponse('add lb %s ok' % lb_name)
         # 字段验证不通过
         else:
-            return render(request, "lb/addlb.html", {'add_lbform': add_lbform})
+            return render(request, "opmanage/lb/addlb.html", {'add_lbform': add_lbform})
     # 非POST请求
     else:
         add_lbform = AddLbForm()
-        return render(request, "lb/addlb.html", {'add_lbform': add_lbform})
+        return render(request, "opmanage/lb/addlb.html", {'add_lbform': add_lbform})
 
 
 @check_login
@@ -69,7 +69,7 @@ def del_lb(request):
             return HttpResponse('del lb %s ok' % lb_name)
         # 字段验证不通过
         else:
-            return render(request, "lb/dellb.html", {'del_lbform': del_lbform})
+            return render(request, "opmanage/lb/dellb.html", {'del_lbform': del_lbform})
     # 非POST请求
     else:
         lb_name = request.GET.get('lb_name')
@@ -77,7 +77,7 @@ def del_lb(request):
             del_lbform = DelLbForm({'lb_name': lb_name})
         else:
             del_lbform = DelLbForm()
-        return render(request, "lb/dellb.html", {'del_lbform': del_lbform})
+        return render(request, "opmanage/lb/dellb.html", {'del_lbform': del_lbform})
 
 
 @check_login
@@ -122,7 +122,7 @@ def updata_lb(request):
             return HttpResponse('updata lb %s ok' % lb_name)
         # 字段验证不通过
         else:
-            return render(request, "lb/updatalb.html", {'updata_lbform': updata_lbform})
+            return render(request, "opmanage/lb/updatalb.html", {'updata_lbform': updata_lbform})
     # 非POST请求
     else:
         lb_name = request.GET.get('lb_name')
@@ -132,7 +132,7 @@ def updata_lb(request):
             updata_lbform = UpdataLbForm(instance=lb)
         else:
             updata_lbform = UpdataLbForm()
-        return render(request, "lb/updatalb.html", {'updata_lbform': updata_lbform})
+        return render(request, "opmanage/lb/updatalb.html", {'updata_lbform': updata_lbform})
 
 
 @check_login
@@ -161,10 +161,10 @@ def get_lb(request):
                         lb_list.append(i)
             page_lb_list = to_page(lb_list, pages, every_page_sum)
             # 获取相关LB信息
-            return render(request, "lb/getlb.html", {'get_lbform': get_lbform, 'page_lb_list': page_lb_list})
+            return render(request, "opmanage/lb/getlb.html", {'get_lbform': get_lbform, 'page_lb_list': page_lb_list})
         # 字段验证不通过
         else:
-            return render(request, "lb/getlb.html", {'get_lbform': get_lbform})
+            return render(request, "opmanage/lb/getlb.html", {'get_lbform': get_lbform})
     # 非POST请求
     else:
 
@@ -183,6 +183,6 @@ def get_lb(request):
                     lb_list.append(i)
             get_lbform = GetLbForm({'lb_name': lb_name})
         page_lb_list = to_page(lb_list, pages, every_page_sum)
-        return render(request, "lb/getlb.html", {'get_lbform': get_lbform, 'page_lb_list': page_lb_list})
+        return render(request, "opmanage/lb/getlb.html", {'get_lbform': get_lbform, 'page_lb_list': page_lb_list})
 
 

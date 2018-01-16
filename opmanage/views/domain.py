@@ -33,11 +33,11 @@ def add_domain(request):
             return HttpResponse('add,domain ok')
         # 字段验证不通过
         else:
-            return render(request, "domain/adddomain.html", {'add_domainform': add_domainform, 'error': add_domainform.errors})
+            return render(request, "opmanage/domain/adddomain.html", {'add_domainform': add_domainform, 'error': add_domainform.errors})
     # 非POST请求
     else:
         add_domainform = AddDomainForm()
-        return render(request, "domain/adddomain.html", {'add_domainform': add_domainform})
+        return render(request, "opmanage/domain/adddomain.html", {'add_domainform': add_domainform})
 
 
 @check_login
@@ -65,7 +65,7 @@ def del_domain(request):
             return HttpResponse('del,domain %s@%s ok' % (name,domain))
         # 字段验证不通过
         else:
-            return render(request, "domain/deldomain.html", {'del_domainform': del_domainform, 'error': del_domainform.errors})
+            return render(request, "opmanage/domain/deldomain.html", {'del_domainform': del_domainform, 'error': del_domainform.errors})
     # 非POST请求
     else:
         name = request.GET.get('name')
@@ -74,7 +74,7 @@ def del_domain(request):
             del_domainform = DelDomainForm({'name': name, 'domain': domain})
         else:
             del_domainform = DelDomainForm()
-        return render(request, "domain/deldomain.html", {'del_domainform': del_domainform})
+        return render(request, "opmanage/domain/deldomain.html", {'del_domainform': del_domainform})
 
 
 
@@ -100,7 +100,7 @@ def updata_domain(request):
             return HttpResponse('updata domain %s ok' % name)
         # 字段验证不通过
         else:
-            return render(request, "domain/updatadomain.html", {'updata_domainform': updata_domainform})
+            return render(request, "opmanage/domain/updatadomain.html", {'updata_domainform': updata_domainform})
     # 非POST请求
     else:
         name = request.GET.get('name')
@@ -115,7 +115,7 @@ def updata_domain(request):
             updata_domainform = UpdataDomainForm(instance=domain)
         else:
             updata_domainform = UpdataDomainForm()
-        return render(request, "domain/updatadomain.html", {'updata_domainform': updata_domainform})
+        return render(request, "opmanage/domain/updatadomain.html", {'updata_domainform': updata_domainform})
 
 
 @check_login
@@ -143,10 +143,10 @@ def get_domain(request):
                         domain_list.append(i)
             page_domain_list = to_page(domain_list, pages, every_page_sum)
             # 获取相关domain信息
-            return render(request, "domain/getdomain.html", {'get_domainform': get_domainform, 'page_domain_list': page_domain_list})
+            return render(request, "opmanage/domain/getdomain.html", {'get_domainform': get_domainform, 'page_domain_list': page_domain_list})
         # 字段验证不通过
         else:
-            return render(request, "domain/getdomain.html", {'get_domainform': get_domainform})
+            return render(request, "opmanage/domain/getdomain.html", {'get_domainform': get_domainform})
     # 非POST请求
     else:
 
@@ -165,6 +165,6 @@ def get_domain(request):
                     domain_list.append(i)
             get_domainform = GetDomainForm({'name': name})
         page_domain_list = to_page(domain_list, pages, every_page_sum)
-        return render(request, "domain/getdomain.html", {'get_domainform': get_domainform, 'page_domain_list': page_domain_list})
+        return render(request, "opmanage/domain/getdomain.html", {'get_domainform': get_domainform, 'page_domain_list': page_domain_list})
 
 

@@ -76,11 +76,11 @@ def add_user(request):
             return HttpResponse('ok')
         # 字段验证不通过
         else:
-            return render(request, "user/adduser.html", {'add_userform': add_userform})
+            return render(request, "opmanage/user/adduser.html", {'add_userform': add_userform})
     # 非POST请求
     else:
         add_userform = AddUserForm()
-        return render(request,"user/adduser.html", {'add_userform': add_userform})
+        return render(request,"opmanage/user/adduser.html", {'add_userform': add_userform})
 
 
 @check_login
@@ -104,7 +104,7 @@ def del_user(request):
             return HttpResponse('del %s' % username)
         # 字段验证不通过
         else:
-            return render(request, "user/deluser.html", {'del_userform': del_userform})
+            return render(request, "opmanage/user/deluser.html", {'del_userform': del_userform})
     # 非POST请求
     else:
         username = request.GET.get('username')
@@ -112,7 +112,7 @@ def del_user(request):
             del_userform = DelUserForm({'username': username})
         else:
             del_userform = DelUserForm()
-        return render(request, "user/deluser.html", {'del_userform': del_userform})
+        return render(request, "opmanage/user/deluser.html", {'del_userform': del_userform})
 
 
 @check_login
@@ -140,10 +140,10 @@ def get_user(request):
                         user_list.append(i)
             page_user_list = to_page(user_list, pages, every_page_sum)
             # 获取相关user信息
-            return render(request, "user/getuser.html", {'get_userform': get_userform, 'page_user_list': page_user_list})
+            return render(request, "opmanage/user/getuser.html", {'get_userform': get_userform, 'page_user_list': page_user_list})
         # 字段验证不通过
         else:
-            return render(request, "user/getuser.html", {'get_userform': get_userform})
+            return render(request, "opmanage/user/getuser.html", {'get_userform': get_userform})
     # 非POST请求
     else:
         every_page_sum = 20
@@ -161,7 +161,7 @@ def get_user(request):
                     user_list.append(i)
             get_userform = GetUserForm({'username': username})
         page_user_list = to_page(user_list, pages, every_page_sum)
-        return render(request, "user/getuser.html", {'get_userform': get_userform, 'page_user_list': page_user_list})
+        return render(request, "opmanage/user/getuser.html", {'get_userform': get_userform, 'page_user_list': page_user_list})
 
 
 
@@ -214,7 +214,7 @@ def updata_user(request):
             return HttpResponse('updata %s' % username)
         # 字段验证不通过
         else:
-            return render(request, "user/updatauser.html", {'updata_userform': updata_userform})
+            return render(request, "opmanage/user/updatauser.html", {'updata_userform': updata_userform})
     # 非POST请求
     else:
         username = request.GET.get('username')
@@ -224,7 +224,7 @@ def updata_user(request):
             updata_userform = UpdataUserForm(instance=user)
         else:
             updata_userform = UpdataUserForm()
-        return render(request, "user/updatauser.html", {'updata_userform': updata_userform})
+        return render(request, "opmanage/user/updatauser.html", {'updata_userform': updata_userform})
 
 
 
@@ -431,7 +431,7 @@ def get_message(request):
     :return:
     """
     user_info = User_info.objects.all()
-    return render(request, "user/getmessage.html", {'user_info': user_info})
+    return render(request, "opmanage/user/getmessage.html", {'user_info': user_info})
 
 
 

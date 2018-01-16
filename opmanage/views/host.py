@@ -74,7 +74,7 @@ def del_host(request):
 
         # 字段验证不通过
         else:
-            return render(request, "host/delhost.html", {'del_hostform': del_hostform, 'error': del_hostform.errors})
+            return render(request, "opmanage/host/delhost.html", {'del_hostform': del_hostform, 'error': del_hostform.errors})
 
     # 非POST请求
     else:
@@ -83,7 +83,7 @@ def del_host(request):
             del_hostform = DelHostForm({'host_name': host_name})
         else:
             del_hostform = DelHostForm()
-        return render(request, "host/delhost.html", {'del_hostform': del_hostform})
+        return render(request, "opmanage/host/delhost.html", {'del_hostform': del_hostform})
 
 @check_login
 @check_user_auth(check_num=check_num)
@@ -107,7 +107,7 @@ def updata_host(request):
             return HttpResponse('updata host %s ok' % host_name)
         # 字段验证不通过
         else:
-            return render(request, "host/updatahost.html", {'updata_hostform': updata_hostform})
+            return render(request, "opmanage/host/updatahost.html", {'updata_hostform': updata_hostform})
     # 非POST请求
     else:
         host_name = request.GET.get('host_name')
@@ -117,7 +117,7 @@ def updata_host(request):
             updata_hostform = UpdataHostForm(instance=host)
         else:
             updata_hostform = UpdataHostForm()
-        return render(request, "host/updatahost.html", {'updata_hostform': updata_hostform})
+        return render(request, "opmanage/host/updatahost.html", {'updata_hostform': updata_hostform})
 
 
 @check_login
@@ -145,10 +145,10 @@ def get_host(request):
                         host_list.append(i)
             page_host_list = to_page(host_list, pages, every_page_sum)
             # 获取相关host信息
-            return render(request, "host/gethost.html", {'get_hostform': get_hostform, 'page_host_list': page_host_list})
+            return render(request, "opmanage/host/gethost.html", {'get_hostform': get_hostform, 'page_host_list': page_host_list})
         # 字段验证不通过
         else:
-            return render(request, "host/gethost.html", {'get_hostform': get_hostform})
+            return render(request, "opmanage/host/gethost.html", {'get_hostform': get_hostform})
     # 非POST请求
     else:
         every_page_sum = 20
@@ -166,7 +166,7 @@ def get_host(request):
                     host_list.append(i)
             get_hostform = GetHostForm({'host_name': host_name})
         page_host_list = to_page(host_list, pages, every_page_sum)
-        return render(request, "host/gethost.html", {'get_hostform': get_hostform, 'page_host_list': page_host_list})
+        return render(request, "opmanage/host/gethost.html", {'get_hostform': get_hostform, 'page_host_list': page_host_list})
 
 
 
@@ -200,7 +200,7 @@ def updown_host(request):
 
         # 字段验证不通过
         else:
-            return render(request, "host/updownhost.html",
+            return render(request, "opmanage/host/updownhost.html",
                           {'updown_hostform': updown_hostform, 'error': updown_hostform.errors})
 
     # 非POST请求
@@ -236,13 +236,13 @@ def rename_host(request):
 
         # 字段验证不通过
         else:
-            return render(request, "host/renamehost.html",
+            return render(request, "opmanage/host/renamehost.html",
                           {'rename_hostform': rename_hostform, 'error': rename_hostform.errors})
 
     # 非POST请求
     else:
         rename_hostform = RenameHostForm()
-    return render(request, "host/renamehost.html", {'rename_hostform': rename_hostform})
+    return render(request, "opmanage/host/renamehost.html", {'rename_hostform': rename_hostform})
 
 
 def get_zabbix_template(host):

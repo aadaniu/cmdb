@@ -6,13 +6,14 @@ from django.db import models
 # Create your models here.
 
 
-class WorkOrder_Host_info(models.Model):
+class Host_WorkOrder_info(models.Model):
     apply_choices = (
-        (),
-        ()
+        ('php','php'),
+        ('java', 'java')
     )
     submit_time = models.DateField(auto_now_add=True)                   # 提交时间
     submit_user = models.CharField(max_length=20)                       # 提交用户
+    subject = models.CharField(max_length=30)                           # 主题
     apply_type = models.CharField(max_length=30, choices=apply_choices) # 申请主机类型
     cloud_type = models.CharField(max_length=30)                        # 云主机类型
     host_type = models.CharField(max_length=30)                         # 主机类型
@@ -20,14 +21,14 @@ class WorkOrder_Host_info(models.Model):
     serverline = models.CharField(max_length=30)                        # 业务线
     monitor_url = models.CharField(max_lenth=30)                        # 需监控url
     git_code = models.CharField(max_lenth=30)                           # git仓库
-    remark = models.CharField(max_length=30)                            # 备注
+    domain = models.CharField(max_length=30)                            # 内网域名
+    # remark = models.CharField(max_length=30)                            # 备注
     describe = models.CharField(max_length=30)                          # 描述
-    app_leader = models.CharField(max_length=30)                        # app负责人
 
 
-class WorkOrder_Serverline_info(models.Model):
+class Serverline_WorkOrder_info(models.Model):
     submit_time = models.DateField(auto_now_add=True)                   # 提交时间
     submit_user = models.CharField(max_length=20)                       # 提交用户
     serverline = models.CharField(max_length=30)                        # 业务线
-    describe = models.CharField(max_length=30)                          # 描述
     serverline_leader = models.CharField(max_length=30)                 # 业务线负责人
+    describe = models.CharField(max_length=30)                          # 描述

@@ -81,13 +81,13 @@ def login(request):
             return redirect(nextpath)
         # 字段验证不通过
         else:
-            return render(request, "index/login.html", {'userform': userform, 'error': userform.errors})
+            return render(request, "opmanage/index/login.html", {'userform': userform, 'error': userform.errors})
     # 非POST请求
     else:
         # 获取登录前要访问的url
         nextpath = request.GET.get('nextpath') or '/index/index/'
         userform = LoginUserForm({'nextpath': nextpath})
-        return render(request, "index/login.html", {'userform': userform})
+        return render(request, "opmanage/index/login.html", {'userform': userform})
 
 
 def index(request):
@@ -96,7 +96,7 @@ def index(request):
     :param request:
     :return:
     """
-    return render(request, 'index/index.html')
+    return render(request, 'opmanage/index/index.html')
 
 
 def logout(request):
@@ -107,7 +107,7 @@ def logout(request):
     """
     request.session.set_expiry(0.1)
     time.sleep(0.2)
-    return redirect('/index/login/')
+    return redirect('opmanage/index/login/')
 
 
 def get_auth(username):
