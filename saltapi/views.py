@@ -58,7 +58,6 @@ def exec_cmd(request):
             salt_conn = client.LocalClient()
             result = salt_conn.cmd(tgt, fun, arg=[str_kwarg,], timeout=None, expr_form=tgt_type, ret='', jid='', full_return=True, kwarg=None)
             # 写入历史数据
-            #
             SaltReturns_info.objects.create(tgt=tgt, fun=fun, tgt_type=tgt_type, str_kwarg=str_kwarg, result=result)
             return JsonResponse(result, safe=False)
         else:
@@ -118,6 +117,15 @@ def custom_module(request):
     """
     pass
 
+
+def get_salt_log(request):
+    """
+        salt执行记录
+    :param request:
+    :return:
+    """
+    salt_log = SaltReturns_info.objects.all().order_by('-exec_time')
+    return render(request, "alert/getsomealert.html", {'salt_log': salt_log})
 
 
 

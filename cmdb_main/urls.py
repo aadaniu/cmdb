@@ -23,6 +23,7 @@ from django.conf import settings
 from opmanage.views import index, user, test, test_zabbix, host, lb, domain, department, serverline
 from alert.views import *
 from saltapi.views import *
+from workorder.views import *
 
 urlpatterns = [
     # url(r'^admin/', admin.site.urls),
@@ -96,5 +97,8 @@ urlpatterns = [
     ###################Salt##############################
     url(r'^saltapi/saltrun/',exec_cmd),       # 获取历史报警信息
     url(r'^saltapi/saltpillar/', exec_cmd),   # 主机标签
+
+    ###################WorkOrder##############################
+    url(r'^workorder/create_host',)
 ]  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

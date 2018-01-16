@@ -61,32 +61,42 @@
                     <li class="xn-title">Op</li>
                     <!-- Op Manage -->
                     <li class="xn-openable  active">
-                        <a href="#"><span class="fa fa-files-o"></span> <span class="xn-text">Op Manage </span></a>
+                        <a href="#"><span class="fa fa-files-o"></span> <span class="xn-text"> 运维管理(Op Manage) </span></a>
                         <ul>
-                            <li><a href="/user/getuser/"><span class="fa fa-image"></span> User </a></li>
-                            <li><a href="/department/getdepartment/"><span class="fa fa-image"></span> Department </a></li>
-                            <li><a href="/serverline/getserverline/"><span class="fa fa-image"></span> Serverline </a></li>
-                            <li><a href="/host/gethost/"><span class="fa fa-image"></span> Host </a></li>
-                            <li><a href="/lb/getlb/"><span class="fa fa-image"></span> LB </a></li>
-                            <li><a href="/domain/getdomain/"><span class="fa fa-image"></span> Domain </a></li>
+                            <li><a href="/user/getuser/"><span class="fa fa-image"></span> 用户(User) </a></li>
+                            <li><a href="/department/getdepartment/"><span class="fa fa-image"></span> 部门(Department) </a></li>
+                            <li><a href="/serverline/getserverline/"><span class="fa fa-image"></span> 业务线(Serverline) </a></li>
+                            <li><a href="/host/gethost/"><span class="fa fa-image"></span> 主机(Host) </a></li>
+                            <li><a href="/lb/getlb/"><span class="fa fa-image"></span> 负载均衡(LB) </a></li>
+                            <li><a href="/domain/getdomain/"><span class="fa fa-image"></span> 域名(Domain) </a></li>
                         </ul>
                     </li>
+                    <!-- WorkOrders -->
+                    <li class="xn-openable">
+                        <a href="#"><span class="fa fa-files-o"></span> <span class="xn-text"> 工单(WorkOrders) </span></a>
+                        <ul>
+                            <li><a href="/alert/gethistoryalert/"><span class="fa fa-image"></span> 主机工单(Host WorkOrder) </a></li>
+                            <li><a href="/alert/get_lastday_alert/"><span class="fa fa-image"></span> 业务线工单(Serverline WorkOrder) </a></li>
+                            <li><a href="/alert/get_last10_alert/"><span class="fa fa-image"></span> 历史工单(History WorkOrder) </a></li>
+                        </ul>
+                    </li>
+                    <!-- Salt -->
                     <!-- Alerts -->
                     <li class="xn-openable">
-                        <a href="#"><span class="fa fa-files-o"></span> <span class="xn-text"> Alerts </span></a>
+                        <a href="#"><span class="fa fa-files-o"></span> <span class="xn-text"> 报警(Alerts) </span></a>
                         <ul>
-                            <li><a href="/alert/gethistoryalert/"><span class="fa fa-image"></span> History Alerts </a></li>
-                            <li><a href="/alert/get_lastday_alert/"><span class="fa fa-image"></span> Last 10 Alerts </a></li>
-                            <li><a href="/alert/get_last10_alert/"><span class="fa fa-image"></span> Last Alerts by day </a></li>
-                            <li><a href="/alert/get_closed_alert/"><span class="fa fa-image"></span> Closed Alerts </a></li>
+                            <li><a href="/alert/gethistoryalert/"><span class="fa fa-image"></span> 历史报警(History Alerts) </a></li>
+                            <li><a href="/alert/get_lastday_alert/"><span class="fa fa-image"></span> 最近10条报警(Last 10 Alerts) </a></li>
+                            <li><a href="/alert/get_last10_alert/"><span class="fa fa-image"></span> 最近一天报警(Last Alerts by day) </a></li>
+                            <li><a href="/alert/get_closed_alert/"><span class="fa fa-image"></span> 已关闭报警(Closed Alerts) </a></li>
                         </ul>
                     </li>
                     <!-- Salt -->
                     <li class="xn-openable">
-                        <a href="#"><span class="fa fa-files-o"></span> <span class="xn-text"> Salt </span></a>
+                        <a href="#"><span class="fa fa-files-o"></span> <span class="xn-text"> 自动化(Salt) </span></a>
                         <ul>
-                            <li><a href="/alert/gethistoryalert/"><span class="fa fa-image"></span> Host Groups </a></li>
-                            <li><a href="/alert/get_lastday_alert/"><span class="fa fa-image"></span> Exec Cmd </a></li>
+                            <li><a href="/alert/gethistoryalert/"><span class="fa fa-image"></span> 主机组(Host Groups) </a></li>
+                            <li><a href="/alert/get_lastday_alert/"><span class="fa fa-image"></span> 执行命令(Exec Cmd) </a></li>
                             <li><a href="/alert/get_lastday_alert/"><span class="fa fa-image"></span> Exec Records </a></li>
                             <li><a href="/alert/get_lastday_alert/"><span class="fa fa-image"></span> Crontab Plan </a></li>
                         </ul>
