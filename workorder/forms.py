@@ -35,7 +35,7 @@ class AddServerlineWorkOrderForm(forms.ModelForm):
         fields = '__all__'
 
         labels = {
-            'serverline': u'创建业务线',
-            'serverline_leader': u'业务负责人',
+            'serverline': u'业务线名称',
+            'serverline_leader': u'业务线负责人',
             'describe': u'描述',
         }
