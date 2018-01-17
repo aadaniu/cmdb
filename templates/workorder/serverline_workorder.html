@@ -42,7 +42,9 @@
                     <div class="col-md-6 col-xs-12">
                         <!--<textarea class="form-control" rows="5"></textarea>-->
                         {{ form.describe }}
-                        <span class="help-block">Default textarea field</span>
+                        {% if  form.describe.errors.0 %}
+                        <span class="help-block">{{ form.describe.errors.0 }}</span>
+                        {% endif %}
                     </div>
                 </div>
 
