@@ -34,12 +34,12 @@ def add_serverline_workorder(request):
 
         # 字段验证不通过
         else:
-            return render(request, "host/addhost.html", {'form': form})
+            return render(request, "workorder/serverline_workorder.html", {'form': form})
 
     # 非POST请求
     else:
         form = AddHostWorkOrderForm()
-        return render(request, "host/addhost.html", {'form': form})
+        return render(request, "workorder/serverline_workorder.html", {'form': form})
 
 @check_login
 @check_user_auth(check_num=check_num)

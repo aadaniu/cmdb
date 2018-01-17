@@ -19,8 +19,8 @@ class Host_WorkOrder_info(models.Model):
     host_type = models.CharField(max_length=30)                         # 主机类型
     pubipaddr = models.CharField(max_length=30)                         # 是否要求外网IP
     serverline = models.CharField(max_length=30)                        # 业务线
-    monitor_url = models.CharField(max_lenth=30)                        # 需监控url
-    git_code = models.CharField(max_lenth=30)                           # git仓库
+    monitor_url = models.CharField(max_length=30)                        # 需监控url
+    git_code = models.CharField(max_length=30)                           # git仓库
     domain = models.CharField(max_length=30)                            # 内网域名
     # remark = models.CharField(max_length=30)                            # 备注
     describe = models.CharField(max_length=30)                          # 描述
