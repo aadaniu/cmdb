@@ -39,3 +39,8 @@ class AddServerlineWorkOrderForm(forms.ModelForm):
             'serverline_leader': u'业务线负责人',
             'describe': u'描述',
         }
+
+        widgets = {
+            'serverline': forms.TextInput(attrs={'class': "form-control"}),
+            'describe': forms.Textarea(attrs={'rows': 5, 'class': "form-control"})
+        }
