@@ -102,5 +102,5 @@ urlpatterns = [
     url(r'^workorder/add_host_workorder/',add_host_workorder),                  # 创建主机工单
     url(r'^workorder/add_serverline_workorder/',add_serverline_workorder),      # 创建业务线工单
     url(r'^workorder/check_serverline_workorder/',check_serverline_workorder),  # 审核业务线工单
-]  # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
