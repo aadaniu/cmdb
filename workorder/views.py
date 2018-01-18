@@ -84,12 +84,32 @@ def add_host_workorder(request):
 
 @check_login
 @check_user_auth(check_num=check_num)
-def check_serverline_workorder(request):
+def check_host_workorder(request):
     """
         运维审核主机工单
     :param request:
     :return:
     """
-    pass
+    # POST请求
+    if request.method == "POST":
+        form = AddHostWorkOrderForm(request.POST)
+        # 字段验证通过
+        if form.is_valid():
+            # 插入数据
+            work_order = form.save(commit=False)
+            work_order.submit_user = request.session.get('username')
+            work_order.save()
+            return HttpResponse('add,work order ok')
+
+        # 字段验证不通过
+        else:
+            return render(request, "workorder/host_workorder.html", {'form': form})
+
+    # 非POST请求
+    else:
+        subject = request.GET.get('subject')
+        host_workorder = Host_WorkOrder_info.objects.get(subject=subject)
+        form = AddHostWorkOrderForm(instance=host_workorder)
+        return render(request, "workorder/host_workorder.html", {'form': form})
 
 
