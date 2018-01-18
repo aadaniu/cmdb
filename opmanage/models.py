@@ -51,6 +51,19 @@ class User_info(models.Model):
     def __unicode__(self):
         return self.username
 
+class Notice_info(models.Model):
+    """
+        用户通知
+    """
+    notice_type_choices = (
+        ('WorkOrder','WorkOrder'),
+
+    )
+    username = models.ForeignKey('User_info')
+    notice_type = models.CharField(max_length=30, choices=notice_type_choices)
+    subject = models.CharField(max_length=30)
+    link_url = models.CharField(max_length=256)
+
 class Serverline_info(models.Model):
     """
         业务线

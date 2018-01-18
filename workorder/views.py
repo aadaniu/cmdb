@@ -70,6 +70,8 @@ def add_host_workorder(request):
             work_order = form.save(commit=False)
             work_order.submit_user = request.session.get('username')
             work_order.save()
+            # 用户构造
+            print work_order.id
             return HttpResponse('add,work order ok')
 
         # 字段验证不通过
