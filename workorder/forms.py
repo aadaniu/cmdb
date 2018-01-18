@@ -20,11 +20,24 @@ class AddHostWorkOrderForm(forms.ModelForm):
             'cloud_type': u'云厂商',
             'host_type': u'主机型号',
             'pubipaddr': u'是否需要外网IP',
-            'serverline': u'所属业务线',
+            'serverline_name': u'所属业务线',
             'monitor_url': u'待监控url',
             'git_code': u'git仓库',
             'domain': u'申请域名',
             'describe': u'描述',
+        }
+
+        widgets = {
+            'subject': forms.TextInput(attrs={'class': "form-control"}),
+            'apply_type': forms.TextInput(attrs={'class': "form-control"}),
+            'cloud_type': forms.TextInput(attrs={'class': "form-control"}),
+            'host_type': forms.TextInput(attrs={'class': "form-control"}),
+            'pubipaddr': forms.TextInput(attrs={'class': "form-control"}),
+            'serverline_name': forms.TextInput(attrs={'class': "form-control"}),
+            'monitor_url': forms.TextInput(attrs={'class': "form-control"}),
+            'git_code': forms.TextInput(attrs={'class': "form-control"}),
+            'domain': forms.TextInput(attrs={'class': "form-control"}),
+            'describe': forms.widgets.Textarea(attrs={'rows': 5, 'class': "form-control", 'placeholder': u'详细描述'}),
         }
 
 
@@ -33,14 +46,16 @@ class AddServerlineWorkOrderForm(forms.ModelForm):
         model = Serverline_WorkOrder_info
         # 表示该模型的全部字段都被表单使用
         fields = '__all__'
+        exclude = ['submit_user']
 
         labels = {
-            'serverline': u'业务线名称',
+            'serverline_name': u'业务线名称',
             'serverline_leader': u'业务线负责人',
             'describe': u'描述',
         }
 
         widgets = {
-            'serverline': forms.TextInput(attrs={'class': "form-control"}),
-            'describe': forms.Textarea(attrs={'rows': 5, 'class': "form-control"})
+            'serverline_name': forms.TextInput(attrs={'class': "form-control"}),
+            'serverline_leader': forms.Select(attrs={'class': "form-control select"}),
+            'describe': forms.widgets.Textarea(attrs={'rows': 5, 'class': "form-control", 'placeholder': u'详细描述'}),
         }

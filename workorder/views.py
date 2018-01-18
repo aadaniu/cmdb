@@ -7,6 +7,7 @@ from django.http import HttpResponse
 
 from workorder.forms import *
 from opmanage.views.index import check_login, check_user_auth, to_page
+from opmanage.models import Serverline_info
 
 
 # 用于判定页面访问权限的下标
@@ -38,7 +39,7 @@ def add_serverline_workorder(request):
 
     # 非POST请求
     else:
-        form = AddHostWorkOrderForm()
+        form = AddServerlineWorkOrderForm()
         return render(request, "workorder/serverline_workorder.html", {'form': form})
 
 @check_login
@@ -73,12 +74,12 @@ def add_host_workorder(request):
 
         # 字段验证不通过
         else:
-            return render(request, "host/addhost.html", {'form': form})
+            return render(request, "workorder/host_workorder.html", {'form': form})
 
     # 非POST请求
     else:
         form = AddHostWorkOrderForm()
-        return render(request, "host/addhost.html", {'form': form})
+        return render(request, "workorder/host_workorder.html", {'form': form})
 
 
 @check_login

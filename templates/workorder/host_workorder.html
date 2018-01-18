@@ -11,16 +11,16 @@
 <div class="row">
     <div class="col-md-12">
 
-        <form class="form-horizontal form-group-separated" action="/workorder/add_serverline_workorder/" method="post" novalidate>
+        <form class="form-horizontal form-group-separated" action="/workorder/add_host_workorder/" method="post" novalidate>
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title"><strong>业务线提交</strong> 工单</h3>
+                <h3 class="panel-title"><strong>主机申请</strong> 工单</h3>
                 <ul class="panel-controls">
                     <li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
                 </ul>
             </div>
             <div class="panel-body">
-                <p>业务线工单用于部门领导新上业务使用，用于申请主机需要选定业务线进行申请，如果是已存在的业务线需要添加主机或者删除主机可以直接进行操作</p>
+                <p>主机申请工单用于对业务线申请主机，包括申请主机，申请添加主机，申请删除主机和申请业务线主机</p>
             </div>
             <div class="panel-body">
                 {% for i in form %}
@@ -28,13 +28,7 @@
                         <label class="col-md-3 col-xs-12 control-label">{{ i.label }}</label>
                         <div class="col-md-6 col-xs-12">
 
-                            {% if i.label == '业务线名称' %}
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <!--<input type="text" class="form-control"/>-->
-                                    {{ i }}
-                                </div>
-                            {% elif i.label == '描述' %}
+                            {% if i.label == '描述' %}
                                 <!--<textarea class="form-control" rows="5"></textarea>-->
                                 {{ i }}
                             {% elif i.label == '业务线负责人' %}
@@ -46,6 +40,12 @@
                                     <!--<option>Option 5</option>-->
                                 <!--</select>-->
                                 {{ i }}
+                            {% else %}
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <!--<input type="text" class="form-control"/>-->
+                                    {{ i }}
+                                </div>
                             {% endif %}
 
                             {% if  i.errors.0 %}
