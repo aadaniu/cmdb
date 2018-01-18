@@ -110,6 +110,6 @@ def check_host_workorder(request):
         subject = request.GET.get('subject')
         host_workorder = Host_WorkOrder_info.objects.get(subject=subject)
         form = AddHostWorkOrderForm(instance=host_workorder)
-        return render(request, "workorder/host_workorder.html", {'form': form})
+        return render(request, "workorder/host_workorder_check.html", {'form': form})
 
 

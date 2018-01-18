@@ -1,0 +1,60 @@
+{% extends "cmdbbase.html" %}
+
+
+{% block css %}
+{% include "form_css.html"%}
+{% endblock %}
+
+{% block content %}
+
+
+<div class="row">
+    <div class="col-md-12">
+
+        <form class="form-horizontal form-group-separated" action="/workorder/add_host_workorder/" method="post" novalidate>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><strong>主机申请审批</strong> 工单</h3>
+                <ul class="panel-controls">
+                    <li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
+                </ul>
+            </div>
+            <div class="panel-body">
+                <p>用于审批主机申请</p>
+            </div>
+            <div class="panel-body">
+                {% for i in form %}
+                    <div class="form-group">
+                        <label class="col-md-3 col-xs-12 control-label">{{ i.label }}</label>
+                        <div class="col-md-6 col-xs-12">
+
+                            {% if i.label == '描述' %}
+                                <!--<textarea class="form-control" rows="5"></textarea>-->
+                                {{ i }}
+                            {% else %}
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <!--<input type="text" class="form-control"/>-->
+                                    {{ i }}
+                                </div>
+                            {% endif %}
+
+                            {% if  i.errors.0 %}
+                                <span class="help-block">{{ i.errors.0 }}</span>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="panel-footer">
+                <button class="btn btn-primary pull-right"> 提交(Submit) </button>
+            </div>
+        </div>
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}
