@@ -7,6 +7,7 @@ from django.http import HttpResponse
 
 from workorder.forms import *
 from opmanage.views.index import check_login, check_user_auth, to_page
+from opmanage.models import User_info, Notice_info
 from opmanage.models import Serverline_info
 
 
@@ -71,7 +72,9 @@ def add_host_workorder(request):
             work_order.submit_user = request.session.get('username')
             work_order.save()
             # 用户构造
-            print work_order.id
+            url = '/workorder/check_host_workorder/?id=%s' % work_order.id
+            op_admin = User_info.objects.get(username='cmdbadmin')
+            Notice_info.objects.create(username_id=op_admin.id, notice_type='WorkOrder', subject=work_order.subject, link_url=url)
             return HttpResponse('add,work order ok')
 
         # 字段验证不通过

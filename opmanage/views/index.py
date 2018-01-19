@@ -147,3 +147,17 @@ def to_page(list, pages, every_page_sum):
     return page_list
 
 
+def load_message(username=None):
+    """
+        用于页面间传递message
+    :param username:
+    :return:
+    """
+    # 获取当前用户的notice
+    username = 'cmdbadmin'
+    return HttpResponse(User_info.objects.filter(username='cmdbadmin').values('notice_info__notice_type','notice_info__subject','notice_info__link_url')
+)
+
+
+
+
