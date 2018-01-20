@@ -3,10 +3,11 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render,render_to_response,HttpResponseRedirect
 from django.http import HttpResponse
+from django.db.models import Q
 
 
 from workorder.forms import *
-from opmanage.views.index import check_login, check_user_auth, to_page
+from opmanage.views.index import check_login, check_user_auth, to_page, load_message
 from opmanage.models import User_info, Notice_info
 from opmanage.models import Serverline_info
 
@@ -52,6 +53,7 @@ def add_host_workorder(request):
     :return:
     """
     # POST请求
+    request_user = request.session.get('username')
     if request.method == "POST":
         form = AddHostWorkOrderForm(request.POST)
         # 字段验证通过
@@ -69,7 +71,7 @@ def add_host_workorder(request):
             """
             # 插入数据
             work_order = form.save(commit=False)
-            work_order.submit_user = request.session.get('username')
+            work_order.submit_user = request_user
             work_order.save()
             # 用户构造
             url = '/workorder/check_host_workorder/?id=%s' % work_order.id
@@ -79,12 +81,12 @@ def add_host_workorder(request):
 
         # 字段验证不通过
         else:
-            return render(request, "workorder/host_workorder.html", {'form': form})
+            return render(request, "workorder/host_workorder.html", {'form': form, 'notice': load_message(request_user)})
 
     # 非POST请求
     else:
         form = AddHostWorkOrderForm()
-        return render(request, "workorder/host_workorder.html", {'form': form})
+        return render(request, "workorder/host_workorder.html", {'form': form, 'notice': load_message(request_user)})
 
 
 @check_login
@@ -95,6 +97,7 @@ def check_host_workorder(request):
     :param request:
     :return:
     """
+    request_user = request.session.get('username')
     # POST请求
     if request.method == "POST":
         form = AddHostWorkOrderForm(request.POST)
@@ -112,8 +115,11 @@ def check_host_workorder(request):
 
     # 非POST请求
     else:
-        subject = request.GET.get('subject')
-        host_workorder = Host_WorkOrder_info.objects.get(subject=subject)
+        url = request.META.get('PATH_INFO')
+        id = request.GET.get('id')
+        link_url = '%s?id=%s' % (url, id)
+        print Notice_info.objects.filter(Q(username__username='cmdbadmin')&Q(link_url=link_url)).delete()
+        host_workorder = Host_WorkOrder_info.objects.get(id=id)
         form = AddHostWorkOrderForm(instance=host_workorder)
         return render(request, "workorder/host_workorder_check.html", {'form': form})
 

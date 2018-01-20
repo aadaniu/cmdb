@@ -10,7 +10,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 from opmanage.forms.index import LoginUserForm
-from opmanage.models import User_info
+from opmanage.models import User_info, Notice_info
+
 
 
 def check_login(func):
@@ -37,7 +38,7 @@ def check_user_auth(check_num):
     """
         装饰器，用于检测用户页面访问权限
     :param func:
-    :param check_num: 权限认证级别，1为user，2为host
+    :param check_num: 权限认证级别，1为admin，2为host， 3为other
     :return:
     """
     def check_user_auth_1(func):
@@ -96,6 +97,7 @@ def index(request):
     :param request:
     :return:
     """
+    # return HttpResponse(User_info.objects.filter(username='cmdbadmin').values('notice_info__notice_type','notice_info__subject','notice_info__link_url'))
     return render(request, 'opmanage/index/index.html')
 
 
@@ -155,8 +157,8 @@ def load_message(username=None):
     """
     # 获取当前用户的notice
     username = 'cmdbadmin'
-    return HttpResponse(User_info.objects.filter(username='cmdbadmin').values('notice_info__notice_type','notice_info__subject','notice_info__link_url')
-)
+
+    return User_info.objects.filter(username=username).values('notice_info__notice_type','notice_info__subject','notice_info__link_url')
 
 
 
