@@ -103,22 +103,23 @@ def check_host_workorder(request):
         form = AddHostWorkOrderForm(request.POST)
         # 字段验证通过
         if form.is_valid():
-            # 插入数据
-            work_order = form.save(commit=False)
-            work_order.submit_user = request.session.get('username')
-            work_order.save()
+            # 更新数据
+            subject = request.POST.get('subject', None)
+            work_order = Host_WorkOrder_info.objects.get(subject=subject)
+            a = AddHostWorkOrderForm(request.POST, instance=work_order)
+            a.save()
             return HttpResponse('add,work order ok')
 
         # 字段验证不通过
         else:
-            return render(request, "workorder/host_workorder.html", {'form': form})
+            return render(request, "workorder/host_workorder_check.html", {'form': form})
 
     # 非POST请求
     else:
         url = request.META.get('PATH_INFO')
         id = request.GET.get('id')
         link_url = '%s?id=%s' % (url, id)
-        print Notice_info.objects.filter(Q(username__username='cmdbadmin')&Q(link_url=link_url)).delete()
+        Notice_info.objects.filter(Q(username__username='cmdbadmin')&Q(link_url=link_url)).delete()
         host_workorder = Host_WorkOrder_info.objects.get(id=id)
         form = AddHostWorkOrderForm(instance=host_workorder)
         return render(request, "workorder/host_workorder_check.html", {'form': form})
