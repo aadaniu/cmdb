@@ -142,3 +142,15 @@ def get_host_workorder(request):
     else:
         form = Host_WorkOrder_info.objects.filter(submit_user=request_user).all()
         return render(request, "workorder/get_host_workorder.html", {'form': form})
+
+@check_login
+@check_user_auth(check_num=check_num)
+def status_host_workorder(request):
+    """
+        获取主机工单状态
+    :param request:
+    :return:
+    """
+    id = request.Method.get('id')
+    form = Host_WorkOrder_info.objects.filter(id=id).first()
+    return render(request, "workorder/status_host_workorder.html", {'form': form})
