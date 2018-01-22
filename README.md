@@ -114,4 +114,7 @@ python manage.py makemigrations
 python manage.py migrate
 python manage.py runserver
 
+## 坑
+
+酷狗音乐会占用8000端口，导致django使用默认端口起不来，报错为 `Error: [Errno 10013]`
 

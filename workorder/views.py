@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render,render_to_response,HttpResponseRedirect
+from django.shortcuts import render,render_to_response,HttpResponseRedirect,redirect
 from django.http import HttpResponse
 from django.db.models import Q
 
@@ -77,16 +77,16 @@ def add_host_workorder(request):
             url = '/workorder/check_host_workorder/?id=%s' % work_order.id
             op_admin = User_info.objects.get(username='cmdbadmin')
             Notice_info.objects.create(username_id=op_admin.id, notice_type='WorkOrder', subject=work_order.subject, link_url=url)
-            return HttpResponse('add,work order ok')
+            return redirect('/workorder/get_host_workorder/')
 
         # 字段验证不通过
         else:
-            return render(request, "workorder/host_workorder.html", {'form': form, 'notice': load_message(request_user)})
+            return render(request, "workorder/add_host_workorder.html", {'form': form, 'notice': load_message(request_user)})
 
     # 非POST请求
     else:
         form = AddHostWorkOrderForm()
-        return render(request, "workorder/host_workorder.html", {'form': form, 'notice': load_message(request_user)})
+        return render(request, "workorder/add_host_workorder.html", {'form': form, 'notice': load_message(request_user)})
 
 
 @check_login
@@ -112,7 +112,7 @@ def check_host_workorder(request):
 
         # 字段验证不通过
         else:
-            return render(request, "workorder/host_workorder_check.html", {'form': form})
+            return render(request, "workorder/check_host_workorder.html", {'form': form})
 
     # 非POST请求
     else:
@@ -122,6 +122,23 @@ def check_host_workorder(request):
         Notice_info.objects.filter(Q(username__username='cmdbadmin')&Q(link_url=link_url)).delete()
         host_workorder = Host_WorkOrder_info.objects.get(id=id)
         form = AddHostWorkOrderForm(instance=host_workorder)
-        return render(request, "workorder/host_workorder_check.html", {'form': form})
+        return render(request, "workorder/check_host_workorder.html", {'form': form})
 
 
+
+@check_login
+@check_user_auth(check_num=check_num)
+def get_host_workorder(request):
+    """
+        获取主机工单
+    :param request:
+    :return:
+    """
+    request_user = request.session.get('username')
+    # POST请求
+    if request.method == "POST":
+        pass
+    # GET请求
+    else:
+        form = Host_WorkOrder_info.objects.filter(submit_user=request_user).all()
+        return render(request, "workorder/get_host_workorder.html", {'form': form})

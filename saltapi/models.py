@@ -28,6 +28,6 @@ class HostGroup(models.Model):
         自定义主机组，serverline自动创建主机组
     """
     group_name = models.CharField(max_length=30)
-    host_info = models.ManyToManyField('opmanage.host_info', through='HostToHostgroup')
+    host_info = models.ManyToManyField('opmanage.host_info')# , through='HostToHostgroup')
     def __unicode__(self):
         return self.group_name
