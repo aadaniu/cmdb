@@ -101,6 +101,8 @@ urlpatterns = [
     ###################WorkOrder##############################
     url(r'^workorder/add_host_workorder/',add_host_workorder),                  # 创建主机工单
     url(r'^workorder/add_serverline_workorder/',add_serverline_workorder),      # 创建业务线工单
-    url(r'^workorder/check_host_workorder/',check_host_workorder),        # 审核主机工单
-]  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    url(r'^workorder/check_host_workorder/',check_host_workorder),              # 审核主机工单
+    url(r'^workorder/get_host_workorder/',get_host_workorder),                  # 获取主机工单
+    url(r'^workorder/status_host_workorder/',status_host_workorder),            # 状态主机工单
+]  # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

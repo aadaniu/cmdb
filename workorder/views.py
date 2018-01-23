@@ -151,6 +151,6 @@ def status_host_workorder(request):
     :param request:
     :return:
     """
-    id = request.Method.get('id')
+    id = request.GET.get('id')
     form = Host_WorkOrder_info.objects.filter(id=id).first()
     return render(request, "workorder/status_host_workorder.html", {'form': form})

@@ -6,7 +6,7 @@ from django.shortcuts import render
 # Create your views here.
 
 from django.shortcuts import HttpResponse,HttpResponseRedirect,render_to_response
-from salt import client
+# from salt import client
 from django.http import JsonResponse
 import json
 
@@ -54,15 +54,15 @@ def exec_cmd(request):
         """
         fun = request.POST.get('fun')
         str_kwarg = request.POST.get('kwarg')
-        if fun in accect:
-            salt_conn = client.LocalClient()
-            result = salt_conn.cmd(tgt, fun, arg=[str_kwarg,], timeout=None, expr_form=tgt_type, ret='', jid='', full_return=True, kwarg=None)
-            # 写入历史数据
-            SaltReturns_info.objects.create(tgt=tgt, fun=fun, tgt_type=tgt_type, str_kwarg=str_kwarg, result=result)
-            return JsonResponse(result, safe=False)
-        else:
-            data = {fun: "请检查命令是否正确或命令超权限，请联系管理员！"}
-            return JsonResponse(data, safe=False)
+        # if fun in accect:
+        #     salt_conn = client.LocalClient()
+        #     result = salt_conn.cmd(tgt, fun, arg=[str_kwarg,], timeout=None, expr_form=tgt_type, ret='', jid='', full_return=True, kwarg=None)
+        #     # 写入历史数据
+        #     SaltReturns_info.objects.create(tgt=tgt, fun=fun, tgt_type=tgt_type, str_kwarg=str_kwarg, result=result)
+        #     return JsonResponse(result, safe=False)
+        # else:
+        #     data = {fun: "请检查命令是否正确或命令超权限，请联系管理员！"}
+        #     return JsonResponse(data, safe=False)
     else:
         return render_to_response('saltapi/cmd.html')
 

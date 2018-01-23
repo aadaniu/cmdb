@@ -1,0 +1,160 @@
+{% extends "cmdbbase.html" %}
+
+
+{% block css %}
+{% include "form_css.html"%}
+{% endblock %}
+
+{% block content %}
+
+
+<!--<div class="row">-->
+    <!--<div class="col-md-12">-->
+
+        <!--&lt;!&ndash; START DEFAULT WIZARD &ndash;&gt;-->
+        <!--<div class="panel panel-default">-->
+            <!--<div class="panel-body">-->
+                <!--<h3>{{ i.suject }}处理流程</h3>-->
+                <!--<div class="wizard">-->
+
+                    <!--<ul class="steps_5 anchor">-->
+                        <!--<li>-->
+                            <!--<a href="#step-1">-->
+                                <!--<span class="stepNumber">1</span>-->
+                                <!--<span class="stepDesc">Step 1<br /><small>Step 1 提交主机工单</small></span>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<a href="#step-2">-->
+                                <!--<span class="stepNumber">2</span>-->
+                                <!--<span class="stepDesc">Step 2<br /><small>Step 2 运维审核工单</small></span>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<a href="#step-3">-->
+                                <!--<span class="stepNumber">3</span>-->
+                                <!--<span class="stepDesc">Step 3<br /><small>Step 3 创建主机，负载，域名</small></span>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<a href="#step-4">-->
+                                <!--<span class="stepNumber">4</span>-->
+                                <!--<span class="stepDesc">Step 4<br /><small>Step 4 创建自动部署</small></span>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<a href="#step-5">-->
+                                <!--<span class="stepNumber">5</span>-->
+                                <!--<span class="stepDesc">Step 5<br /><small>Step 5 主机申请成功</small></span>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                    <!--<div id="step-1">-->
+                        <!--<h4>Step 1 Content</h4>-->
+                        <!--<p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.</p>-->
+                    <!--</div>-->
+                    <!--<div id="step-2">-->
+                        <!--<h4>Step 2 Content</h4>-->
+                        <!--<p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.</p>-->
+                    <!--</div>-->
+                    <!--<div id="step-3">-->
+                        <!--<h4>Step 3 Content</h4>-->
+                        <!--<p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.</p>-->
+                    <!--</div>-->
+                    <!--<div id="step-4">-->
+                        <!--<h4>Step 4 Content</h4>-->
+                        <!--<p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.</p>-->
+                    <!--</div>-->
+                    <!--<div id="step-5">-->
+                        <!--<h4>Step 5 Content</h4>-->
+                        <!--<p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.</p>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+
+    <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- START TIMELINE -->
+        <div class="timeline timeline-right">
+
+            <!-- START TIMELINE ITEM -->
+            <div class="timeline-item timeline-main">
+                <div class="timeline-date">2015</div>
+            </div>
+            <!-- END TIMELINE ITEM -->
+            <!-- START TIMELINE ITEM -->
+            <div class="timeline-item timeline-item-right">
+                <div class="timeline-item-info">Yesterday</div>
+                <div class="timeline-item-icon"><span class="fa fa-globe"></span></div>
+                <div class="timeline-item-content">
+                    <div class="timeline-heading">
+                        <a>Step 1 提交主机工单</a>
+                    </div>
+                    <div class="timeline-body">
+                        <p>提交主机工单</p>
+                    </div>
+                    <div class="timeline-footer">
+                    </div>
+                </div>
+            </div>
+            <!-- END TIMELINE ITEM -->
+            <!-- START TIMELINE ITEM -->
+            <div class="timeline-item timeline-main">
+                <div class="timeline-date"><a href="#"><span class="fa fa-ellipsis-h"></span></a></div>
+            </div>
+            <!-- END TIMELINE ITEM -->
+        </div>
+        <!-- END TIMELINE -->
+
+    </div>
+</div>
+
+
+
+
+
+
+
+{% endblock %}
+
+
+{% block js %}
+        <!-- THIS PAGE PLUGINS -->
+        <script type='text/javascript' src='/static/js/plugins/icheck/icheck.min.js'></script>
+        <script type="text/javascript" src="/static/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
+
+        <script type="text/javascript" src="/static/js/plugins/smartwizard/jquery.smartWizard-2.0.min.js"></script>
+        <script type="text/javascript" src="/static/js/plugins/jquery-validation/jquery.validate.js"></script>
+        <!-- END PAGE PLUGINS -->
+
+        <!-- START THIS PAGE PLUGINS-->
+        <script type='text/javascript' src='/static/js/plugins/icheck/icheck.min.js'></script>
+        <script type="text/javascript" src="/static/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
+
+        <script type="text/javascript" src="/static/js/plugins/blueimp/jquery.blueimp-gallery.min.js"></script>
+        <script type="text/javascript" src="/static/js/plugins/bootstrap/bootstrap-datepicker.js"></script>
+        <script type="text/javascript" src="/static/js/plugins/bootstrap/bootstrap-select.js"></script>
+        <!-- END THIS PAGE PLUGINS-->
+
+
+
+        <script>
+            document.getElementById('links').onclick = function (event) {
+                event = event || window.event;
+                var target = event.target || event.srcElement,
+                    link = target.src ? target.parentNode : target,
+                    options = {index: link, event: event,onclosed: function(){
+                        setTimeout(function(){
+                            $("body").css("overflow","");
+                        },200);
+                    }},
+                    links = this.getElementsByTagName('a');
+                blueimp.Gallery(links, options);
+            };
+        </script>
+{% endblock %}
