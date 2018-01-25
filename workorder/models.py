@@ -11,6 +11,9 @@ from opmanage.models import Serverline_info
 
 
 class Host_WorkOrder_info(models.Model):
+    """
+        主机工单
+    """
     cloud_choices = (
         ('aws',u'亚马逊云'),
         ('qcloud',u'腾讯云'),
@@ -43,6 +46,9 @@ class Host_WorkOrder_info(models.Model):
 
 
 class Status_WorkOrder_info(models.Model):
+    """
+        主机工单状态
+    """
     status_choices = (
         ('step1', 'step1'),
         ('step2', 'step2'),
@@ -58,6 +64,9 @@ class Status_WorkOrder_info(models.Model):
 
 
 class Serverline_WorkOrder_info(models.Model):
+    """
+        业务线工单表
+    """
     submit_time = models.DateField(auto_now_add=True)                   # 提交时间
     submit_user = models.CharField(max_length=20)                       # 提交用户
     serverline_name = models.CharField(max_length=30)                   # 业务线

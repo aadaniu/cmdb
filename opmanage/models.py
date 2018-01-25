@@ -51,6 +51,16 @@ class User_info(models.Model):
     def __unicode__(self):
         return self.username
 
+
+class Show_info(models.Model):
+    """
+        用户前端展示信息
+    """
+    username = models.OneToOneField('User_info')
+    profile_photo = models.CharField(max_length=64,default='/static/assets/images/users/avatar.jpg')
+    navigation_title = models.CharField(max_length=64, default='closed')
+
+
 class Notice_info(models.Model):
     """
         用户通知

@@ -104,5 +104,8 @@ urlpatterns = [
     url(r'^workorder/check_host_workorder/',check_host_workorder),              # 审核主机工单
     url(r'^workorder/get_host_workorder/',get_host_workorder),                  # 获取主机工单
     url(r'^workorder/status_host_workorder/',status_host_workorder),            # 状态主机工单
+
+    ###################Default#####################################
+    url(r'^$',index.index),
 ]  # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

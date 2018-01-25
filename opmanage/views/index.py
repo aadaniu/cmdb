@@ -10,7 +10,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 from opmanage.forms.index import LoginUserForm
-from opmanage.models import User_info, Notice_info
+from opmanage.models import User_info, Notice_info, Show_info
 
 
 
@@ -159,6 +159,16 @@ def load_message(username=None):
     username = 'cmdbadmin'
 
     return User_info.objects.filter(username=username).values('notice_info__notice_type','notice_info__subject','notice_info__link_url')
+
+
+def load_show(username=None):
+    """
+        用于返回前端
+    :param username:
+    :return:
+    """
+    return Show_info.objects.filter(username__username=username).first()
+
 
 
 

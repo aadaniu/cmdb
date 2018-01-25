@@ -8,7 +8,7 @@ from django.db.models import Q
 
 from workorder.forms import *
 from workorder.models import *
-from opmanage.views.index import check_login, check_user_auth, to_page, load_message
+from opmanage.views.index import check_login, check_user_auth, to_page, load_message, load_show
 from opmanage.models import User_info, Notice_info
 from opmanage.models import Serverline_info
 
@@ -92,7 +92,7 @@ def add_host_workorder(request):
     # 非POST请求
     else:
         form = AddHostWorkOrderForm()
-        return render(request, "workorder/add_host_workorder.html", {'form': form, 'notice': load_message(request_user)})
+        return render(request, "workorder/add_host_workorder.html", {'form': form, 'notice': load_message(request_user), 'show': load_show(request_user)})
 
 
 @check_login
