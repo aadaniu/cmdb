@@ -87,22 +87,24 @@
                 <div class="timeline-date">2015</div>
             </div>
             <!-- END TIMELINE ITEM -->
+            {% for i in form %}
             <!-- START TIMELINE ITEM -->
             <div class="timeline-item timeline-item-right">
-                <div class="timeline-item-info">Yesterday</div>
+                <div class="timeline-item-info">{{ i.submit_time|date:"Y-m-d H:i:s" }}</div>
                 <div class="timeline-item-icon"><span class="fa fa-globe"></span></div>
                 <div class="timeline-item-content">
                     <div class="timeline-heading">
-                        <a>Step 1 提交主机工单</a>
+                        <a>{{ i.step_num }}</a>
                     </div>
                     <div class="timeline-body">
-                        <p>提交主机工单</p>
+                        <p>{{ i.step_message }}</p>
                     </div>
                     <div class="timeline-footer">
                     </div>
                 </div>
             </div>
             <!-- END TIMELINE ITEM -->
+            {% endfor %}
             <!-- START TIMELINE ITEM -->
             <div class="timeline-item timeline-main">
                 <div class="timeline-date"><a href="#"><span class="fa fa-ellipsis-h"></span></a></div>

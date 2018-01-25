@@ -56,7 +56,7 @@ class AddServerlineWorkOrderForm(forms.ModelForm):
         model = Serverline_WorkOrder_info
         # 表示该模型的全部字段都被表单使用
         fields = '__all__'
-        exclude = ['submit_user']
+        exclude = ['submit_user', 'workorder_status',]
 
         labels = {
             'serverline_name': u'业务线名称',

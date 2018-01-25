@@ -28,11 +28,11 @@
                         </thead>
                         <tbody>
                             {% for i in form %}
-                            <tr class="success" id="{{ i.event_id }}">
+                            <tr class="success" id="{{ i.host_workorder_id }}">
                                 <td>{{ i.submit_time }}</td>
                                 <td><strong>{{ i.subject }}</strong></td>
                                 <td>
-                                    <button onclick="window.location.href='/workorder/status_host_workorder?event_id={{ i.event_id }}'" class="btn btn-default btn-rounded btn-condensed btn-sm"><span class="fa fa-pencil"></span></button>
+                                    <button onclick="window.location.href='/workorder/status_host_workorder?host_workorder_id={{ i.host_workorder_id }}'" class="btn btn-default btn-rounded btn-condensed btn-sm"><span class="fa fa-pencil"></span></button>
                                 </td>
                             </tr>
                             {% endfor %}

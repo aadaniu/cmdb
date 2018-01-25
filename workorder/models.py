@@ -24,6 +24,8 @@ class Host_WorkOrder_info(models.Model):
         ('t','是'),
         ('f', '否')
     )
+
+    host_workorder_id = models.AutoField(primary_key=True)              # id
     submit_time = models.DateField(auto_now_add=True)                   # 提交时间
     submit_user = models.CharField(max_length=20)                       # 提交用户
     subject = models.CharField(max_length=30)                           # 主题
@@ -37,8 +39,22 @@ class Host_WorkOrder_info(models.Model):
     domain = models.CharField(max_length=30)                            # 域名
     # remark = models.CharField(max_length=30)                          # 备注
     describe = models.CharField(max_length=30)                          # 描述
+    # workorder_status = models.ManyToManyField('Status_WorkOrder_info', request=False)  # 工单处理流程
 
 
+class Status_WorkOrder_info(models.Model):
+    status_choices = (
+        ('step1', 'step1'),
+        ('step2', 'step2'),
+        ('step3', 'step3'),
+        ('step4', 'step4'),
+        ('step5', 'step5'),
+    )
+    status_workorder_id = models.AutoField(primary_key=True)            # id
+    submit_time = models.DateTimeField(auto_now_add=True)               # 处理时间
+    attribute_workorder = models.ManyToManyField('Host_WorkOrder_info') # 所属工单
+    step_num = models.CharField(max_length=30)                          # 步骤
+    step_message = models.CharField(max_length=255)                     # 处理结果
 
 
 class Serverline_WorkOrder_info(models.Model):

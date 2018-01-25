@@ -7,6 +7,7 @@ from django.db.models import Q
 
 
 from workorder.forms import *
+from workorder.models import *
 from opmanage.views.index import check_login, check_user_auth, to_page, load_message
 from opmanage.models import User_info, Notice_info
 from opmanage.models import Serverline_info
@@ -70,14 +71,19 @@ def add_host_workorder(request):
             form.save()
             """
             # 插入数据
-            work_order = form.save(commit=False)
-            work_order.submit_user = request_user
-            work_order.save()
+            host_workorder_obj = form.save(commit=False)
+            host_workorder_obj.submit_user = request_user
+            host_workorder_obj.save()
+            print type(host_workorder_obj)
+            # 添加步骤
+            status_workorder_obj = Status_WorkOrder_info.objects.create(step_num='step1', step_message='%s summit workorder ok' % host_workorder_obj.subject)
+            print type(status_workorder_obj)
+            status_workorder_obj.attribute_workorder.add(host_workorder_obj)
             # 用户构造
-            url = '/workorder/check_host_workorder/?id=%s' % work_order.id
-            op_admin = User_info.objects.get(username='cmdbadmin')
-            Notice_info.objects.create(username_id=op_admin.id, notice_type='WorkOrder', subject=work_order.subject, link_url=url)
-            return redirect('/workorder/get_host_workorder/')
+            url = '/workorder/check_host_workorder/?host_workorder_id=%s' % host_workorder_obj.host_workorder_id
+            user_opadmin_object = User_info.objects.get(username='cmdbadmin')
+            Notice_info.objects.create(username_id=user_opadmin_object.id, notice_type='WorkOrder', subject=host_workorder_obj.subject, link_url=url)
+            return redirect('/workorder/get_host_workorder/?id=host_workorder_obj')
 
         # 字段验证不通过
         else:
@@ -101,13 +107,17 @@ def check_host_workorder(request):
     # POST请求
     if request.method == "POST":
         form = AddHostWorkOrderForm(request.POST)
+
         # 字段验证通过
         if form.is_valid():
             # 更新数据
             subject = request.POST.get('subject', None)
-            work_order = Host_WorkOrder_info.objects.get(subject=subject)
-            a = AddHostWorkOrderForm(request.POST, instance=work_order)
+            host_workorder_obj = Host_WorkOrder_info.objects.get(subject=subject)
+            a = AddHostWorkOrderForm(request.POST, instance=host_workorder_obj)
             a.save()
+            # 添加步骤
+            status_workorder_obj = Status_WorkOrder_info.objects.create(step_num='step2', step_message='op check workorder ok')
+            status_workorder_obj.attribute_workorder.add(host_workorder_obj)
             return HttpResponse('add,work order ok')
 
         # 字段验证不通过
@@ -117,11 +127,11 @@ def check_host_workorder(request):
     # 非POST请求
     else:
         url = request.META.get('PATH_INFO')
-        id = request.GET.get('id')
-        link_url = '%s?id=%s' % (url, id)
+        host_workorder_id = request.GET.get('host_workorder_id')
+        link_url = '%s?host_workorder_id=%s' % (url, host_workorder_id)
         Notice_info.objects.filter(Q(username__username='cmdbadmin')&Q(link_url=link_url)).delete()
-        host_workorder = Host_WorkOrder_info.objects.get(id=id)
-        form = AddHostWorkOrderForm(instance=host_workorder)
+        host_workorder_obj = Host_WorkOrder_info.objects.get(host_workorder_id=host_workorder_id)
+        form = AddHostWorkOrderForm(instance=host_workorder_obj)
         return render(request, "workorder/check_host_workorder.html", {'form': form})
 
 
@@ -135,13 +145,9 @@ def get_host_workorder(request):
     :return:
     """
     request_user = request.session.get('username')
-    # POST请求
-    if request.method == "POST":
-        pass
-    # GET请求
-    else:
-        form = Host_WorkOrder_info.objects.filter(submit_user=request_user).all()
-        return render(request, "workorder/get_host_workorder.html", {'form': form})
+    form = Host_WorkOrder_info.objects.filter(submit_user=request_user).all()
+    return render(request, "workorder/get_host_workorder.html", {'form': form})
+
 
 @check_login
 @check_user_auth(check_num=check_num)
@@ -151,6 +157,6 @@ def status_host_workorder(request):
     :param request:
     :return:
     """
-    id = request.GET.get('id')
-    form = Host_WorkOrder_info.objects.filter(id=id).first()
+    host_workorder_id = request.GET.get('host_workorder_id')
+    form = Status_WorkOrder_info.objects.filter(attribute_workorder__host_workorder_id=host_workorder_id).all().order_by('-step_num')
     return render(request, "workorder/status_host_workorder.html", {'form': form})
