@@ -2,7 +2,7 @@
 <html lang="en" class="body-full-height">
     <head>        
         <!-- META SECTION -->
-        <title>Atlant - Responsive Bootstrap Admin Template</title>            
+        <title>whys cmdb</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -24,7 +24,7 @@
                     <div class="lsb-box">
                         <div class="fa fa-lock"></div>
                         <div class="user animated fadeIn">
-                            <img src="assets/images/users/user2.jpg" alt="John Doe"/>
+                            <img src="/static/assets/images/users/user2.jpg" alt="John Doe"/>
                             <div class="user_signin animated fadeIn">
                                 <div class="fa fa-sign-in"></div>
                             </div>
@@ -33,14 +33,18 @@
                 </div>
                 
                 <div class="lsb-form animated fadeInDown">
-                    <form action="index.html" method="post" class="form-horizontal">
+                    <form action="/index/lock_screen/" method="post" class="form-horizontal">
+                        {% csrf_token %}
                         <div class="form-group sign-in animated fadeInDown">
                             <div class="col-md-12">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <span class="fa fa-user"></span>
                                     </div>
-                                    <input type="text" class="form-control" placeholder="Your login"/>
+                                    {{ userform.username }}
+                                    {% if userform.username.error.0 %}
+                                    <span>{{ userform.username.error.0 }}</span>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -50,7 +54,10 @@
                                     <div class="input-group-addon">
                                         <span class="fa fa-lock"></span>
                                     </div>
-                                    <input type="password" class="form-control" placeholder="Password"/>
+                                    {{ userform.password }}
+                                    {% if userform.password.errors.0 %}
+                                    <span>{{ userform.password.errors.0 }}</span>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

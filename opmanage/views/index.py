@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt,csrf_protect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
-from opmanage.forms.index import LoginUserForm
+from opmanage.forms.index import LoginUserForm, LockScreenUserForm
 from opmanage.models import User_info, Notice_info, Show_info
 
 
@@ -28,6 +28,8 @@ def check_login(func):
             r = func(request, *args)
             return r
         # 验证登录状态不通过，跳转到登录页面
+        elif request.session.get('login_status', None) == 2:
+            return redirect('/index/lock_screen/')
         else:
             # print 'check_login验证登录状态不通过，跳转到登录页面no'
             return redirect('/index/login/?nextpath=%s'% request.path)
@@ -110,6 +112,48 @@ def logout(request):
     request.session.set_expiry(0.1)
     time.sleep(0.2)
     return redirect('opmanage/index/login/')
+
+
+@csrf_protect
+def lock_screen(request):
+    """
+        用于锁屏
+    :param request:
+    :return:
+    """
+    login_status = request.session.get('login_status',None)
+    if login_status == None:
+        return redirect('opmanage/index/login/')
+    else:
+        if request.method == 'GET':
+            request.session['login_status'] = 2
+            userform = LockScreenUserForm()
+            return render(request, "opmanage/index/lock_screen.html",{'userform': userform})
+        elif request.method == 'POST':
+            userform = LockScreenUserForm(request.POST)
+            # 字段验证通过
+            if userform.is_valid():
+                username = request.POST.get('username')
+                # 如果有没有post数据，则
+                if len(username) == 0 or username == None:
+                    username = request.session.get('username', None)
+                password = request.POST.get('password')
+                if User_info.objects.filter(username=username,password=password).count():
+                    # 添加session
+                    request.session['username'] = username
+                    request.session['auth'] = get_auth(username)
+                    request.session['login_status'] = 1
+                    return redirect('/index/index/')
+                else:
+                    userform.errors['password'] = ['password error',]
+                    print userform
+                    return render(request, "opmanage/index/lock_screen.html", {'userform': userform})
+            # 字段验证不通过
+            else:
+                return render(request, "opmanage/index/lock_screen.html", {'userform': userform})
+
+
+
 
 
 def get_auth(username):

@@ -45,6 +45,7 @@ urlpatterns = [
     url(r'^index/login/', index.login),             # 登录
     url(r'^index/logout/', index.logout),           # 退出
     url(r'^index/index/', index.index),             # 主页
+    url(r'^index/lock_screen/', index.lock_screen), # 锁屏
     ###################User#############################
     url(r'^user/adduser/', user.add_user),                      # 添加用户
     url(r'^user/deluser/', user.del_user),                      # 删除用户
@@ -106,6 +107,6 @@ urlpatterns = [
     url(r'^workorder/status_host_workorder/',status_host_workorder),            # 状态主机工单
 
     ###################Default#####################################
-    url(r'^$',index.index),
+    url(r'.*',index.index),                                                     # 默认匹配
 ]  # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

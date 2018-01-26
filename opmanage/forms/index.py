@@ -38,6 +38,20 @@ class LoginUserForm(forms.Form):
     # py3
 
 
+class LockScreenUserForm(forms.Form):
+    username = forms.CharField(required=False,
+                               max_length=20,
+                               error_messages={'invalid': '用户名格式错误'},
+                               widget=forms.TextInput(attrs={'class':'form-control',
+                                                             'placeholder':"Username"}))
+    password = forms.CharField(required=True,
+                               max_length=20,
+                               error_messages={'required': '密码不能为空',
+                                               'invalid': '密码格式错误'},
+                               widget=forms.PasswordInput(attrs={'class':'form-control',
+                                                                 'placeholder':"Password"}))
+
+
 
 
 
