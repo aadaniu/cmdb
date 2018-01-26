@@ -42,10 +42,11 @@
                                         <span class="fa fa-user"></span>
                                     </div>
                                     {{ userform.username }}
-                                    {% if userform.username.error.0 %}
-                                    <span>{{ userform.username.error.0 }}</span>
-                                    {% endif %}
+
                                 </div>
+                                {% if userform.username.error.0 %}
+                                <span>{{ userform.username.error.0 }}</span>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="form-group">
@@ -55,10 +56,11 @@
                                         <span class="fa fa-lock"></span>
                                     </div>
                                     {{ userform.password }}
-                                    {% if userform.password.errors.0 %}
-                                    <span>{{ userform.password.errors.0 }}</span>
-                                    {% endif %}
+
                                 </div>
+                                {% if userform.password.errors.0 %}
+                                <span>{{ userform.password.errors.0 }}</span>
+                                {% endif %}
                             </div>
                         </div>
                         <input type="submit" class="hidden"/>
