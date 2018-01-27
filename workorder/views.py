@@ -47,7 +47,7 @@ def add_serverline_workorder(request):
 
 @check_login
 @check_user_auth(check_num=check_num)
-def add_host_workorder(request):
+def add_host_workorder(request, notice=None, show=None):
     """
         添加主机工单
     :param request:
@@ -83,21 +83,21 @@ def add_host_workorder(request):
             url = '/workorder/check_host_workorder/?host_workorder_id=%s' % host_workorder_obj.host_workorder_id
             user_opadmin_object = User_info.objects.get(username='cmdbadmin')
             Notice_info.objects.create(username_id=user_opadmin_object.id, notice_type='WorkOrder', subject=host_workorder_obj.subject, link_url=url)
-            return redirect('/workorder/get_host_workorder/?id=host_workorder_obj')
+            return redirect('/workorder/get_host_workorder/?host_workorder_id=host_workorder_obj', locals())
 
         # 字段验证不通过
         else:
-            return render(request, "workorder/add_host_workorder.html", {'form': form, 'notice': load_message(request_user)})
+            return render(request, "workorder/add_host_workorder.html", locals())
 
     # 非POST请求
     else:
         form = AddHostWorkOrderForm()
-        return render(request, "workorder/add_host_workorder.html", {'form': form, 'notice': load_message(request_user), 'show': load_show(request_user)})
+        return render(request, "workorder/add_host_workorder.html", {'form': form, 'notice': notice, 'show': show})
 
 
 @check_login
 @check_user_auth(check_num=check_num)
-def check_host_workorder(request):
+def check_host_workorder(request, notice=None, show=None):
     """
         运维审核主机工单
     :param request:
@@ -122,7 +122,7 @@ def check_host_workorder(request):
 
         # 字段验证不通过
         else:
-            return render(request, "workorder/check_host_workorder.html", {'form': form})
+            return render(request, "workorder/check_host_workorder.html", {'form': form, 'notice': notice, 'show': show})
 
     # 非POST请求
     else:
@@ -132,13 +132,13 @@ def check_host_workorder(request):
         Notice_info.objects.filter(Q(username__username='cmdbadmin')&Q(link_url=link_url)).delete()
         host_workorder_obj = Host_WorkOrder_info.objects.get(host_workorder_id=host_workorder_id)
         form = AddHostWorkOrderForm(instance=host_workorder_obj)
-        return render(request, "workorder/check_host_workorder.html", {'form': form})
+        return render(request, "workorder/check_host_workorder.html", {'form': form, 'notice': notice, 'show': show})
 
 
 
 @check_login
 @check_user_auth(check_num=check_num)
-def get_host_workorder(request):
+def get_host_workorder(request, notice=None, show=None):
     """
         获取主机工单
     :param request:
@@ -146,12 +146,12 @@ def get_host_workorder(request):
     """
     request_user = request.session.get('username')
     form = Host_WorkOrder_info.objects.filter(submit_user=request_user).all()
-    return render(request, "workorder/get_host_workorder.html", {'form': form})
+    return render(request, "workorder/get_host_workorder.html", {'form': form, 'notice': notice, 'show': show})
 
 
 @check_login
 @check_user_auth(check_num=check_num)
-def status_host_workorder(request):
+def status_host_workorder(request, notice=None, show=None):
     """
         获取主机工单状态
     :param request:
@@ -159,4 +159,25 @@ def status_host_workorder(request):
     """
     host_workorder_id = request.GET.get('host_workorder_id')
     form = Status_WorkOrder_info.objects.filter(attribute_workorder__host_workorder_id=host_workorder_id).all().order_by('-step_num')
-    return render(request, "workorder/status_host_workorder.html", {'form': form})
+    return render(request, "workorder/status_host_workorder.html", {'form': form, 'notice': notice, 'show': show})
+
+
+@check_login
+@check_user_auth(check_num=check_num)
+def exec_workorder(request, notice=None, show=None):
+    """
+        执行工单
+    :param request:
+    :param notice:
+    :param show:
+    :return:
+    """
+    host_workorder_id = request.GET.get('host_workorder_id')
+    host_workorder_obj = Host_WorkOrder_info.objects.get(host_workorder_id=host_workorder_id)
+    # 根据工单设计操作url
+    if host_workorder_obj.type:
+        pass
+
+
+
+    return render(request, "workorder/status_host_workorder.html", {'host_workorder_obj': host_workorder_obj, 'notice': notice, 'show': show})

@@ -55,12 +55,16 @@ def check_user_auth(check_num):
             # if str(auth)[local_check_num] == '1':
             if int(auth) <= local_check_num:
                 # print 'check_user_auth验证权限通过ok'
-                return func(request, *args)
+                username = request.session.get('username')
+                notice = load_message(username)
+                show = load_show(username)
+                return func(request, notice,show, *args)
             else:
                 # print 'check_user_auth验证权限不通过no'
                 return HttpResponse('no')
         return check_user_auth_2
     return check_user_auth_1
+
 
 @csrf_protect
 def login(request):
@@ -93,14 +97,16 @@ def login(request):
         return render(request, "opmanage/index/login.html", {'userform': userform})
 
 
-def index(request):
+@check_login
+@check_user_auth(check_num=3)
+def index(request, notice=None, show=None):
     """
         浏览主页
     :param request:
     :return:
     """
-    # return HttpResponse(User_info.objects.filter(username='cmdbadmin').values('notice_info__notice_type','notice_info__subject','notice_info__link_url'))
-    return render(request, 'opmanage/index/index.html')
+    if request.method == 'GET':
+        return render(request, 'opmanage/index/index.html', locals())
 
 
 def logout(request):

@@ -40,7 +40,7 @@ class Host_WorkOrder_info(models.Model):
     monitor_url = models.CharField(max_length=30)                       # 需监控url
     git_code = models.CharField(max_length=30)                          # git仓库
     domain = models.CharField(max_length=30)                            # 域名
-    # remark = models.CharField(max_length=30)                          # 备注
+    remark = models.CharField(max_length=30)                            # 备注
     describe = models.CharField(max_length=30)                          # 描述
     # workorder_status = models.ManyToManyField('Status_WorkOrder_info', request=False)  # 工单处理流程
 
