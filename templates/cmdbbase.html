@@ -393,11 +393,37 @@
         <script type='text/javascript' src='/static/js/demo_tables.js'></script>
         <!-- END THIS PAGE PLUGINS-->
 
+        <!-- START THIS PAGE PLUGINS-->
+        <!--<script type="text/javascript" src="/static/js/plugins/bootstrap/bootstrap-datepicker.js"></script>-->
+        <!--<script type="text/javascript" src="/static/js/plugins/bootstrap/bootstrap-timepicker.min.js"></script>-->
+        <!--<script type="text/javascript" src="/static/js/plugins/bootstrap/bootstrap-colorpicker.js"></script>-->
+        <!--<script type="text/javascript" src="/static/js/plugins/bootstrap/bootstrap-file-input.js"></script>-->
+        <!--<script type="text/javascript" src="/static/js/plugins/bootstrap/bootstrap-select.js"></script>-->
+        <!--<script type="text/javascript" src="/static/js/plugins/tagsinput/jquery.tagsinput.min.js"></script>-->
+
+        <!-- END THIS PAGE PLUGINS-->
+
         <!-- START TEMPLATE -->
         <script type="text/javascript" src="/static/js/settings.js"></script>
         <script type="text/javascript" src="/static/js/plugins.js"></script>
         <script type="text/javascript" src="/static/js/actions.js"></script>
         <!-- END TEMPLATE -->
+
+        <script>
+            $(function(){
+                //Spinner
+                $(".spinner_default").spinner()
+                $(".spinner_decimal").spinner({step: 0.01, numberFormat: "n"});
+                //End spinner
+
+                //Datepicker
+                $('#dp-2').datepicker();
+                $('#dp-3').datepicker({startView: 2});
+                $('#dp-4').datepicker({startView: 1});
+                //End Datepicker
+            });
+        </script>
+
 
         <!--START JS-->
         {% block js %}

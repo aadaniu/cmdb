@@ -101,6 +101,7 @@ class Host_info(models.Model):
     cloud = models.CharField(max_length=30, choices=cloud_choices)                  # 云主机类型
     types = models.CharField(max_length=30)                                         # 内存cpu
     status = models.CharField(max_length=30, choices=status_choices)                # 运行状态
+    disk = models.CharField(max_length=30)                                          # 磁盘大小
     serverline = models.ForeignKey('Serverline_info')                               # 业务线
 
     def __unicode__(self):
@@ -114,7 +115,7 @@ class Lb_info(models.Model):
 
     types_choices = (
         ('internal',u'内网'),
-        ('internet-facing', u'外网'),
+        ('internet_facing', u'外网'),
     )
 
     lb_name = models.CharField(max_length=30)                               # 名称

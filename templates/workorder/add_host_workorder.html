@@ -28,15 +28,16 @@
                         <label class="col-md-3 col-xs-12 control-label">{{ i.label }}</label>
                         <div class="col-md-6 col-xs-12">
 
-                            {% if i.label == '描述' or i.label == '申请主机类型' or i.label == '云厂商' or i.label == '是否需要外网IP' or i.label == '所属业务线' or i.label == '待监控url'%}
+                            {% if i.label == '主题' or i.label == 'git仓库' or i.label == '磁盘大小' %}
                                 <!--<textarea class="form-control" rows="5"></textarea>-->
-                                {{ i }}
-                            {% else %}
+
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                     <!--<input type="text" class="form-control"/>-->
                                     {{ i }}
                                 </div>
+                            {% else %}
+                                {{ i }}
                             {% endif %}
 
                             {% if  i.errors.0 %}
@@ -48,8 +49,10 @@
                 {% endfor %}
             </div>
 
+
+
             <div class="panel-footer">
-                <button class="btn btn-default"> 请空表单(Clear Form) </button>
+                <!--<button class="btn btn-default"> 请空表单(Clear Form) </button>-->
                 <button class="btn btn-primary pull-right"> 提交(Submit) </button>
             </div>
         </div>
