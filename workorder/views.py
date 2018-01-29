@@ -175,8 +175,44 @@ def exec_workorder(request, notice=None, show=None):
     host_workorder_id = request.GET.get('host_workorder_id')
     host_workorder_obj = Host_WorkOrder_info.objects.get(host_workorder_id=host_workorder_id)
     # 根据工单设计操作url
-    if host_workorder_obj.type:
-        pass
+    step = 2
+    # host
+    step += 1
+    Status_WorkOrder_info.objects.create(step_num='step%s' % step,
+                                         step_message='创建主机',
+                                         step_url='host/addhost/host_workorder_id=%s' % host_workorder_id)
+    # elb
+    if host_workorder_obj.internal_lb == 't':
+        step += 1
+        Status_WorkOrder_info.objects.create(step_num='step%s' % step,
+                                             step_message='创建内网ELB',
+                                             step_url='lb/addlb/host_workorder_id=%s&' % host_workorder_id)
+    if host_workorder_obj.internet_facing_lb == 't':
+        step += 1
+        Status_WorkOrder_info.objects.create(step_num='step%s' % step,
+                                             step_message='创建外网ELB',
+                                             step_url='lb/addlb/host_workorder_id=%s&' % host_workorder_id)
+    # domain
+    if host_workorder_obj.internal_domain == 't':
+        step += 1
+        Status_WorkOrder_info.objects.create(step_num='step%s' % step,
+                                             step_message='创建内网域名',
+                                             step_url='domain/adddomain/host_workorder_id=%s' % host_workorder_id)
+    if host_workorder_obj.internet_facing_domain == 't':
+        step += 1
+        # 在提交的时候就自动创建step2，明天加一下
+        status_workorder_obj = Status_WorkOrder_info.objects.create(step_num='step%s' % step, step_message='创建外域名')
+        url = 'domain/adddomain/host_workorder_id=%s' % host_workorder_id
+    # env
+    step += 1
+    status_workorder_obj = Status_WorkOrder_info.objects.create(step_num='step%s' % step, step_message='生成正式环境')
+    # monitor
+    step += 1
+    status_workorder_obj = Status_WorkOrder_info.objects.create(step_num='step%s' % step, step_message='添加监控')
+    # log
+    step += 1
+    status_workorder_obj = Status_WorkOrder_info.objects.create(step_num='step%s' % step, step_message='配置日志切分，保存和上传')
+
 
 
 

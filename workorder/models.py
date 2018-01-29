@@ -85,11 +85,14 @@ class Status_WorkOrder_info(models.Model):
         ('step4', 'step4'),
         ('step5', 'step5'),
     )
-    status_workorder_id = models.AutoField(primary_key=True)            # id
-    submit_time = models.DateTimeField(auto_now_add=True)               # 处理时间
-    attribute_workorder = models.ManyToManyField('Host_WorkOrder_info') # 所属工单
-    step_num = models.CharField(max_length=30)                          # 步骤
-    step_message = models.CharField(max_length=255)                     # 处理结果
+    status_workorder_id = models.AutoField(primary_key=True)                # id
+    submit_time = models.DateTimeField(auto_now_add=True)                   # 处理时间
+    attribute_workorder = models.ManyToManyField('Host_WorkOrder_info')     # 所属工单
+    step_num = models.CharField(max_length=30)                              # 步骤
+    step_message = models.CharField(max_length=255)                         # 处理过程
+    step_status = models.CharField(max_length=30, default='wait op exec')   # 处理结果
+    step_url = models.CharField(max_length=255, null=True)                  # 用于人工处理的url
+
 
 
 class Serverline_WorkOrder_info(models.Model):
