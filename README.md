@@ -24,6 +24,8 @@
 
 ## cmdb功能
 
+### 工单workorder
+
 ### 管理功能opmanage
 
 #### index
@@ -69,6 +71,7 @@
 
 主机组管理
 主机组
+salt执行
 
 ### 安全相关waf
 
@@ -110,9 +113,21 @@
 
 ## 生成数据库并启动服务
 
-python manage.py makemigrations
-python manage.py migrate
-python manage.py runserver
+- python manage.py makemigrations
+- python manage.py migrate
+- python manage.py runserver
+
+## 数据初始化
+
+```
+python manage.py shell
+
+from opmanage.models import  *
+Department_info.objects.create(department_name='op',department_leader='opleader',department_email='op@whysdomain.com')
+User_info.objects.create(username='cmdbadmin',password='123456',email='why@whysdomain.com',auth='1',jumper='f',vpn='f',phone='13552493019', department_id = 1, git= 'f',zabbix='f',jenkins='f')
+Serverline_info.objects.create(serverline_name='op-basic-cmdb',serverline_leader='wanghongyu',serverline_op_leader='wanghongyu',department_id='1')
+Show_info.objects.create(username_id=1)
+```
 
 ## 坑
 
