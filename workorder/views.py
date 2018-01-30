@@ -74,15 +74,17 @@ def add_host_workorder(request, notice=None, show=None):
             host_workorder_obj = form.save(commit=False)
             host_workorder_obj.submit_user = request_user
             host_workorder_obj.save()
-            print type(host_workorder_obj)
-            # 添加步骤
-            status_workorder_obj = Status_WorkOrder_info.objects.create(step_num='step1', step_message='%s summit workorder ok' % host_workorder_obj.subject)
-            print type(status_workorder_obj)
+
+            # 添加步骤1
+            status_workorder_obj = Status_WorkOrder_info.objects.create(step_num='step1', step_message='%s提交工单成功' % host_workorder_obj.subject, step_status='ok')
             status_workorder_obj.attribute_workorder.add(host_workorder_obj)
             # 用户构造
             url = '/workorder/check_host_workorder/?host_workorder_id=%s' % host_workorder_obj.host_workorder_id
             user_opadmin_object = User_info.objects.get(username='cmdbadmin')
             Notice_info.objects.create(username_id=user_opadmin_object.id, notice_type='WorkOrder', subject=host_workorder_obj.subject, link_url=url)
+            # 添加步骤2
+            status_workorder_obj = Status_WorkOrder_info.objects.create(step_num='step2', step_message='运维审核工单', step_url=url)
+            status_workorder_obj.attribute_workorder.add(host_workorder_obj)
             return redirect('/workorder/get_host_workorder/?host_workorder_id=host_workorder_obj', locals())
 
         # 字段验证不通过
@@ -115,9 +117,10 @@ def check_host_workorder(request, notice=None, show=None):
             host_workorder_obj = Host_WorkOrder_info.objects.get(subject=subject)
             a = AddHostWorkOrderForm(request.POST, instance=host_workorder_obj)
             a.save()
-            # 添加步骤
-            status_workorder_obj = Status_WorkOrder_info.objects.create(step_num='step2', step_message='op check workorder ok')
-            status_workorder_obj.attribute_workorder.add(host_workorder_obj)
+            # 更新步骤2
+            status_workorder_obj = Status_WorkOrder_info.objects.filter(Q(step_num='step2')&Q(attribute_workorder__host_workorder_id=host_workorder_obj.host_workorder_id)).first()
+            status_workorder_obj.step_status = 'ok'
+            status_workorder_obj.save()
             return HttpResponse('add,work order ok')
 
         # 字段验证不通过
@@ -129,7 +132,9 @@ def check_host_workorder(request, notice=None, show=None):
         url = request.META.get('PATH_INFO')
         host_workorder_id = request.GET.get('host_workorder_id')
         link_url = '%s?host_workorder_id=%s' % (url, host_workorder_id)
+        # 更新Notice信息
         Notice_info.objects.filter(Q(username__username='cmdbadmin')&Q(link_url=link_url)).delete()
+        # 更新
         host_workorder_obj = Host_WorkOrder_info.objects.get(host_workorder_id=host_workorder_id)
         form = AddHostWorkOrderForm(instance=host_workorder_obj)
         return render(request, "workorder/check_host_workorder.html", {'form': form, 'notice': notice, 'show': show})
@@ -162,8 +167,6 @@ def status_host_workorder(request, notice=None, show=None):
     return render(request, "workorder/status_host_workorder.html", {'form': form, 'notice': notice, 'show': show})
 
 
-@check_login
-@check_user_auth(check_num=check_num)
 def exec_workorder(request, notice=None, show=None):
     """
         执行工单
@@ -178,7 +181,8 @@ def exec_workorder(request, notice=None, show=None):
     step = 2
     # host
     step += 1
-    Status_WorkOrder_info.objects.create(step_num='step%s' % step,
+    Status_WorkOrder_info.objects.create(host_workorder_id=host_workorder_id,
+                                         step_num='step%s' % step,
                                          step_message='创建主机',
                                          step_url='host/addhost/host_workorder_id=%s' % host_workorder_id)
     # elb
@@ -200,9 +204,7 @@ def exec_workorder(request, notice=None, show=None):
                                              step_url='domain/adddomain/host_workorder_id=%s' % host_workorder_id)
     if host_workorder_obj.internet_facing_domain == 't':
         step += 1
-        # 在提交的时候就自动创建step2，明天加一下
-        status_workorder_obj = Status_WorkOrder_info.objects.create(step_num='step%s' % step, step_message='创建外域名')
-        url = 'domain/adddomain/host_workorder_id=%s' % host_workorder_id
+        status_workorder_obj = Status_WorkOrder_info.objects.create(step_num='step%s' % step, step_message='创建外域名',step_url='domain/adddomain/host_workorder_id=%s' % host_workorder_id)
     # env
     step += 1
     status_workorder_obj = Status_WorkOrder_info.objects.create(step_num='step%s' % step, step_message='生成正式环境')
