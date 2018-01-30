@@ -97,7 +97,11 @@
                         <a>{{ i.step_num }}</a>
                     </div>
                     <div class="timeline-body">
+
                         <p>{{ i.step_message }}</p>
+                        {% if i.step_status != 'ok' and op %}
+                        <a href="/{{ i.step_url }}">执行工单</a>
+                        {% endif %}
                     </div>
                     <div class="timeline-footer">
                     </div>

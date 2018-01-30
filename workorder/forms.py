@@ -79,13 +79,13 @@ class AddHostWorkOrderForm(forms.ModelForm):
 
 
     # 前端显示默认值设置
-    def __init__(self, *args, **kwargs):
-        super(AddHostWorkOrderForm, self).__init__(*args, **kwargs)
-        self.initial["cloud_type"] = 'aws'
-        self.initial["apply_type"] = 'php'
-        self.initial["pubipaddr"] = 't'
-        self.initial["monitor_url"] = '/heart.php'
-        self.initial["host_number"] = 1
+    # def __init__(self, *args, **kwargs):
+    #     super(AddHostWorkOrderForm, self).__init__(*args, **kwargs)
+    #     self.initial["cloud_type"] = 'aws'
+    #     self.initial["apply_type"] = 'php'
+    #     self.initial["pubipaddr"] = 't'
+    #     self.initial["monitor_url"] = '/heart.php'
+    #     self.initial["host_number"] = 1
 
 
 

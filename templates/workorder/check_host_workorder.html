@@ -28,15 +28,16 @@
                         <label class="col-md-3 col-xs-12 control-label">{{ i.label }}</label>
                         <div class="col-md-6 col-xs-12">
 
-                            {% if i.label == '描述' %}
+                            {% if i.label == '主题' or i.label == 'git仓库' or i.label == '磁盘大小' %}
                                 <!--<textarea class="form-control" rows="5"></textarea>-->
-                                {{ i }}
-                            {% else %}
+
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                     <!--<input type="text" class="form-control"/>-->
                                     {{ i }}
                                 </div>
+                            {% else %}
+                                {{ i }}
                             {% endif %}
 
                             {% if  i.errors.0 %}

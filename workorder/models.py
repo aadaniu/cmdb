@@ -78,15 +78,8 @@ class Status_WorkOrder_info(models.Model):
     """
         主机工单状态
     """
-    status_choices = (
-        ('step1', 'step1'),
-        ('step2', 'step2'),
-        ('step3', 'step3'),
-        ('step4', 'step4'),
-        ('step5', 'step5'),
-    )
     status_workorder_id = models.AutoField(primary_key=True)                # id
-    submit_time = models.DateTimeField(auto_now_add=True)                   # 处理时间
+    submit_time = models.DateTimeField(auto_now=True)                       # 处理时间
     attribute_workorder = models.ManyToManyField('Host_WorkOrder_info')     # 所属工单
     step_num = models.CharField(max_length=30)                              # 步骤
     step_message = models.CharField(max_length=255)                         # 处理过程

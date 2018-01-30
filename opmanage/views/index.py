@@ -40,7 +40,7 @@ def check_user_auth(check_num):
     """
         装饰器，用于检测用户页面访问权限
     :param func:
-    :param check_num: 权限认证级别，1为admin，2为host， 3为other
+    :param check_num: 权限认证级别，1为admin，2为op， 3为other
     :return:
     """
     def check_user_auth_1(func):
@@ -56,9 +56,13 @@ def check_user_auth(check_num):
             if int(auth) <= local_check_num:
                 # print 'check_user_auth验证权限通过ok'
                 username = request.session.get('username')
+                # 添加session
+                request.session['path_info'] = request.META.get('PATH_INFO')
+
+                # 用于返回消息和展示
                 notice = load_message(username)
                 show = load_show(username)
-                return func(request, notice,show, *args)
+                return func(request, notice, show, *args)
             else:
                 # print 'check_user_auth验证权限不通过no'
                 return HttpResponse('no')
@@ -218,6 +222,18 @@ def load_show(username=None):
     :return:
     """
     return Show_info.objects.filter(username__username=username).first()
+
+
+def check_op(request):
+    """
+        用于检测是否为运维
+    :param reuest:
+    :return:
+    """
+    if int(request.session.get('auth')) <= 2:
+        return True
+    else:
+        return False
 
 
 

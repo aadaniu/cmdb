@@ -8,7 +8,7 @@ from django.db.models import Q
 
 from workorder.forms import *
 from workorder.models import *
-from opmanage.views.index import check_login, check_user_auth, to_page, load_message, load_show
+from opmanage.views.index import check_login, check_user_auth, to_page, check_op
 from opmanage.models import User_info, Notice_info
 from opmanage.models import Serverline_info
 
@@ -93,7 +93,13 @@ def add_host_workorder(request, notice=None, show=None):
 
     # 非POST请求
     else:
-        form = AddHostWorkOrderForm()
+        print request.session.get('path_info')
+        form = AddHostWorkOrderForm(initial={'cloud_type': 'aws',
+                                             "apply_type": 'php',
+                                             "pubipaddr": 't',
+                                             "monitor_url": '/heart.php',
+                                             "host_number": 1,
+                                             })
         return render(request, "workorder/add_host_workorder.html", {'form': form, 'notice': notice, 'show': show})
 
 
@@ -115,13 +121,39 @@ def check_host_workorder(request, notice=None, show=None):
             # 更新数据
             subject = request.POST.get('subject', None)
             host_workorder_obj = Host_WorkOrder_info.objects.get(subject=subject)
+            host_workorder_id = host_workorder_obj.host_workorder_id
             a = AddHostWorkOrderForm(request.POST, instance=host_workorder_obj)
             a.save()
             # 更新步骤2
-            status_workorder_obj = Status_WorkOrder_info.objects.filter(Q(step_num='step2')&Q(attribute_workorder__host_workorder_id=host_workorder_obj.host_workorder_id)).first()
+            status_workorder_obj = Status_WorkOrder_info.objects.filter(Q(step_num='step2')&Q(attribute_workorder__host_workorder_id=host_workorder_id)).first()
             status_workorder_obj.step_status = 'ok'
             status_workorder_obj.save()
-            return HttpResponse('add,work order ok')
+            # 生成后续步骤
+            # 根据工单设计操作url
+            step = 2
+            # host
+            step = add_step(host_workorder_obj, step, '创建主机', 'host/addhost/')
+            # elb
+            if host_workorder_obj.internal_lb == 't':
+                step = add_step(host_workorder_obj, step, '创建内网负载均衡器', 'lb/addlb/')
+            if host_workorder_obj.internet_facing_lb == 't':
+                step = add_step(host_workorder_obj, step, '创建外网负载均衡器', 'lb/addlb/')
+            # domain
+            if host_workorder_obj.internal_domain == 't':
+                step = add_step(host_workorder_obj, step, '创建内网域名', 'domain/adddomain/')
+            if host_workorder_obj.internet_facing_domain == 't':
+                step = add_step(host_workorder_obj, step, '创建外网域名', 'domain/adddomain/')
+            # # env
+            # step += 1
+            # status_workorder_obj = Status_WorkOrder_info.objects.create(step_num='step%s' % step, step_message='生成正式环境')
+            # # monitor
+            # step += 1
+            # status_workorder_obj = Status_WorkOrder_info.objects.create(step_num='step%s' % step, step_message='添加监控')
+            # # log
+            # step += 1
+            # status_workorder_obj = Status_WorkOrder_info.objects.create(step_num='step%s' % step, step_message='配置日志切分，保存和上传')
+
+            return redirect('/workorder/status_host_workorder/?host_workorder_id=%s' % host_workorder_id)
 
         # 字段验证不通过
         else:
@@ -140,9 +172,27 @@ def check_host_workorder(request, notice=None, show=None):
         return render(request, "workorder/check_host_workorder.html", {'form': form, 'notice': notice, 'show': show})
 
 
+def add_step(host_workorder_obj, step, message, url):
+    """
+        用于添加工单步骤
+    :param host_workorder_obj: 工单对象
+    :param step: 步骤
+    :param message: 提示消息
+    :param url: 请求url
+    :return:
+    """
+    step += 1
+    status_workorder_obj = Status_WorkOrder_info.objects.create(step_num='step%s' % step,
+                                                                step_message=message,
+                                                                step_url='%s?host_workorder_id=%s' % (url, host_workorder_obj.host_workorder_id))
+    status_workorder_obj.attribute_workorder.add(host_workorder_obj)
+    return step
+
+
+
 
 @check_login
-@check_user_auth(check_num=check_num)
+@check_user_auth(check_num=3)
 def get_host_workorder(request, notice=None, show=None):
     """
         获取主机工单
@@ -150,72 +200,27 @@ def get_host_workorder(request, notice=None, show=None):
     :return:
     """
     request_user = request.session.get('username')
-    form = Host_WorkOrder_info.objects.filter(submit_user=request_user).all()
+    # 判断是否为check op
+    op = check_op(request)
+    if op:
+        form = Host_WorkOrder_info.objects.all()
+    else:
+        form = Host_WorkOrder_info.objects.filter(submit_user=request_user).all()
     return render(request, "workorder/get_host_workorder.html", {'form': form, 'notice': notice, 'show': show})
 
 
 @check_login
-@check_user_auth(check_num=check_num)
+@check_user_auth(check_num=3)
 def status_host_workorder(request, notice=None, show=None):
     """
-        获取主机工单状态
+        获取主机工单状态，用于执行后续工单
     :param request:
     :return:
     """
     host_workorder_id = request.GET.get('host_workorder_id')
     form = Status_WorkOrder_info.objects.filter(attribute_workorder__host_workorder_id=host_workorder_id).all().order_by('-step_num')
-    return render(request, "workorder/status_host_workorder.html", {'form': form, 'notice': notice, 'show': show})
+    # 通过op字段和step_status字段决定是否显示执行工单
+    op = check_op(request)
+    return render(request, "workorder/status_host_workorder.html", {'form': form, 'notice': notice, 'show': show, 'op': op})
 
 
-def exec_workorder(request, notice=None, show=None):
-    """
-        执行工单
-    :param request:
-    :param notice:
-    :param show:
-    :return:
-    """
-    host_workorder_id = request.GET.get('host_workorder_id')
-    host_workorder_obj = Host_WorkOrder_info.objects.get(host_workorder_id=host_workorder_id)
-    # 根据工单设计操作url
-    step = 2
-    # host
-    step += 1
-    Status_WorkOrder_info.objects.create(host_workorder_id=host_workorder_id,
-                                         step_num='step%s' % step,
-                                         step_message='创建主机',
-                                         step_url='host/addhost/host_workorder_id=%s' % host_workorder_id)
-    # elb
-    if host_workorder_obj.internal_lb == 't':
-        step += 1
-        Status_WorkOrder_info.objects.create(step_num='step%s' % step,
-                                             step_message='创建内网ELB',
-                                             step_url='lb/addlb/host_workorder_id=%s&' % host_workorder_id)
-    if host_workorder_obj.internet_facing_lb == 't':
-        step += 1
-        Status_WorkOrder_info.objects.create(step_num='step%s' % step,
-                                             step_message='创建外网ELB',
-                                             step_url='lb/addlb/host_workorder_id=%s&' % host_workorder_id)
-    # domain
-    if host_workorder_obj.internal_domain == 't':
-        step += 1
-        Status_WorkOrder_info.objects.create(step_num='step%s' % step,
-                                             step_message='创建内网域名',
-                                             step_url='domain/adddomain/host_workorder_id=%s' % host_workorder_id)
-    if host_workorder_obj.internet_facing_domain == 't':
-        step += 1
-        status_workorder_obj = Status_WorkOrder_info.objects.create(step_num='step%s' % step, step_message='创建外域名',step_url='domain/adddomain/host_workorder_id=%s' % host_workorder_id)
-    # env
-    step += 1
-    status_workorder_obj = Status_WorkOrder_info.objects.create(step_num='step%s' % step, step_message='生成正式环境')
-    # monitor
-    step += 1
-    status_workorder_obj = Status_WorkOrder_info.objects.create(step_num='step%s' % step, step_message='添加监控')
-    # log
-    step += 1
-    status_workorder_obj = Status_WorkOrder_info.objects.create(step_num='step%s' % step, step_message='配置日志切分，保存和上传')
-
-
-
-
-    return render(request, "workorder/status_host_workorder.html", {'host_workorder_obj': host_workorder_obj, 'notice': notice, 'show': show})
