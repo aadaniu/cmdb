@@ -11,6 +11,7 @@ from opmanage.forms.lb import AddLbForm, DelLbForm, UpdataLbForm, GetLbForm
 from opmanage.models import Lb_info
 from opmanage.views.index import check_login, check_user_auth, to_page
 from opmanage.views.host import add_zabbix_host, del_zabbix_host
+from workorder.models import Host_WorkOrder_info, Status_WorkOrder_info
 
 
 # 用于判定页面访问权限的下标
@@ -42,7 +43,15 @@ def add_lb(request):
             return render(request, "opmanage/lb/addlb.html", {'add_lbform': add_lbform})
     # 非POST请求
     else:
-        add_lbform = AddLbForm()
+        host_workorder_id = request.GET.get('host_workorder_id', None)
+        if host_workorder_id != None:
+            Host_WorkOrder_info.objects.filter(host_workorder_id=host_workorder_id).first()
+            add_lbform = AddLbForm(initial={'lb_name': 'aws',
+
+                                                }
+                                       )
+        else:
+            add_lbform = AddLbForm()
         return render(request, "opmanage/lb/addlb.html", {'add_lbform': add_lbform})
 
 

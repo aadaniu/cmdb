@@ -8,6 +8,7 @@ from django.http import HttpResponse
 from opmanage.forms.host import *
 from opmanage.models import Host_info
 from opmanage.views.index import check_login, check_user_auth, to_page
+from workorder.models import Host_WorkOrder_info, Status_WorkOrder_info
 from lib.zabbix import zabbix
 
 # 用于判定页面访问权限的下标
@@ -44,7 +45,18 @@ def add_host(request):
 
     # 非POST请求
     else:
-        add_hostform = AddHostForm()
+        host_workorder_id = request.GET.get('host_workorder_id', None)
+        if host_workorder_id != None:
+            Host_WorkOrder_info.objects.filter(host_workorder_id=host_workorder_id).first()
+            add_hostform = AddHostForm(initial={'cloud_type': 'aws',
+                                                "apply_type": 'php',
+                                                "pubipaddr": 't',
+                                                "monitor_url": '/heart.php',
+                                                "host_number": 1,
+                                                }
+                                       )
+        else:
+            add_hostform = AddHostForm()
         return render(request, "host/addhost.html", {'add_hostform': add_hostform})
 
 
