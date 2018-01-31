@@ -16,7 +16,7 @@ check_num = 2
 
 @check_login
 @check_user_auth(check_num=check_num)
-def add_host(request):
+def add_host(request, notice=None, show=None):
     """
         添加主机
     :param request:
@@ -24,45 +24,49 @@ def add_host(request):
     """
     # POST请求
     if request.method == "POST":
-        add_hostform = AddHostForm(request.POST)
+        form = AddHostForm(request.POST)
         # 字段验证通过
-        if add_hostform.is_valid():
-            host_name = request.POST.get('host_name', None)
-            pro_ipaddr = request.POST.get('pro_ipaddr', None)
+        if form.is_valid():
+            cloud_type = request.POST.get('cloud_type')
+            host_type = request.POST.get('host_type')
+            host_number = request.POST.get('host_number')
+            disk = request.POST.get('disk')
+            pubipaddr = request.POST.get('pro_ipaddr')
+            serverline = request.POST.get('serverline')
+            host_workorder_id = request.POST.get('host_workorder_id')
+            host_workorder_obj = Host_WorkOrder_info.objects.filter(host_workorder_id=host_workorder_id).first()
 
             # 插入数据
-            add_hostform.save()
-
-            # 添加zabbix监控，日后添加到信号中
-            add_zabbix_host(host=host_name, ip=pro_ipaddr)
-
+            create_host(cloud_type,host_type,host_number,disk,pubipaddr,serverline)
+            # 更新workorder
             # 创建主机成功
-            return HttpResponse('add,host %s ok' % host_name)
+            return HttpResponse('add,host %s ok')
 
         # 字段验证不通过
         else:
-            return render(request, "host/addhost.html", {'add_hostform': add_hostform, 'error': add_hostform.errors})
+            return render(request, "opmanage/host/addhost.html", {'form': form, 'notice': notice, 'show': show})
 
     # 非POST请求
     else:
         host_workorder_id = request.GET.get('host_workorder_id', None)
         if host_workorder_id != None:
-            Host_WorkOrder_info.objects.filter(host_workorder_id=host_workorder_id).first()
-            add_hostform = AddHostForm(initial={'cloud_type': 'aws',
-                                                "apply_type": 'php',
-                                                "pubipaddr": 't',
-                                                "monitor_url": '/heart.php',
-                                                "host_number": 1,
-                                                }
-                                       )
+            host_workorder_obj = Host_WorkOrder_info.objects.filter(host_workorder_id=host_workorder_id).first()
+            form = AddHostForm(initial={'cloud_type': host_workorder_obj.cloud_type,
+                                        'host_type': host_workorder_obj.host_type,
+                                        'host_number': host_workorder_obj.host_number,
+                                        'disk': host_workorder_obj.disk,
+                                        'pubipaddr': host_workorder_obj.pubipaddr,
+                                        'serverline': host_workorder_obj.serverline_name,
+                                        'host_workorder_id': host_workorder_id,
+                                        })
         else:
-            add_hostform = AddHostForm()
-        return render(request, "host/addhost.html", {'add_hostform': add_hostform})
+            form = AddHostForm()
+        return render(request, "opmanage/host/addhost.html", {'form': form, 'notice': notice, 'show': show})
 
 
 @check_login
 @check_user_auth(check_num=check_num)
-def del_host(request):
+def del_host(request, notice=None, show=None):
     """
         删除主机
     :param requets:
@@ -99,7 +103,7 @@ def del_host(request):
 
 @check_login
 @check_user_auth(check_num=check_num)
-def updata_host(request):
+def updata_host(request, notice=None, show=None):
     """
         更新主机
     :param request:
@@ -134,7 +138,7 @@ def updata_host(request):
 
 @check_login
 @check_user_auth(check_num=check_num)
-def get_host(request):
+def get_host(request, notice=None, show=None):
     """
         获取主机
     :param request:
@@ -184,7 +188,7 @@ def get_host(request):
 
 @check_login
 @check_user_auth(check_num=check_num)
-def updown_host(request):
+def updown_host(request, notice=None, show=None):
     """
         主机状态发生变化(开机关机)
     :param requets:
@@ -223,7 +227,7 @@ def updown_host(request):
 
 @check_login
 @check_user_auth(check_num=check_num)
-def rename_host(request):
+def rename_host(request, notice=None, show=None):
     """
         更名主机
     :param requets:
@@ -359,3 +363,17 @@ def disable_zabbix_host(host):
     params = {'hostid': hostid,
               'status': 1}
     return z.getdataZabbix('host.update', params)
+
+
+def create_host(cloud_type,host_type,host_number,disk,pubipaddr,serverline):
+    """
+        通过api创建主机
+    :param cloud_type:
+    :param host_type:
+    :param host_number:
+    :param disk:
+    :param pubipaddr:
+    :param serverline:
+    :return:
+    """
+    pass

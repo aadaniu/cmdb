@@ -189,6 +189,15 @@ def add_step(host_workorder_obj, step, message, url):
     return step
 
 
+def step_status_ok(host_workorder_id):
+    """
+        工单对应步骤转化为ok
+    :param host_workorder_id:
+    :return:
+    """
+    pass
+
+
 
 
 @check_login

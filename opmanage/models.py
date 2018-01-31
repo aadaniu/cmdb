@@ -98,8 +98,8 @@ class Host_info(models.Model):
     host_name = models.CharField(max_length=30)                                     # 主机
     pro_ipaddr = models.GenericIPAddressField()                                     # 内网IP地址
     pub_ipaddr = models.GenericIPAddressField()                                     # 公网IP地址
-    cloud = models.CharField(max_length=30, choices=cloud_choices)                  # 云主机类型
-    types = models.CharField(max_length=30)                                         # 内存cpu
+    cloud_type = models.CharField(max_length=30, choices=cloud_choices)                  # 云主机类型
+    host_type = models.CharField(max_length=30)                                         # 内存cpu
     status = models.CharField(max_length=30, choices=status_choices)                # 运行状态
     disk = models.CharField(max_length=30)                                          # 磁盘大小
     serverline = models.ForeignKey('Serverline_info')                               # 业务线
@@ -124,8 +124,8 @@ class Lb_info(models.Model):
     backend_host = models.ManyToManyField('Host_info')                      # 后端主机
     role_from_port = models.CharField(max_length=30)                        # LB上端口
     role_to_port = models.CharField(max_length=30)                          # 后端主机
-    cloud = models.CharField(max_length=30, choices=cloud_choices)          # 云厂商
-    types = models.CharField(max_length=30, choices=types_choices)          # 内外网
+    cloud_type = models.CharField(max_length=30, choices=cloud_choices)     # 云厂商
+    net_types = models.CharField(max_length=30, choices=types_choices)      # 内外网
     serverline = models.ForeignKey('Serverline_info')                       # 业务线
 
 class Domain_info(models.Model):
