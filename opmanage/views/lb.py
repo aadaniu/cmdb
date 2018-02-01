@@ -44,15 +44,20 @@ def add_lb(request):
     # 非POST请求
     else:
         host_workorder_id = request.GET.get('host_workorder_id', None)
+        step_num = request.GET.get('step_num', None)
+        net = request.GET.get('net', None)
+        # intranet
         if host_workorder_id != None:
-            Host_WorkOrder_info.objects.filter(host_workorder_id=host_workorder_id).first()
-            add_lbform = AddLbForm(initial={'lb_name': 'aws',
-
-                                                }
-                                       )
+            host_workorder_obj = Host_WorkOrder_info.objects.filter(host_workorder_id=host_workorder_id).first()
+            form = AddLbForm(initial={'host_workorder_id': host_workorder_id,
+                                      'net_type': net,
+                                      'role': role,
+                                      'step_num': step_num,
+                                      'serverline': host_workorder_obj.serverline_name,
+                                        })
         else:
-            add_lbform = AddLbForm()
-        return render(request, "opmanage/lb/addlb.html", {'add_lbform': add_lbform})
+            form = AddLbForm()
+        return render(request, "opmanage/lb/addlb.html", {'add_lbform': form})
 
 
 @check_login

@@ -114,8 +114,8 @@ class Lb_info(models.Model):
     """
 
     types_choices = (
-        ('internal',u'内网'),
-        ('internet_facing', u'外网'),
+        ('intranet',u'内网'),
+        ('internet', u'外网'),
     )
 
     lb_name = models.CharField(max_length=30)                               # 名称

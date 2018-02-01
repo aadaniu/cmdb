@@ -57,7 +57,6 @@ def add_host(request, notice=None, show=None):
     else:
         host_workorder_id = request.GET.get('host_workorder_id', None)
         step_num = request.GET.get('step_num', None)
-        print step_num
         if host_workorder_id != None:
             host_workorder_obj = Host_WorkOrder_info.objects.filter(host_workorder_id=host_workorder_id).first()
             form = AddHostForm(initial={'step_num': step_num,
