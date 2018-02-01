@@ -37,7 +37,7 @@ class Host_WorkOrder_info(models.Model):
     )
 
     host_workorder_id = models.AutoField(primary_key=True)              # id
-    submit_time = models.DateField(auto_now_add=True)                   # 提交时间
+    submit_time = models.DateTimeField(auto_now_add=True)               # 提交时间
     submit_user = models.CharField(max_length=20)                       # 提交用户
     subject = models.CharField(max_length=30)                           # 主题
     git_code = models.CharField(max_length=30)                          # git仓库
@@ -58,17 +58,17 @@ class Host_WorkOrder_info(models.Model):
 
     # log
     nginx_log_save = models.CharField(max_length=30,choices=t_or_f_choices)     # 是否需要上传nginx log
-    app_log_save_pwd = models.CharField(max_length=30, blank=True, null=True)                          # 需要上传app日志pwd new
+    app_log_save_pwd = models.CharField(max_length=30, blank=True, null=True)   # 需要上传app日志pwd new
     nginx_log_elk = models.CharField(max_length=30,choices=t_or_f_choices)      # 是否需要elb nginx log new
-    app_log_elk_pwd = models.CharField(max_length=30, blank=True, null=True)                           # 需要elk的app日志pwd new
+    app_log_elk_pwd = models.CharField(max_length=30, blank=True, null=True)    # 需要elk的app日志pwd new
     # lb
-    internal_lb = models.CharField(max_length=30, choices=t_or_f_choices)           # 是否创建内网ELB new
-    internal_role = models.CharField(max_length=30, blank=True)                                 # 内网路由规则
-    internet_facing_lb = models.CharField(max_length=30, choices=t_or_f_choices)    # 是否创建外网ELB new
-    internet_facing_role = models.CharField(max_length=30, blank=True, null=True)                          # 外网路由规则
+    intranet_lb = models.CharField(max_length=30, choices=t_or_f_choices)       # 是否创建内网ELB new
+    intranet_role = models.CharField(max_length=30, blank=True)                 # 内网路由规则
+    internet_lb = models.CharField(max_length=30, choices=t_or_f_choices)       # 是否创建外网ELB new
+    internet_role = models.CharField(max_length=30, blank=True, null=True)      # 外网路由规则
     # domain
-    internal_domain = models.CharField(max_length=30, choices=t_or_f_choices)       # 是否创建内网域名 new
-    internet_facing_domain = models.CharField(max_length=30, choices=t_or_f_choices)# 是否创建外网域名 new
+    intranet_domain = models.CharField(max_length=30, choices=t_or_f_choices)       # 是否创建内网域名 new
+    internet_domain = models.CharField(max_length=30, choices=t_or_f_choices)       # 是否创建外网域名 new
     domain = models.CharField(max_length=30, choices=domain_choices, blank=True, null=True)                # 域名
 
     # workorder_status = models.ManyToManyField('Status_WorkOrder_info', request=False)  # 工单处理流程
@@ -92,7 +92,7 @@ class Serverline_WorkOrder_info(models.Model):
     """
         业务线工单表
     """
-    submit_time = models.DateField(auto_now_add=True)                   # 提交时间
+    submit_time = models.DateTimeField(auto_now_add=True)               # 提交时间
     submit_user = models.CharField(max_length=20)                       # 提交用户
     serverline_name = models.CharField(max_length=30)                   # 业务线
     serverline_leader = models.ForeignKey('opmanage.User_info')         # 业务线负责人

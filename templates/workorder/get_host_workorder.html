@@ -29,7 +29,7 @@
                         <tbody>
                             {% for i in form %}
                             <tr class="success" id="{{ i.host_workorder_id }}">
-                                <td>{{ i.submit_time }}</td>
+                                <td>{{ i.submit_time|date:"Y-m-d H:i:s" }}</td>
                                 <td><strong>{{ i.subject }}</strong></td>
                                 <td>
                                     <button onclick="window.location.href='/workorder/status_host_workorder?host_workorder_id={{ i.host_workorder_id }}'" class="btn btn-default btn-rounded btn-condensed btn-sm"><span class="fa fa-pencil"></span></button>

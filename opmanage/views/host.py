@@ -9,6 +9,7 @@ from opmanage.forms.host import *
 from opmanage.models import Host_info
 from opmanage.views.index import check_login, check_user_auth, to_page
 from workorder.models import Host_WorkOrder_info, Status_WorkOrder_info
+from workorder.views import step_status_ok
 from lib.zabbix import zabbix
 
 # 用于判定页面访问权限的下标
@@ -34,13 +35,19 @@ def add_host(request, notice=None, show=None):
             pubipaddr = request.POST.get('pro_ipaddr')
             serverline = request.POST.get('serverline')
             host_workorder_id = request.POST.get('host_workorder_id')
-            host_workorder_obj = Host_WorkOrder_info.objects.filter(host_workorder_id=host_workorder_id).first()
+            step_num = request.POST.get('step_num')
 
-            # 插入数据
+            # 创建主机
             create_host(cloud_type,host_type,host_number,disk,pubipaddr,serverline)
+
             # 更新workorder
-            # 创建主机成功
-            return HttpResponse('add,host %s ok')
+            func_status = step_status_ok(host_workorder_id, step_num)
+
+            if func_status:
+                # 创建主机成功
+                return HttpResponse('add host ok')
+            else:
+                return HttpResponse('add host false')
 
         # 字段验证不通过
         else:
@@ -49,9 +56,12 @@ def add_host(request, notice=None, show=None):
     # 非POST请求
     else:
         host_workorder_id = request.GET.get('host_workorder_id', None)
+        step_num = request.GET.get('step_num', None)
+        print step_num
         if host_workorder_id != None:
             host_workorder_obj = Host_WorkOrder_info.objects.filter(host_workorder_id=host_workorder_id).first()
-            form = AddHostForm(initial={'cloud_type': host_workorder_obj.cloud_type,
+            form = AddHostForm(initial={'step_num': step_num,
+                                        'cloud_type': host_workorder_obj.cloud_type,
                                         'host_type': host_workorder_obj.host_type,
                                         'host_number': host_workorder_obj.host_number,
                                         'disk': host_workorder_obj.disk,

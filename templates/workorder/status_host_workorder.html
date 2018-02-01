@@ -7,76 +7,6 @@
 
 {% block content %}
 
-
-<!--<div class="row">-->
-    <!--<div class="col-md-12">-->
-
-        <!--&lt;!&ndash; START DEFAULT WIZARD &ndash;&gt;-->
-        <!--<div class="panel panel-default">-->
-            <!--<div class="panel-body">-->
-                <!--<h3>{{ i.suject }}处理流程</h3>-->
-                <!--<div class="wizard">-->
-
-                    <!--<ul class="steps_5 anchor">-->
-                        <!--<li>-->
-                            <!--<a href="#step-1">-->
-                                <!--<span class="stepNumber">1</span>-->
-                                <!--<span class="stepDesc">Step 1<br /><small>Step 1 提交主机工单</small></span>-->
-                            <!--</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a href="#step-2">-->
-                                <!--<span class="stepNumber">2</span>-->
-                                <!--<span class="stepDesc">Step 2<br /><small>Step 2 运维审核工单</small></span>-->
-                            <!--</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a href="#step-3">-->
-                                <!--<span class="stepNumber">3</span>-->
-                                <!--<span class="stepDesc">Step 3<br /><small>Step 3 创建主机，负载，域名</small></span>-->
-                            <!--</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a href="#step-4">-->
-                                <!--<span class="stepNumber">4</span>-->
-                                <!--<span class="stepDesc">Step 4<br /><small>Step 4 创建自动部署</small></span>-->
-                            <!--</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a href="#step-5">-->
-                                <!--<span class="stepNumber">5</span>-->
-                                <!--<span class="stepDesc">Step 5<br /><small>Step 5 主机申请成功</small></span>-->
-                            <!--</a>-->
-                        <!--</li>-->
-                    <!--</ul>-->
-                    <!--<div id="step-1">-->
-                        <!--<h4>Step 1 Content</h4>-->
-                        <!--<p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.</p>-->
-                    <!--</div>-->
-                    <!--<div id="step-2">-->
-                        <!--<h4>Step 2 Content</h4>-->
-                        <!--<p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.</p>-->
-                    <!--</div>-->
-                    <!--<div id="step-3">-->
-                        <!--<h4>Step 3 Content</h4>-->
-                        <!--<p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.</p>-->
-                    <!--</div>-->
-                    <!--<div id="step-4">-->
-                        <!--<h4>Step 4 Content</h4>-->
-                        <!--<p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.</p>-->
-                    <!--</div>-->
-                    <!--<div id="step-5">-->
-                        <!--<h4>Step 5 Content</h4>-->
-                        <!--<p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.</p>-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
-
-    <!--</div>-->
-    <!--</div>-->
-<!--</div>-->
-
-
 <div class="row">
     <div class="col-md-12">
         <!-- START TIMELINE -->
@@ -100,7 +30,7 @@
 
                         <p>{{ i.step_message }}</p>
                         {% if i.step_status != 'ok' and op %}
-                        <a href="/{{ i.step_url }}">执行工单</a>
+                        <a href="{{ i.step_url }}">执行工单</a>
                         {% endif %}
                     </div>
                     <div class="timeline-footer">

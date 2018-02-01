@@ -4,24 +4,45 @@
 
 from django import forms
 
-from opmanage.models import Lb_info
+from opmanage.models import Lb_info, Serverline_info
 
-class AddLbForm(forms.ModelForm):
-    class Meta:
-        model = Lb_info
-        # 表示该模型的全部字段都被表单使用
-        fields = '__all__'
-        labels = {
-            'lb_name': u'lb名称',
-            'cname': u'cname',
-            'ipaddr': u'a记录ip',
-            'backend_host': u'后端主机',
-            'role_from_port': u'lb端口',
-            'role_to_port': u'后端主机端口',
-            'cloud': u'云类型',
-            'types': u'内外网类型',
-            'serverline': u'业务线',
-        }
+# class AddLbForm(forms.ModelForm):
+#     class Meta:
+#         model = Lb_info
+#         # 表示该模型的全部字段都被表单使用
+#         fields = '__all__'
+#         labels = {
+#             'lb_name': u'lb名称',
+#             'cname': u'cname',
+#             'ipaddr': u'a记录ip',
+#             'backend_host': u'后端主机',
+#             'role_from_port': u'lb端口',
+#             'role_to_port': u'后端主机端口',
+#             'cloud': u'云类型',
+#             'types': u'内外网类型',
+#             'serverline': u'业务线',
+#         }
+
+cloud_choices = (
+    ('aws', u'亚马逊云'),
+    ('qcloud', u'腾讯云'),
+    ('aliyun', u'阿里云'),
+)
+t_or_f_choices = (
+    ('t', '是'),
+    ('f', '否')
+)
+
+class AddLbForm(forms.Form):
+    host_workorder_id = forms.CharField(max_length=30)
+    step_num = forms.CharField(max_length=30)
+    net_type = forms.CharField(max_length=30)
+    role = forms.CharField(max_length=30)
+    def __init__(self, *args, **kwargs):
+        super(AddLbForm, self).__init__(*args, **kwargs)
+
+        self.fields['serverline'] = forms.CharField(max_length=30, widget=forms.Select(attrs={'class': "form-control select"}, choices=Serverline_info.objects.values_list('serverline_name','serverline_name')), label=u'所属业务线')
+
 
 
 class DelLbForm(forms.Form):

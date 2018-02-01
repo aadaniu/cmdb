@@ -35,14 +35,14 @@ class AddHostWorkOrderForm(forms.ModelForm):
             'nginx_log_elk': u'是否需要上传nginx日志到elk',
             'app_log_elk_pwd': u'需要上传业务日志到elk的日志路径',
             # lb
-            'internal_lb': u'是否创建内网ELB',
-            'internal_role': u'内网路由规则',
-            'internet_facing_lb': u'是否创建外网ELB',
-            'internet_facing_role': u'外网路由规则',
+            'intranet_lb': u'是否创建内网ELB',
+            'intranet_role': u'内网路由规则',
+            'internet_lb': u'是否创建外网ELB',
+            'internet_role': u'外网路由规则',
 
             # domain
-            'internal_domain': u'是否创建内网域名',
-            'internet_facing_domain': u'是否创建外网域名',
+            'intranet_domain': u'是否创建内网域名',
+            'internet_domain': u'是否创建外网域名',
             'domain': u'申请域名',
 
         }
@@ -67,13 +67,13 @@ class AddHostWorkOrderForm(forms.ModelForm):
             'nginx_log_elk': forms.Select(attrs={'class': "form-control select"}),
             'app_log_elk_pwd': forms.TextInput(attrs={'class': "tagsinput"}),
             # lb
-            'internal_lb': forms.Select(attrs={'class': "form-control select"}),
-            'internal_role': forms.TextInput(attrs={'class': "tagsinput"}),
-            'internet_facing_lb': forms.Select(attrs={'class': "form-control select"}),
-            'internet_facing_role': forms.TextInput(attrs={'class': "tagsinput"}),
+            'intranet_lb': forms.Select(attrs={'class': "form-control select"}),
+            'intranet_role': forms.TextInput(attrs={'class': "tagsinput"}),
+            'internet_lb': forms.Select(attrs={'class': "form-control select"}),
+            'internet_role': forms.TextInput(attrs={'class': "tagsinput"}),
             # domain
-            'internal_domain': forms.Select(attrs={'class': "form-control select"}),
-            'internet_facing_domain': forms.Select(attrs={'class': "form-control select"}),
+            'intranet_domain': forms.Select(attrs={'class': "form-control select"}),
+            'internet_domain': forms.Select(attrs={'class': "form-control select"}),
             'domain': forms.Select(attrs={'class': "form-control select", "data-live-search": "true"})
         }
 

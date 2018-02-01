@@ -85,7 +85,7 @@ def add_host_workorder(request, notice=None, show=None):
             # 添加步骤2
             status_workorder_obj = Status_WorkOrder_info.objects.create(step_num='step2', step_message='运维审核工单', step_url=url)
             status_workorder_obj.attribute_workorder.add(host_workorder_obj)
-            return redirect('/workorder/get_host_workorder/?host_workorder_id=host_workorder_obj', locals())
+            return redirect('/workorder/get_host_workorder/', locals())
 
         # 字段验证不通过
         else:
@@ -125,24 +125,23 @@ def check_host_workorder(request, notice=None, show=None):
             a = AddHostWorkOrderForm(request.POST, instance=host_workorder_obj)
             a.save()
             # 更新步骤2
-            status_workorder_obj = Status_WorkOrder_info.objects.filter(Q(step_num='step2')&Q(attribute_workorder__host_workorder_id=host_workorder_id)).first()
-            status_workorder_obj.step_status = 'ok'
-            status_workorder_obj.save()
+            step = 2
+            step_status_ok(host_workorder_id=host_workorder_id, step_num='step%s' % step)
             # 生成后续步骤
             # 根据工单设计操作url
-            step = 2
+
             # host
-            step = add_step(host_workorder_obj, step, '创建主机', 'host/addhost/')
+            step = add_step(host_workorder_obj, step, '创建主机', '/host/addhost/')
             # elb
-            if host_workorder_obj.internal_lb == 't':
-                step = add_step(host_workorder_obj, step, '创建内网负载均衡器', 'lb/addlb/')
-            if host_workorder_obj.internet_facing_lb == 't':
-                step = add_step(host_workorder_obj, step, '创建外网负载均衡器', 'lb/addlb/')
+            if host_workorder_obj.intranet_lb == 't':
+                step = add_step(host_workorder_obj, step, '创建内网负载均衡器', '/lb/addlb/', 'net=intranet')
+            if host_workorder_obj.internet_lb == 't':
+                step = add_step(host_workorder_obj, step, '创建外网负载均衡器', '/lb/addlb/', 'net=internet')
             # domain
-            if host_workorder_obj.internal_domain == 't':
-                step = add_step(host_workorder_obj, step, '创建内网域名', 'domain/adddomain/')
-            if host_workorder_obj.internet_facing_domain == 't':
-                step = add_step(host_workorder_obj, step, '创建外网域名', 'domain/adddomain/')
+            if host_workorder_obj.intranet_domain == 't':
+                step = add_step(host_workorder_obj, step, '创建内网域名', '/domain/adddomain/', 'net=intranet')
+            if host_workorder_obj.internet_domain == 't':
+                step = add_step(host_workorder_obj, step, '创建外网域名', '/domain/adddomain/', 'net=internet')
             # # env
             # step += 1
             # status_workorder_obj = Status_WorkOrder_info.objects.create(step_num='step%s' % step, step_message='生成正式环境')
@@ -172,30 +171,39 @@ def check_host_workorder(request, notice=None, show=None):
         return render(request, "workorder/check_host_workorder.html", {'form': form, 'notice': notice, 'show': show})
 
 
-def add_step(host_workorder_obj, step, message, url):
+def add_step(host_workorder_obj, step, message, url, otheragrs=''):
     """
         用于添加工单步骤
     :param host_workorder_obj: 工单对象
     :param step: 步骤
     :param message: 提示消息
     :param url: 请求url
+    :param net: 网络类型 intranet为内网，internet为外网
     :return:
     """
     step += 1
     status_workorder_obj = Status_WorkOrder_info.objects.create(step_num='step%s' % step,
                                                                 step_message=message,
-                                                                step_url='%s?host_workorder_id=%s' % (url, host_workorder_obj.host_workorder_id))
+                                                                step_url='%s?host_workorder_id=%s&step_num=step%s&%s' % (url, host_workorder_obj.host_workorder_id, step, otheragrs))
     status_workorder_obj.attribute_workorder.add(host_workorder_obj)
     return step
 
 
-def step_status_ok(host_workorder_id):
+def step_status_ok(host_workorder_id, step_num):
     """
         工单对应步骤转化为ok
     :param host_workorder_id:
     :return:
     """
-    pass
+    status = True
+    try:
+        status_workorder_obj = Status_WorkOrder_info.objects.filter(
+        Q(step_num=step_num) & Q(attribute_workorder__host_workorder_id=host_workorder_id)).first()
+        status_workorder_obj.step_status = 'ok'
+        status_workorder_obj.save()
+    except:
+        status = False
+    return status
 
 
 

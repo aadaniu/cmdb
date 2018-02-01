@@ -40,6 +40,7 @@ type_choices = (
 
 class AddHostForm(forms.Form):
     host_workorder_id = forms.CharField(max_length=30)
+    step_num = forms.CharField(max_length=30)
     cloud_type = forms.CharField(max_length=30, widget=forms.Select(attrs={'class': "form-control select"}, choices=cloud_choices), label=u'云厂商')
     host_type = forms.CharField(max_length=30, widget=forms.Select(attrs={'class': "form-control select"}, choices=type_choices), label=u'主机型号')
     host_number = forms.CharField(max_length=30, widget=forms.TextInput(attrs={'class': "form-control"}), label=u'申请主机数量')
