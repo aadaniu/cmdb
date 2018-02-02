@@ -24,7 +24,11 @@
             </div>
             <div class="panel-body">
                 {% for i in form %}
-                    <div class="form-group">
+                    {% if i.label == 'Host workorder id'  or i.label == 'Step num' %}
+                        <div class="form-group hidden">
+                    {% else %}
+                        <div class="form-group">
+                    {% endif %}
                         <label class="col-md-3 col-xs-12 control-label">{{ i.label }}</label>
                         <div class="col-md-6 col-xs-12">
 

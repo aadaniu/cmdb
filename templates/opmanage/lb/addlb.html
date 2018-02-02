@@ -6,18 +6,55 @@
 {% endblock %}
 
 {% block content %}
-    <form action="/lb/addlb/" method="post" novalidate>
-        {% for i in add_lbform %}
-            <a>{{ i.label }}</a><br>
-            <div class="input-group">
-            {{ i }}
-            {% if i.errors.0 %}
-            <span>{{ i.errors.0 }}</span>
-            {% endif %}
+
+
+<div class="row">
+    <div class="col-md-12">
+
+        <form class="form-horizontal form-group-separated" action="/lb/addlb/" method="post" novalidate>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><strong>创建负载均衡器</strong> 工单</h3>
+                <ul class="panel-controls">
+                    <li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
+                </ul>
             </div>
-        {% endfor %}
-        <div>
-            <input type="submit" value="提交">
+            <div class="panel-body">
+                <p>检查并创建主机</p>
+            </div>
+            <div class="panel-body">
+                {% for i in form %}
+                    {% if i.label == 'Host workorder id'  or i.label == 'Step num' %}
+                        <div class="form-group hidden">
+                    {% else %}
+                        <div class="form-group">
+                    {% endif %}
+                            <label class="col-md-3 col-xs-12 control-label">{{ i.label }}</label>
+
+                            <div class="col-md-6 col-xs-12">
+
+
+                        {{ i }}
+
+                        {% if  i.errors.0 %}
+                            <span class="help-block">{{ i.errors.0 }}</span>
+                        {% endif %}
+
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+
+
+            <div class="panel-footer">
+                <!--<button class="btn btn-default"> 请空表单(Clear Form) </button>-->
+                <button class="btn btn-primary pull-right"> 提交(Submit) </button>
+            </div>
         </div>
-    </form>
+        </form>
+
+    </div>
+</div>
+
 {% endblock %}

@@ -12,6 +12,7 @@ from opmanage.models import Lb_info
 from opmanage.views.index import check_login, check_user_auth, to_page
 from opmanage.views.host import add_zabbix_host, del_zabbix_host
 from workorder.models import Host_WorkOrder_info, Status_WorkOrder_info
+from workorder.views import step_status_ok
 
 
 # 用于判定页面访问权限的下标
@@ -19,7 +20,7 @@ check_num = 2
 
 @check_login
 @check_user_auth(check_num=check_num)
-def add_lb(request):
+def add_lb(request, notice=None, show=None):
     """
         添加主机
     :param request:
@@ -27,20 +28,31 @@ def add_lb(request):
     """
     # POST请求
     if request.method == "POST":
-        add_lbform = AddLbForm(request.POST)
+        form = AddLbForm(request.POST)
         # 字段验证通过
-        if add_lbform.is_valid():
-            # 添加LB数据
-            add_lbform.save()
+        if form.is_valid():
+            host_workorder_id = request.POST.get('host_workorder_id')
+            step_num = request.POST.get('step_num')
+            net_type = request.POST.get('net_type')
+            role = request.POST.get('role')
+            serverline = request.POST.get('serverline')
+            cloud_type = request.POST.get('cloud_type')
+            # 创建LB
+            create_lb(cloud_type, net_type, role, serverline)
+
             # 添加zabbix监控
-            lb_name = request.POST.get('lb_name', None)
-            zabbix_proxy_id = '127.0.0.1'
-            add_zabbix_host(host=lb_name, ip=zabbix_proxy_id)
-            # 添加LB成功
-            return HttpResponse('add lb %s ok' % lb_name)
+            # zabbix_proxy_id = '127.0.0.1'
+            # add_zabbix_host(host=lb_name, ip=zabbix_proxy_id)
+
+            func_status = step_status_ok(host_workorder_id, step_num)
+            if func_status:
+                # 创建主机成功
+                return HttpResponse('add host ok')
+            else:
+                return HttpResponse('add host false')
         # 字段验证不通过
         else:
-            return render(request, "opmanage/lb/addlb.html", {'add_lbform': add_lbform})
+            return render(request, "opmanage/lb/addlb.html", {'form': form})
     # 非POST请求
     else:
         host_workorder_id = request.GET.get('host_workorder_id', None)
@@ -49,6 +61,10 @@ def add_lb(request):
         # intranet
         if host_workorder_id != None:
             host_workorder_obj = Host_WorkOrder_info.objects.filter(host_workorder_id=host_workorder_id).first()
+            if net == 'intranet':
+                role = host_workorder_obj.intranet_role
+            else:
+                role = host_workorder_obj.internet_role
             form = AddLbForm(initial={'host_workorder_id': host_workorder_id,
                                       'net_type': net,
                                       'role': role,
@@ -57,7 +73,7 @@ def add_lb(request):
                                         })
         else:
             form = AddLbForm()
-        return render(request, "opmanage/lb/addlb.html", {'add_lbform': form})
+        return render(request, "opmanage/lb/addlb.html", {'form': form, 'notice': notice, 'show': show})
 
 
 @check_login
@@ -200,3 +216,13 @@ def get_lb(request):
         return render(request, "opmanage/lb/getlb.html", {'get_lbform': get_lbform, 'page_lb_list': page_lb_list})
 
 
+def create_lb(cloud_type, net_type, role, serverline):
+    """
+        创建lb
+    :param cloud_type:
+    :param net_type:
+    :param role: 转发规则
+    :param serverline:
+    :return:
+    """
+    pass

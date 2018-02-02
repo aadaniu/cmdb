@@ -30,22 +30,38 @@ cloud_choices = (
 )
 t_or_f_choices = (
     ('t', '是'),
-    ('f', '否')
+    ('f', '否'),
 )
 
+net_choices = (
+    ('intranet', u'内网LB'),
+    ('internet', u'外网LB'),
+)
+
+
 class AddLbForm(forms.Form):
-    host_workorder_id = forms.CharField(max_length=30)
-    step_num = forms.CharField(max_length=30)
-    net_type = forms.CharField(max_length=30)
-    role = forms.CharField(max_length=30)
+
+    host_workorder_id = forms.CharField(max_length=30,)
+    step_num = forms.CharField(max_length=30,)
+    net_type = forms.CharField(max_length=30,
+                               widget=forms.Select(attrs={'class': "form-control select"}, choices=net_choices),
+                               label=u'负载均衡器类型')
+    cloud_type = forms.CharField(max_length=30,
+                                 widget=forms.Select(attrs={'class': "form-control select"}, choices=cloud_choices),
+                                 label=u'云厂商')
+    role = forms.CharField(max_length=30,
+                           widget=forms.TextInput(attrs={'class': "tagsinput"}),
+                           label=u'转发规则')
+
     def __init__(self, *args, **kwargs):
         super(AddLbForm, self).__init__(*args, **kwargs)
-
-        self.fields['serverline'] = forms.CharField(max_length=30, widget=forms.Select(attrs={'class': "form-control select"}, choices=Serverline_info.objects.values_list('serverline_name','serverline_name')), label=u'所属业务线')
-
+        self.fields['serverline'] = forms.CharField(max_length=30,
+                                                    widget=forms.Select(attrs={'class': "form-control select"}, choices=Serverline_info.objects.values_list('serverline_name','serverline_name')),
+                                                    label=u'所属业务线')
 
 
 class DelLbForm(forms.Form):
+
     lb_name = forms.CharField(label=u'待删除记录')
 
     def clean(self):
@@ -56,7 +72,9 @@ class DelLbForm(forms.Form):
 
 
 class UpdataLbForm(forms.ModelForm):
+
     class Meta:
+
         model = Lb_info
         # 表示该模型的全部字段都被表单使用
         fields = '__all__'

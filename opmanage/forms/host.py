@@ -39,17 +39,30 @@ type_choices = (
 
 
 class AddHostForm(forms.Form):
+
     host_workorder_id = forms.CharField(max_length=30)
     step_num = forms.CharField(max_length=30)
-    cloud_type = forms.CharField(max_length=30, widget=forms.Select(attrs={'class': "form-control select"}, choices=cloud_choices), label=u'云厂商')
-    host_type = forms.CharField(max_length=30, widget=forms.Select(attrs={'class': "form-control select"}, choices=type_choices), label=u'主机型号')
-    host_number = forms.CharField(max_length=30, widget=forms.TextInput(attrs={'class': "form-control"}), label=u'申请主机数量')
-    pubipaddr = forms.CharField(max_length=30, widget=forms.Select(attrs={'class': "form-control select"}, choices=t_or_f_choices), label=u'是否需要外网IP')
-    disk = forms.CharField(max_length=30 ,widget=forms.TextInput(attrs={'class': "form-control"}), label=u'磁盘大小')
+    cloud_type = forms.CharField(max_length=30,
+                                 widget=forms.Select(attrs={'class': "form-control select"}, choices=cloud_choices),
+                                 label=u'云厂商')
+    host_type = forms.CharField(max_length=30,
+                                widget=forms.Select(attrs={'class': "form-control select"}, choices=type_choices),
+                                label=u'主机型号')
+    host_number = forms.CharField(max_length=30,
+                                  widget=forms.TextInput(attrs={'class': "form-control"}),
+                                  label=u'申请主机数量')
+    pubipaddr = forms.CharField(max_length=30,
+                                widget=forms.Select(attrs={'class': "form-control select"},
+                                                    choices=t_or_f_choices), label=u'是否需要外网IP')
+    disk = forms.CharField(max_length=30,
+                           widget=forms.TextInput(attrs={'class': "form-control"}),
+                           label=u'磁盘大小')
+
     def __init__(self, *args, **kwargs):
         super(AddHostForm, self).__init__(*args, **kwargs)
-
-        self.fields['serverline'] = forms.CharField(max_length=30, widget=forms.Select(attrs={'class': "form-control select"}, choices=Serverline_info.objects.values_list('serverline_name','serverline_name')), label=u'所属业务线')
+        self.fields['serverline'] = forms.CharField(max_length=30,
+                                                    widget=forms.Select(attrs={'class': "form-control select"}, choices=Serverline_info.objects.values_list('serverline_name','serverline_name')),
+                                                    label=u'所属业务线')
 
 
 class DelHostForm(forms.Form):
