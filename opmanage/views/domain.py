@@ -9,6 +9,8 @@ from django.db.models import Q
 from opmanage.forms.domain import *
 from opmanage.models import Domain_info
 from opmanage.views.index import check_login, check_user_auth, to_page
+from workorder.models import Host_WorkOrder_info, Status_WorkOrder_info
+from workorder.views import step_status_ok
 
 
 # 用于判定页面访问权限的下标
@@ -16,7 +18,7 @@ check_num = 2
 
 @check_login
 @check_user_auth(check_num=check_num)
-def add_domain(request):
+def add_domain(request, notice=None, show=None):
     """
         添加主机
     :param request:
@@ -24,20 +26,49 @@ def add_domain(request):
     """
     # POST请求
     if request.method == "POST":
-        add_domainform = AddDomainForm(request.POST)
+        form = AddDomainForm(request.POST)
         # 字段验证通过
-        if add_domainform.is_valid():
-            # 插入数据
-            add_domainform.save()
-            # 创建域名解析成功
-            return HttpResponse('add,domain ok')
+        if form.is_valid():
+            host_workorder_id = request.POST.get('host_workorder_id')
+            step_num = request.POST.get('step_num')
+            net_type = request.POST.get('net_type')
+            domain = request.POST.get('domain')
+            serverline = request.POST.get('serverline')
+            # 创建LB
+            create_domain(net_type, domain, serverline)
+
+            # 添加zabbix监控
+            # zabbix_proxy_id = '127.0.0.1'
+            # add_zabbix_host(host=lb_name, ip=zabbix_proxy_id)
+
+            func_status = step_status_ok(host_workorder_id, step_num)
+            if func_status:
+                # 创建主机成功
+                return HttpResponse('add host ok')
+            else:
+                return HttpResponse('add host false')
         # 字段验证不通过
         else:
-            return render(request, "opmanage/domain/adddomain.html", {'add_domainform': add_domainform, 'error': add_domainform.errors})
+            return render(request, "opmanage/domain/adddomain.html", locals())
     # 非POST请求
     else:
-        add_domainform = AddDomainForm()
-        return render(request, "opmanage/domain/adddomain.html", {'add_domainform': add_domainform})
+        host_workorder_id = request.GET.get('host_workorder_id', None)
+        step_num = request.GET.get('step_num', None)
+        net = request.GET.get('net', None)
+        domain = request.GET.get('domain', None)
+        # intranet
+        if host_workorder_id != None:
+            host_workorder_obj = Host_WorkOrder_info.objects.filter(host_workorder_id=host_workorder_id).first()
+
+            form = AddDomainForm(initial={'host_workorder_id': host_workorder_id,
+                                          'net_type': net,
+                                          'domain': domain,
+                                          'step_num': step_num,
+                                          'serverline': host_workorder_obj.serverline_name,
+                                          })
+        else:
+            form = AddDomainForm()
+        return render(request, "opmanage/domain/adddomain.html", {'form': form, 'notice': notice, 'show': show})
 
 
 @check_login
@@ -166,5 +197,16 @@ def get_domain(request):
             get_domainform = GetDomainForm({'name': name})
         page_domain_list = to_page(domain_list, pages, every_page_sum)
         return render(request, "opmanage/domain/getdomain.html", {'get_domainform': get_domainform, 'page_domain_list': page_domain_list})
+
+
+def create_domain(net_type, domain, serverline):
+    """
+        添加外网域名解析
+    :param net_type:
+    :param domain:
+    :param serverline:
+    :return:
+    """
+    pass
 
 
